@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Vindi_Subscription>
+            <version>1.0.0</version>
+        </Vindi_Subscription>
+    </modules>
+    <global>
+        <catalog>
+            <product>
+                <type>
+                    <subscription translate="label" module="vindi_subscription">
+                        <label>Assinatura Vindi</label>
+                        <model>vindi_subscription/product_type</model>
+                        <is_qty>0</is_qty>
+                        <composite>0</composite>
+                        <can_use_qty_decimals>0</can_use_qty_decimals>
+                    </subscription>
+                </type>
+            </product>
+        </catalog>
+        <resources>
+            <vindi_subscription_setup>
+                <setup>
+                    <module>Vindi_Subscription</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+            </vindi_subscription_setup>
+        </resources>
+        <blocks>
+            <vindi_subscription>
+                <class>Vindi_Subscription_Block</class>
+            </vindi_subscription>
+        </blocks>
+        <helpers>
+            <vindi_subscription>
+                <class>Vindi_Subscription_Helper</class>
+            </vindi_subscription>
+        </helpers>
+        <models>
+            <vindi_subscription>
+                <class>Vindi_Subscription_Model</class>
+            </vindi_subscription>
+        </models>
+    </global>
+    <default>
+        <payment>
+            <vindi_creditcard>
+                <active>0</active>
+                <model>vindi_subscription/creditCard</model>
+                <order_status>processing</order_status>
+                <title>Cartão de Crédito</title>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </vindi_creditcard>
+            <vindi_bankslip>
+                <active>0</active>
+                <model>vindi_subscription/bankSlip</model>
+                <order_status>processing</order_status>
+                <title>Boleto Bancário</title>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </vindi_bankslip>
+        </payment>
+    </default>
+</config>
+

@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <vindi translate="label" module="vindi_subscription">
+            <label>Vindi</label>
+            <sort_order>399</sort_order>
+        </vindi>
+    </tabs>
+    <sections>
+        <vindi_subscription translate="label" module="vindi_subscription">
+            <label><![CDATA[<img src="//www.vindi.com.br/images/favicon.png" style="float:left;margin-top:1px;width:16px;height:16px"/>&nbsp;Vindi Assinaturas]]></label>
+            <tab>vindi</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label" module="vindi_subscription">
+                    <label>Configuração</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <api_key>
+                            <label>Chave da API</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </api_key>
+                    </fields>
+                </general>
+            </groups>
+        </vindi_subscription>
+        <payment>
+            <groups>
+                <vindi_creditcard translate="label" module="vindi_subscription">
+                    <label>Vindi - Cartão de Crédito</label>
+                    <sort_order>670</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
+                    <fields>
+                        <active translate="label">
+                            <label>Ativo</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Título</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </title>
+                        <order_status translate="label">
+                            <label>Status dos novos pedidos</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </order_status>
+                    </fields>
+                </vindi_creditcard>
+                <vindi_bankslip translate="label" module="vindi_subscription">
+                    <label>Vindi - Boleto Bancário</label>
+                    <sort_order>671</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
+                    <fields>
+                        <active translate="label">
+                            <label>Ativo</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Título</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </title>
+                        <order_status translate="label">
+                            <label>Status dos novos pedidos</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </order_status>
+                    </fields>
+                </vindi_bankslip>
+            </groups>
+        </payment>
+    </sections>
+</config>
