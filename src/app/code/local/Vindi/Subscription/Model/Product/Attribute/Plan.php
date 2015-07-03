@@ -5,16 +5,22 @@ class Vindi_Subscription_Model_Product_Attribute_Plan extends Mage_Eav_Model_Ent
     public function getAllOptions()
     {
         /** @todo grab informations from API */
-        $this->_options = array(
-            array(
+        $this->_options = [
+            [
                 'value' => '',
                 'label' => Mage::helper('catalog')->__('-- Please Select --'),
-            ),
-            array(
-                'value' => '1',
-                'label' => 'Teste',
-            ),
-        );
+            ],
+        ];
+
+        /** @var Vindi_Subscription_Helper_API $api */
+        $api = Mage::helper('vindi_subscription/api');
+
+        foreach ($api->getPlans() as $id => $name) {
+            $this->_options[] = [
+                'value' => $id,
+                'label' => $name,
+            ];
+        }
 
         return $this->_options;
     }

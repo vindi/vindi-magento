@@ -2,6 +2,7 @@
 
 class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstract
 {
+    use Vindi_Subscription_Trait_PaymentMethod;
 
     /**
      * @var string
@@ -64,6 +65,11 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
     protected $_canSaveCc = false;
 
     /**
+     * @var string
+     */
+    protected $_formBlockType = 'vindi_subscription/form_bankSlip';
+
+    /**
      * Assign data to info model instance
      *
      * @param   mixed $data
@@ -76,23 +82,43 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
     }
 
     /**
-     * Method that will be executed instead of authorize or capture
-     * if flag isInitializeNeeded set to true
-     *
      * @param string $paymentAction
      * @param object $stateObject
      *
-     * @return Mage_Payment_Model_Method_Abstract
+     * @return bool|Mage_Payment_Model_Method_Abstract
      */
     public function initialize($paymentAction, $stateObject)
     {
-        Mage::log('Vindi_Subscription_Model_BankSlip::initialize ', null, 'signature.log', true);
+        // TODO accept single payments
+        $payment = $this->getInfoInstance();
+        $order = $payment->getOrder();
+        $customer = Mage::getModel('customer/customer');
+
+        $customerId = $this->createCustomer($order, $customer);
+
+        $subscription = $this->createSubscription($order, $customerId);
+
+        if ($subscription === false) {
+            Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
+
+            return false;
+        }
+
+        $payment->setAmount($order->getTotalDue());
+        $this->setStore($payment->getOrder()->getStoreId());
+        // todo check this?
+        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                            'Assinatura criada', true);
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
+                    ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
+
+        $payment->setAdditionalInformation('vindi_subscription_id', $subscription);
 
         return $this;
     }
 
     /**
-     * Check whether there are CC types set in configuration
+     * Check whether payment method can be used
      *
      * @param Mage_Sales_Model_Quote|null $quote
      *
@@ -100,6 +126,19 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
      */
     public function isAvailable($quote = null)
     {
-        return Mage::getStoreConfig('payment/vindi_bankslip/active');
+        /** @var Vindi_Subscription_Helper_API $api */
+        $api = Mage::helper('vindi_subscription/api');
+
+        return Mage::getStoreConfig('payment/vindi_bankslip/active')
+               && $api->acceptBankSlip();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPaymentMethodCode()
+    {
+        // TODO fix it to proper method code
+        return 'bank_slip';
     }
 }

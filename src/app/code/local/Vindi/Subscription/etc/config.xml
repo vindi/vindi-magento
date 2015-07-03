@@ -2,13 +2,14 @@
 <config>
     <modules>
         <Vindi_Subscription>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Vindi_Subscription>
     </modules>
     <global>
         <catalog>
             <product>
                 <type>
+                    <!-- TODO change type to vindi_subscription -->
                     <subscription translate="label" module="vindi_subscription">
                         <label>Assinatura Vindi</label>
                         <model>vindi_subscription/product_type</model>
@@ -42,6 +43,11 @@
                 <class>Vindi_Subscription_Model</class>
             </vindi_subscription>
         </models>
+        <traits>
+            <vindi_subscription>
+                <class>Vindi_Subscription_Trait_PaymentMethod</class>
+            </vindi_subscription>
+        </traits>
     </global>
     <default>
         <payment>

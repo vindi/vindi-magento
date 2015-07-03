@@ -7,7 +7,7 @@ $installer->startSetup();
 $installer->addAttribute(
     Mage_Catalog_Model_Product::ENTITY,
     'vindi_subscription_plan',
-    array(
+    [
         'type'                    => 'int',
         'input'                   => 'select',
         'backend'                 => '',
@@ -28,10 +28,10 @@ $installer->addAttribute(
         'apply_to'                => 'subscription',
         'is_configurable'         => false,
         'used_in_product_listing' => false,
-        'option'                  => array(
-            'values' => array(),
-        ),
-    )
+        'option'                  => [
+            'values' => [],
+        ],
+    ]
 );
 
 $attributeId = $installer->getAttributeId(
@@ -65,14 +65,14 @@ if ($attributeId > 0) {
     );
 }
 
-$attributes = array(
+$attributes = [
     'price',
     'special_price',
     'special_from_date',
     'special_to_date',
     'minimal_price',
     'tax_class_id',
-);
+];
 
 foreach ($attributes as $attributeCode) {
     $applyTo = explode(

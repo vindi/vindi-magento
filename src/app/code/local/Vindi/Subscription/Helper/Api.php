@@ -31,7 +31,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function __construct()
     {
         $this->version = (string)Mage::getConfig()->getModuleConfig('Vindi_Subscription')->version;
-        $this->key = Mage::getStoreConfig('vindi_subscription/general/api_key');
+        $this->key = Mage::helper('vindi_subscription')->getKey();
     }
 
     /**
@@ -101,8 +101,12 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    private function request($endpoint, $method = 'POST', $data = array(), $dataToLog = null)
+    private function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
     {
+        if (! $this->key) {
+            return false;
+        }
+
         $url = static::BASE_PATH . $endpoint;
         $body = $this->buildBody($data);
 
@@ -111,14 +115,14 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $dataToLog = null !== $dataToLog ? $this->buildBody($dataToLog) : $body;
 
         $this->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $requestId, $method, $url,
-            $dataToLog));
+                           $dataToLog));
 
         $ch = curl_init();
 
-        curl_setopt_array($ch, array(
-            CURLOPT_HTTPHEADER     => array(
+        curl_setopt_array($ch, [
+            CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/json',
-            ),
+            ],
             CURLOPT_TIMEOUT        => 60,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_HEADER         => true,
@@ -128,7 +132,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             CURLOPT_URL            => $url,
             CURLOPT_CUSTOMREQUEST  => $method,
             CURLOPT_POSTFIELDS     => $body,
-        ));
+        ]);
 
         $response = curl_exec($ch);
 
@@ -150,7 +154,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         if (! $responseBody) {
             $this->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $requestId,
-                print_r($body, true)));
+                               print_r($body, true)));
 
             return false;
         }
@@ -252,42 +256,70 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Make an API request to retrive Payment Methods.
+     * Make an API request to retrieve Payment Methods.
      *
      * @return array|bool
      */
     public function getPaymentMethods()
     {
+        $cache = Mage::app()->getCache();
 
-        $paymentMethods = array(
-            'credit_card' => array(),
-            'bank_slip'   => false,
-        );
+        $paymentMethods = $cache->load('vindi_payment_methods');
 
-        $response = $this->request('payment_methods', 'GET');
+        if ($paymentMethods === false) {
 
-        if (false === $response) {
-            return false;
-        }
+            $paymentMethods = [
+                'credit_card' => [],
+                'bank_slip'   => false,
+            ];
 
-        foreach ($response['payment_methods'] as $method) {
-            if ('active' !== $method['status']) {
-                continue;
+            $response = $this->request('payment_methods', 'GET');
+
+            if (false === $response) {
+                return $this->acceptBankSlip = false;
             }
 
-            if ('PaymentMethod::CreditCard' === $method['type']) {
-                $paymentMethods['credit_card'] = array_merge($paymentMethods['credit_card'],
-                    $method['payment_companies']);
-            } else {
-                if ('PaymentMethod::BankSlip' === $method['type']) {
-                    $paymentMethods['bank_slip'] = true;
+            foreach ($response['payment_methods'] as $method) {
+                if ('active' !== $method['status']) {
+                    continue;
+                }
+
+                if ('PaymentMethod::CreditCard' === $method['type']) {
+                    $paymentMethods['credit_card'] = array_merge($paymentMethods['credit_card'],
+                                                                 $method['payment_companies']);
+                } else {
+                    if ('PaymentMethod::BankSlip' === $method['type']) {
+                        $paymentMethods['bank_slip'] = true;
+                    }
                 }
             }
+
+            $cache->save(serialize($paymentMethods), 'vindi_payment_methods', ['vindi_cache'],
+                         12 * 60 * 60); // 12 hours
+        } else {
+            $paymentMethods = unserialize($paymentMethods);
         }
 
         $this->acceptBankSlip = $paymentMethods['bank_slip'];
 
         return $paymentMethods;
+    }
+
+    /**
+     * Retrieve Credit Card Types from Payment Methods.
+     *
+     * @return array
+     */
+    public function getCreditCardTypes()
+    {
+        $methods = $this->getPaymentMethods();
+        $types = [];
+
+        foreach ($methods['credit_card'] as $type) {
+            $types[$type['code']] = $type['name'];
+        }
+
+        return $types;
     }
 
     /**
@@ -359,7 +391,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getProducts()
     {
-        $list = array();
+        $list = [];
         $response = $this->request('products?query=status:active', 'GET');
 
         if ($products = $response['products']) {
@@ -378,7 +410,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getPlanItems($id)
     {
-        $list = array();
+        $list = [];
         $response = $this->request("plans/{$id}", 'GET');
 
         if ($plan = $response['plan']) {
@@ -400,13 +432,13 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function buildPlanItemsForSubscription($planId, $orderTotal)
     {
-        $list = array();
+        $list = [];
 
         foreach ($this->getPlanItems($planId) as $item) {
-            $list[] = array(
+            $list[] = [
                 'product_id'     => $item,
-                'pricing_schema' => array('price' => $orderTotal),
-            );
+                'pricing_schema' => ['price' => $orderTotal],
+            ];
             $orderTotal = 0;
         }
 
@@ -418,13 +450,23 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getPlans()
     {
-        $list = array();
-        $response = $this->request('plans?query=status:active', 'GET');
+        $cache = Mage::app()->getCache();
 
-        if ($plans = $response['plans']) {
-            foreach ($plans as $plan) {
-                $list[$plan['id']] = $plan['name'];
+        $list = $cache->load('vindi_plans');
+
+        if ($list === false) {
+
+            $list = [];
+            $response = $this->request('plans?query=status:active', 'GET');
+
+            if ($plans = $response['plans']) {
+                foreach ($plans as $plan) {
+                    $list[$plan['id']] = $plan['name'];
+                }
             }
+            $cache->save(serialize($list), 'vindi_plans', ['vindi_cache'], 10 * 60); // 10 minutes
+        } else {
+            $list = unserialize($list);
         }
 
         return $list;
@@ -437,8 +479,10 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function createProduct($body)
-    {
+    public
+    function createProduct(
+        $body
+    ) {
         if ($response = $this->request('products', 'POST', $body)) {
             return $response['product']['id'];
         }
@@ -453,8 +497,10 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function findProductByCode($code)
-    {
+    public
+    function findProductByCode(
+        $code
+    ) {
         $response = $this->request("products?query=code%3D{$code}", 'GET');
 
         if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
@@ -469,19 +515,20 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function findOrCreateUniquePaymentProduct()
+    public
+    function findOrCreateUniquePaymentProduct()
     {
         $productId = $this->findProductByCode('wc-pagtounico');
 
         if (false === $productId) {
-            return $this->createProduct(array(
-                'name'           => 'Pagamento Único (não remover)',
-                'code'           => 'wc-pagtounico',
-                'status'         => 'active',
-                'pricing_schema' => array(
-                    'price' => 0,
-                ),
-            ));
+            return $this->createProduct([
+                                            'name'           => 'Pagamento Único (não remover)',
+                                            'code'           => 'wc-pagtounico',
+                                            'status'         => 'active',
+                                            'pricing_schema' => [
+                                                'price' => 0,
+                                            ],
+                                        ]);
         }
 
         return $productId;
@@ -492,15 +539,29 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function getMerchant()
+    public
+    function getMerchant()
     {
-        $response = $this->request('merchant', 'GET');
+        $cache = Mage::app()->getCache();
 
-        if (! $response || ! $response['merchant']) {
-            return false;
+        $merchant = $cache->load('vindi_merchant');
+
+        if ($merchant === false) {
+
+            $response = $this->request('merchant', 'GET');
+
+            if (! $response || ! $response['merchant']) {
+                return false;
+            }
+
+            $merchant = $response['merchant'];
+
+            $cache->save(serialize($merchant), 'vindi_merchant', ['vindi_cache'], 1 * 60 * 60); // 1 hour
+        } else {
+            $merchant = unserialize($merchant);
         }
 
-        return $response['merchant'];
+        return $merchant;
     }
 
     /**
@@ -508,7 +569,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return boolean
      */
-    public function isMerchantStatusTrial()
+    public
+    function isMerchantStatusTrial()
     {
         if ($merchant = $this->getMerchant()) {
             return 'trial' === $merchant['status'];
@@ -516,4 +578,5 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         return false;
     }
+
 }
