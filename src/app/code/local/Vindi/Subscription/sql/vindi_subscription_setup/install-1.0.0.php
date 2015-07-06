@@ -35,21 +35,21 @@ $installer->addAttribute(
 );
 
 $attributeId = $installer->getAttributeId(
-    'catalog_product',
+    Mage_Catalog_Model_Product::ENTITY,
     'vindi_subscription_plan'
 );
 
-$defaultSetId = $installer->getAttributeSetId('catalog_product', 'default');
+$defaultSetId = $installer->getAttributeSetId(Mage_Catalog_Model_Product::ENTITY, 'default');
 
 $installer->addAttributeGroup(
-    'catalog_product',
+    Mage_Catalog_Model_Product::ENTITY,
     $defaultSetId,
     'Vindi'
 );
 
 //find out the id of the new group
 $groupId = $installer->getAttributeGroup(
-    'catalog_product',
+    Mage_Catalog_Model_Product::ENTITY,
     $defaultSetId,
     'Vindi',
     'attribute_group_id'
@@ -58,7 +58,7 @@ $groupId = $installer->getAttributeGroup(
 //assign the attribute to the group and set
 if ($attributeId > 0) {
     $installer->addAttributeToSet(
-        'catalog_product',
+        Mage_Catalog_Model_Product::ENTITY,
         $defaultSetId,
         $groupId,
         $attributeId
@@ -94,5 +94,30 @@ foreach ($attributes as $attributeCode) {
         );
     }
 }
+
+$installer->addAttribute('customer', 'vindi_user_code', [
+    'frontend_input'         => 'text',
+    'default_value_text'     => '',
+    'default_value_yesno'    => false,
+    'default_value_date'     => '',
+    'default_value_textarea' => '',
+    'is_visible'             => false,
+    'is_unique'              => true,
+    'is_required'            => false,
+    'frontend_class'         => '',
+    'sort_order'             => 500,
+    'adminhtml_customer'     => true,
+    'label'                  => 'Código do Cliente na Vindi',
+    'source_model'           => '',
+    'backend_model'          => '',
+    'used_in_forms'          => ['adminhtml_customer'],
+    'backend_type'           => 'varchar',
+    'default_value'          => '',
+]);
+
+Mage::getSingleton('eav/config')
+    ->getAttribute('customer', 'vindi_user_code')
+    ->setData('used_in_forms', ['adminhtml_customer'])
+    ->save();
 
 $installer->endSetup();

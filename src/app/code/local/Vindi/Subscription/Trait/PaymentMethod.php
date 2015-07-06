@@ -4,7 +4,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
 {
 
     /**
-     * @param Mage_Sales_Model_Order       $order
+     * @param Mage_Sales_Model_Order      $order
      * @param Mage_Customer_Model_Customer $customer
      *
      * @return bool|int|null
@@ -14,14 +14,13 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $billing = $order->getBillingAddress();
 
         $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
-        $customer->loadByEmail($order->getCustomerEmail());
+        $customer->loadByEmail($order->getCustomerEmail());;
 
-        $customerId = $customer->getData('vindi_customer_id');
+        if (! ($userCode = $customer->getVindiUserCode())) {
+            $userCode = 'mag-' . $customer->getId() . '-' . time();
 
-        if ($customerId) {
-            $this->log("Customer Id encontrado! ({$customerId})");
-
-            return $customerId;
+            $customer->setVindiUserCode($userCode);
+            $customer->save();
         }
 
         $address = [
@@ -39,7 +38,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
             'name'          => $billing->getFirstname() . ' ' . $billing->getLastname(),
             'email'         => $order->getBillingAddress()->getEmail(),
             'registry_code' => $order->getData('customer_taxvat'),
-            'code'          => 'mag-' . $customer->getId() . '-' . time(),
+            'code'          => $userCode,
             'address'       => $address,
         ];
 
@@ -49,9 +48,6 @@ trait Vindi_Subscription_Trait_PaymentMethod
             Mage::throwException('Falha ao registrar o usuário. Verifique os dados e tente novamente!');
         }
 
-        $customer->setData('vindi_customer_id', $customerId);
-        $customer->save();
-        
         return $customerId;
     }
 
@@ -81,7 +77,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
 
         // TODO change type to vindi_subscription
         if ($product->getTypeID() !== 'subscription') {
-            Mage::throwException('Produto escohido não é uma assinatura.');
+            Mage::throwException('Produto escolhido não é uma assinatura.');
 
             return false;
         }

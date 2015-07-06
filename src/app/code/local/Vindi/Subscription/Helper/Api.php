@@ -210,6 +210,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function findOrCreateCustomer($body)
     {
         $customerId = $this->findCustomerByCode($body['code']);
+        // TODO update information
 
         if (false === $customerId) {
             return $this->createCustomer($body);

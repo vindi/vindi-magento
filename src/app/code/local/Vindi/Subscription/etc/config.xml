@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Vindi_Subscription>
-            <version>1.0.1</version>
+            <version>1.0.0</version>
         </Vindi_Subscription>
     </modules>
     <global>
@@ -55,7 +55,7 @@
                 <active>0</active>
                 <model>vindi_subscription/creditCard</model>
                 <order_status>processing</order_status>
-                <title>Cartão de Crédito</title>
+                <title>Cart&#xE3;o de Cr&#xE9;dito</title>
                 <payment_action>authorize</payment_action>
                 <allowspecific>0</allowspecific>
             </vindi_creditcard>
@@ -63,7 +63,7 @@
                 <active>0</active>
                 <model>vindi_subscription/bankSlip</model>
                 <order_status>processing</order_status>
-                <title>Boleto Bancário</title>
+                <title>Boleto Banc&#xE1;rio</title>
                 <payment_action>authorize</payment_action>
                 <allowspecific>0</allowspecific>
             </vindi_bankslip>

@@ -114,7 +114,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         // TODO accept single payments
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
-        $customer = Mage::getModel('customer/session');
+        $customer = Mage::getModel('customer/customer');
 
         $customerId = $this->createCustomer($order, $customer);
         $this->createPaymentProfile($customerId);
