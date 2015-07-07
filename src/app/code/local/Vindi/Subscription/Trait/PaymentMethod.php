@@ -14,7 +14,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $billing = $order->getBillingAddress();
 
         $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
-        $customer->loadByEmail($order->getCustomerEmail());;
+        $customer->loadByEmail($billing->getEmail());
 
         if (! ($userCode = $customer->getVindiUserCode())) {
             $userCode = 'mag-' . $customer->getId() . '-' . time();
