@@ -69,5 +69,25 @@
             </vindi_bankslip>
         </payment>
     </default>
+    <frontend>
+        <events>
+            <checkout_cart_update_items_before>
+                <observers>
+                    <vindi_subscription_checkQuantity>
+                        <class>vindi_subscription/observer</class>
+                        <method>checkQuantity</method>
+                    </vindi_subscription_checkQuantity>
+                </observers>
+            </checkout_cart_update_items_before>
+            <checkout_cart_product_add_after>
+                <observers>
+                    <vindi_subscription_checkQuantity>
+                        <class>vindi_subscription/observer</class>
+                        <method>checkQuantity</method>
+                    </vindi_subscription_checkQuantity>
+                </observers>
+            </checkout_cart_product_add_after>
+        </events>
+    </frontend>
 </config>
 
