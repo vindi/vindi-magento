@@ -83,9 +83,9 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
      */
     public function assignData($data)
     {
-//        if (! ($data instanceof Varien_Object)) {
-//            $data = new Varien_Object($data);
-//        }
+        if (! ($data instanceof Varien_Object)) {
+            $data = new Varien_Object($data);
+        }
         $info = $this->getInfoInstance();
 
         $info->setCcType($data->getCcType())
@@ -190,10 +190,6 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
      */
     public function validate()
     {
-//        parent::validate();
-
-        // TODO validate cart to allow only one subscription
-
         $info = $this->getInfoInstance();
         $errorMsg = false;
 
@@ -219,12 +215,6 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
 
             return false;
         }
-
-        // TODO check this
-        //This must be after all validation conditions
-//        if ($this->getIsCentinelValidationEnabled()) {
-//            $this->getCentinelValidator()->validate($this->getCentinelValidationData());
-//        }
 
         return $this;
     }

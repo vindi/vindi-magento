@@ -4,7 +4,6 @@ class Vindi_Subscription_Model_Product_Attribute_Plan extends Mage_Eav_Model_Ent
 {
     public function getAllOptions()
     {
-        /** @todo grab informations from API */
         $this->_options = [
             [
                 'value' => '',
