@@ -78,7 +78,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             foreach ($response['errors'] as $error) {
                 $message = $this->getErrorMessage($error, $endpoint);
 
-                Mage::throwException($message);
+                Mage::getSingleton('core/session')->addError($message);
 
                 $this->lastError = $message;
             }

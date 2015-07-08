@@ -75,7 +75,6 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $item = $orderItems->getFirstItem();
         $product = Mage::getModel('catalog/product')->load($item->getProductId());
 
-        // TODO change type to vindi_subscription
         if ($product->getTypeID() !== 'subscription') {
             Mage::throwException('Produto escolhido não é uma assinatura.');
 

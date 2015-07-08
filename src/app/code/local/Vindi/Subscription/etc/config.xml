@@ -9,7 +9,6 @@
         <catalog>
             <product>
                 <type>
-                    <!-- TODO change type to vindi_subscription -->
                     <subscription translate="label" module="vindi_subscription">
                         <label>Assinatura Vindi</label>
                         <model>vindi_subscription/product_type</model>
@@ -70,6 +69,15 @@
         </payment>
     </default>
     <frontend>
+        <routers>
+            <subscription>
+                <use>standard</use>
+                <args>
+                    <module>Vindi_Subscription</module>
+                    <frontName>vindi_subscription</frontName>
+                </args>
+            </subscription>
+        </routers>
         <events>
             <checkout_cart_update_items_before>
                 <observers>
