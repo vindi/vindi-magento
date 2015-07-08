@@ -71,6 +71,9 @@ $attributes = [
     'special_from_date',
     'special_to_date',
     'minimal_price',
+    'cost',
+    'tier_price',
+    'weight',
     'tax_class_id',
 ];
 
