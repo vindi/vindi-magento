@@ -22,6 +22,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
                     <fields>
                         <api_key>
                             <label>Chave da API</label>
@@ -70,15 +71,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </title>
-                        <order_status translate="label">
-                            <label>Status dos novos pedidos</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
-                            <sort_order>3</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </order_status>
                     </fields>
                 </vindi_creditcard>
                 <vindi_bankslip translate="label" module="vindi_subscription">
@@ -106,15 +98,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </title>
-                        <order_status translate="label">
-                            <label>Status dos novos pedidos</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
-                            <sort_order>3</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </order_status>
                     </fields>
                 </vindi_bankslip>
             </groups>

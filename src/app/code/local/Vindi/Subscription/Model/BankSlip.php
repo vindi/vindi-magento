@@ -37,7 +37,7 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
     /**
      * @var bool
      */
-    protected $_canVoid = true;
+    protected $_canVoid = false;
 
     /**
      * @var bool
@@ -52,7 +52,7 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
     /**
      * @var bool
      */
-    protected $_canUseForMultishipping = true;
+    protected $_canUseForMultishipping = false;
 
     /**
      * @var bool
@@ -106,13 +106,11 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
 
         $payment->setAmount($order->getTotalDue());
         $this->setStore($payment->getOrder()->getStoreId());
-        // todo check this?
+
         $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
                             'Assinatura criada', true);
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
                     ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
-
-        $payment->setAdditionalInformation('vindi_subscription_id', $subscription);
 
         return $this;
     }

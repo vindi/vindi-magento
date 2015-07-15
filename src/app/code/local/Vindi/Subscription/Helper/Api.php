@@ -536,7 +536,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Make an API request to retrieve informations about the Merchant.
+     * Make an API request to retrieve information about the Merchant.
      *
      * @return array|bool|mixed
      */

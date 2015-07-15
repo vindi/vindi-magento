@@ -48,22 +48,31 @@
             </vindi_subscription>
         </traits>
     </global>
+    <adminhtml>
+        <sales>
+            <order>
+                <create>
+                    <available_product_types>
+                        <subscription/>
+                    </available_product_types>
+                </create>
+            </order>
+        </sales>
+    </adminhtml>
     <default>
         <payment>
             <vindi_creditcard>
                 <active>0</active>
                 <model>vindi_subscription/creditCard</model>
-                <order_status>processing</order_status>
                 <title>Cart&#xE3;o de Cr&#xE9;dito</title>
-                <payment_action>authorize</payment_action>
+                <payment_action>capture</payment_action>
                 <allowspecific>0</allowspecific>
             </vindi_creditcard>
             <vindi_bankslip>
                 <active>0</active>
                 <model>vindi_subscription/bankSlip</model>
-                <order_status>processing</order_status>
                 <title>Boleto Banc&#xE1;rio</title>
-                <payment_action>authorize</payment_action>
+                <payment_action>capture</payment_action>
                 <allowspecific>0</allowspecific>
             </vindi_bankslip>
         </payment>

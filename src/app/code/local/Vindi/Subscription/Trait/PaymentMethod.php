@@ -4,7 +4,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
 {
 
     /**
-     * @param Mage_Sales_Model_Order      $order
+     * @param Mage_Sales_Model_Order       $order
      * @param Mage_Customer_Model_Customer $customer
      *
      * @return bool|int|null
@@ -89,6 +89,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
             'customer_id'         => $customerId,
             'payment_method_code' => $this->getPaymentMethodCode(),
             'plan_id'             => $plan,
+            'code'                => $order->getIncrementId(),
             'product_items'       => $productItems,
         ];
 
@@ -103,6 +104,10 @@ trait Vindi_Subscription_Trait_PaymentMethod
             // TODO update order status?
             return false;
         }
+
+        $order->setVindiSubscriptionId($subscription['id']);
+        $order->setVindiSubscriptionPeriod(1);
+        $order->save();
 
         return $subscription;
     }

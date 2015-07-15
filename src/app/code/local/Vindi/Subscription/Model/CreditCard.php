@@ -37,7 +37,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     /**
      * @var bool
      */
-    protected $_canVoid = true;
+    protected $_canVoid = false;
 
     /**
      * @var bool
@@ -52,7 +52,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     /**
      * @var bool
      */
-    protected $_canUseForMultishipping = true;
+    protected $_canUseForMultishipping = false;
 
     /**
      * @var bool
@@ -89,16 +89,16 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $info = $this->getInfoInstance();
 
         $info->setCcType($data->getCcType())
-             ->setCcOwner($data->getCcOwner())
-             ->setCcLast4(substr($data->getCcNumber(), -4))
-             ->setCcNumber($data->getCcNumber())
-             ->setCcCid($data->getCcCid())
-             ->setCcExpMonth($data->getCcExpMonth())
-             ->setCcExpYear($data->getCcExpYear())
-             ->setCcSsIssue($data->getCcSsIssue())
-             ->setCcSsStartMonth($data->getCcSsStartMonth())
-             ->setCcSsStartYear($data->getCcSsStartYear())
-             ->setAdditionalInformation('PaymentMethod', $this->_code);
+            ->setCcOwner($data->getCcOwner())
+            ->setCcLast4(substr($data->getCcNumber(), -4))
+            ->setCcNumber($data->getCcNumber())
+            ->setCcCid($data->getCcCid())
+            ->setCcExpMonth($data->getCcExpMonth())
+            ->setCcExpYear($data->getCcExpYear())
+            ->setCcSsIssue($data->getCcSsIssue())
+            ->setCcSsStartMonth($data->getCcSsStartMonth())
+            ->setCcSsStartYear($data->getCcSsStartYear())
+            ->setAdditionalInformation('PaymentMethod', $this->_code);
 
         return $this;
     }
@@ -111,9 +111,47 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
      */
     public function initialize($paymentAction, $stateObject)
     {
+        if ($this->checkForReorder()) {
+            return $this->processReorder($paymentAction, $stateObject);
+        }
+
+        return $this->processNewOrder($paymentAction, $stateObject);
+    }
+
+    /**
+     * @param string $paymentAction
+     * @param object $stateObject
+     *
+     * @return bool|Mage_Payment_Model_Method_Abstract
+     */
+    protected function processReorder($paymentAction, $stateObject)
+    {
+        $payment = $this->getInfoInstance();
+        $order = $payment->getOrder();
+
+        $payment->setAmount($order->getTotalDue());
+        $this->setStore($order->getStoreId());
+
+        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+            'Novo período da assinatura criado', true);
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
+            ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
+
+        return $this;
+    }
+
+    /**
+     * @param string $paymentAction
+     * @param object $stateObject
+     *
+     * @return bool|Mage_Payment_Model_Method_Abstract
+     */
+    protected function processNewOrder($paymentAction, $stateObject)
+    {
         // TODO accept single payments
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
+
         $customer = Mage::getModel('customer/customer');
 
         $customerId = $this->createCustomer($order, $customer);
@@ -128,14 +166,12 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         }
 
         $payment->setAmount($order->getTotalDue());
-        $this->setStore($payment->getOrder()->getStoreId());
-        // todo check this?
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                            'Assinatura criada', true);
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
-                    ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
+        $this->setStore($order->getStoreId());
 
-        $payment->setAdditionalInformation('vindi_subscription_id', $subscription);
+        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+            'Assinatura criada', true);
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
+            ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
 
         return $this;
     }
@@ -152,7 +188,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $creditCardData = [
             'holder_name'          => $payment->getCcOwner(),
             'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
-                                      . '/' . $payment->getCcExpYear(),
+                . '/' . $payment->getCcExpYear(),
             'card_number'          => $payment->getCcNumber(),
             'card_cvv'             => $payment->getCcCid() ?: '000',
             'customer_id'          => $customerId,
@@ -171,6 +207,18 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     }
 
     /**
+     * @return bool
+     */
+    protected function checkForReorder()
+    {
+        $session = Mage::getSingleton('core/session');
+        $isReorder = $session->getData('vindi_is_reorder', false);
+        $session->unsetData('vindi_is_reorder');
+
+        return $isReorder;
+    }
+
+    /**
      * Check whether payment method can be used
      *
      * @param Mage_Sales_Model_Quote|null $quote
@@ -180,7 +228,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     public function isAvailable($quote = null)
     {
         return Mage::getStoreConfig('payment/vindi_creditcard/active')
-               && Mage::helper('vindi_subscription')->getKey();
+        && Mage::helper('vindi_subscription')->getKey();
     }
 
     /**

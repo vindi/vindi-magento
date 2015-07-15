@@ -3,30 +3,26 @@
 class Vindi_Subscription_WebhookController extends Mage_Core_Controller_Front_Action
 {
     /**
-     * @param string   $message
-     * @param int|null $level
-     */
-    private function log($message, $level = null)
-    {
-        Mage::log($message, $level, 'vindi_webhooks.log');
-    }
-
-    /**
      * The route that webhooks will use.
      */
     public function indexAction()
     {
+        /** @var Vindi_Subscription_Helper_WebhookHandler $handler */
+        $handler = Mage::helper('vindi_subscription/webhookHandler');
+
         if (! $this->validateRequest()) {
             $ip = Mage::helper('core/http')->getRemoteAddr();
 
-            $this->log(sprintf('Invalid webhook attempt from IP %s', $ip), Zend_Log::WARN);
+            $handler->log(sprintf('Invalid webhook attempt from IP %s', $ip), Zend_Log::WARN);
             $this->norouteAction();
 
-            return;
+            return false;
         }
 
         $body = file_get_contents('php://input');
-        $this->log("Novo evento dos webhooks!\n{$body}");
+        $handler->log(sprintf("Novo evento dos webhooks!\n%s", $body));
+
+        return $handler->handle($body);
     }
 
     /**
