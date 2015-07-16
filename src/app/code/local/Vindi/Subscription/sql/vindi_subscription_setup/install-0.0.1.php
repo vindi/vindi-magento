@@ -99,78 +99,16 @@ foreach ($attributes as $attributeCode) {
 }
 
 $installer->addAttribute('customer', 'vindi_user_code', [
-    'frontend_input'         => 'text',
-    'default_value_text'     => '',
-    'default_value_yesno'    => false,
-    'default_value_date'     => '',
-    'default_value_textarea' => '',
-    'is_visible'             => false,
-    'is_unique'              => true,
-    'is_required'            => false,
-    'frontend_class'         => '',
-    'sort_order'             => 500,
-    'adminhtml_customer'     => true,
-    'label'                  => 'Código do Cliente na Vindi',
-    'source_model'           => '',
-    'backend_model'          => '',
-    'used_in_forms'          => ['adminhtml_customer'],
-    'backend_type'           => 'varchar',
-    'default_value'          => '',
+    'input'          => 'text',
+    'type'           => 'varchar',
+    'is_visible'     => false,
+    'is_unique'      => true,
+    'is_required'    => false,
+    'sort_order'     => 500,
+    'label'          => 'Código do Cliente na Vindi',
+    'used_in_forms'  => ['adminhtml_customer'],
+    'backend_type'   => 'varchar',
+    'default_value'  => '',
 ]);
 
-Mage::getSingleton('eav/config')
-    ->getAttribute('customer', 'vindi_user_code')
-    ->setData('used_in_forms', ['adminhtml_customer'])
-    ->save();
-
 $installer->endSetup();
-
-$setup = new Mage_Sales_Model_Resource_Setup('core_setup');
-
-$setup->addAttribute(
-    Mage_Sales_Model_Order::ENTITY,
-    'vindi_subscription_id',
-    [
-        'type'             => 'varchar',
-        'input'            => 'text',
-        'backend'          => '',
-        'frontend'         => '',
-        'label'            => 'Id da Assinatura Vindi',
-        'class'            => '',
-        'global'           => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
-        'visible'          => false,
-        'required'         => false,
-        'user_defined'     => false,
-        'default'          => '',
-        'searchable'       => false,
-        'filterable'       => false,
-        'comparable'       => false,
-        'visible_on_front' => false,
-        'unique'           => false,
-    ]
-);
-
-$setup->addAttribute(
-    Mage_Sales_Model_Order::ENTITY,
-    'vindi_subscription_period',
-    [
-        'type'             => 'varchar',
-        'input'            => 'text',
-        'backend'          => '',
-        'frontend'         => '',
-        'label'            => 'Período da Assinatura Vindi',
-        'class'            => '',
-        'global'           => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
-        'visible'          => false,
-        'required'         => false,
-        'user_defined'     => false,
-        'default'          => '',
-        'searchable'       => false,
-        'filterable'       => false,
-        'comparable'       => false,
-        'visible_on_front' => false,
-        'unique'           => false,
-    ]
-);
-
-$setup->endSetup();

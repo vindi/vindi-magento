@@ -91,6 +91,12 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         $subscriptionId = $bill['subscription']['id'];
         $lastPeriodOrder = $this->getOrderForPeriod($subscriptionId, $period - 1);
 
+        if (! $lastPeriodOrder || ! $lastPeriodOrder->getId()) {
+            $this->log('Pedido anterior não encontrado. Ignorando evento.');
+
+            return false;
+        }
+
         $order = $this->createOrder($lastPeriodOrder);
 
         if (! $order) {
