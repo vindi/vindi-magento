@@ -53,12 +53,15 @@ modman update Vindi_Subscription
 ## Limitações
 - O valor cobrado no checkout do Magento será o que efetivamente será recorrente para o cliente.
 Por exemplo, se a soma produto + frete + desconto resultar em *X*, esse valor *X* será cobrado todos os meses do cliente.  
-- No momento, o primeiro item/produto de um plano da Vindi deve ser permanente, pois o valor gerado no checkout do Magento será adicionado **integralmente** neste item, e os demais ficarão com valor R$ 0,00 (zero reais).
+- No momento, o primeiro item/produto de um plano da Vindi deve ser permanente, pois o valor gerado no checkout do Magento será adicionado **integralmente** neste item, 
+e os demais ficarão com valor R$ 0,00 (zero reais).
 - Por conta da limitação acima, não é possível trabalhar de forma automática com items/produtos temporários, pois os mesmos terão valor zero.
 - Na recorrência, os pedidos são gerados com **o mesmo endereço** do pedido do período anterior.   
 - O módulo só aceita a venda de **Assinaturas Vindi**. Não é possível, no momento, efetuar venda de outros tipos de produtos / faturas avulsas.
 **Nota:** no momento, é possível contornar essa limitação criando planos com duração de apenas 1 período (ou seja, sem recorrência).
-
+- O módulo **não** gera pedidos do Magento para criação/recorrência de assinaturas que não possuam um pedido (no Magento) para o período anterior. 
+Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.  
+  
 ## Roadmap
 Novos recursos que entrarão neste módulo, por ordem de prioridade:
 
