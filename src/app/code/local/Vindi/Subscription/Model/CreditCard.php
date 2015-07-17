@@ -88,6 +88,12 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         }
         $info = $this->getInfoInstance();
 
+        if ($data->getCcChoice() === 'saved') {
+            $info->setAdditionalInformation('use_saved_cc', true);
+
+            return $this;
+        }
+
         $info->setCcType($data->getCcType())
             ->setCcOwner($data->getCcOwner())
             ->setCcLast4(substr($data->getCcNumber(), -4))
@@ -98,7 +104,8 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             ->setCcSsIssue($data->getCcSsIssue())
             ->setCcSsStartMonth($data->getCcSsStartMonth())
             ->setCcSsStartYear($data->getCcSsStartYear())
-            ->setAdditionalInformation('PaymentMethod', $this->_code);
+            ->setAdditionalInformation('PaymentMethod', $this->_code)
+            ->setAdditionalInformation('use_saved_cc', false);
 
         return $this;
     }
@@ -155,7 +162,10 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $customer = Mage::getModel('customer/customer');
 
         $customerId = $this->createCustomer($order, $customer);
-        $this->createPaymentProfile($customerId);
+
+        if (! $payment->getAdditionalInformation('use_saved_cc')) {
+            $this->createPaymentProfile($customerId);
+        }
 
         $subscription = $this->createSubscription($order, $customerId);
 
@@ -240,6 +250,10 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     {
         $info = $this->getInfoInstance();
         $errorMsg = false;
+
+        if ($info->getAdditionalInformation('use_saved_cc')) {
+            return $this;
+        }
 
         $availableTypes = $this->api()->getCreditCardTypes();
 

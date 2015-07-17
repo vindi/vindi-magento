@@ -61,13 +61,6 @@
     </adminhtml>
     <default>
         <payment>
-            <vindi_creditcard>
-                <active>0</active>
-                <model>vindi_subscription/creditCard</model>
-                <title>Cart&#xE3;o de Cr&#xE9;dito</title>
-                <payment_action>capture</payment_action>
-                <allowspecific>0</allowspecific>
-            </vindi_creditcard>
             <vindi_bankslip>
                 <active>0</active>
                 <model>vindi_subscription/bankSlip</model>
@@ -75,9 +68,23 @@
                 <payment_action>capture</payment_action>
                 <allowspecific>0</allowspecific>
             </vindi_bankslip>
+            <vindi_creditcard>
+                <active>0</active>
+                <model>vindi_subscription/creditCard</model>
+                <title>Cart&#xE3;o de Cr&#xE9;dito</title>
+                <payment_action>capture</payment_action>
+                <allowspecific>0</allowspecific>
+            </vindi_creditcard>
         </payment>
     </default>
     <frontend>
+        <layout>
+            <updates>
+                <vindi_subscription>
+                    <file>vindi_subscription.xml</file>
+                </vindi_subscription>
+            </updates>
+        </layout>
         <routers>
             <subscription>
                 <use>standard</use>

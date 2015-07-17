@@ -5,7 +5,7 @@ class Vindi_Subscription_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Return Vindi API Key from config or false otherwhise.
      *
-     * @return bool
+     * @return string|bool
      */
     public function getKey()
     {

@@ -1,0 +1,56 @@
+.payment-companies {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.payment-companies img {
+    width: 50px;
+    display: inline-block;
+}
+
+.block-choice {
+    margin: 10px auto;
+}
+
+.block-payment-bankslip, .block-choice-saved-cc {
+    font-weight: bold;
+    background-color: #eee;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.block-choice-saved-cc {
+    position: relative;
+    overflow: hidden;
+}
+
+.block-choice-saved-cc img {
+    width: 50px;
+    margin: 5px 0;
+    position: absolute;
+}
+
+.block-choice-saved-cc .block-choice-saved-cc-details {
+    margin-left: 60px;
+}
+
+.block-choice-saved-cc-holder-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.payment-choice {
+    margin: 16px 0 !important;
+    background-color: inherit;
+}
+
+.label-choice {
+    font-weight: normal;
+    font-size: 1.1em;
+}
+
+.text-upper {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: normal;
+}

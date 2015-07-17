@@ -18,10 +18,26 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
      */
     public function getCcAvailableTypes()
     {
-        /** @var Vindi_Subscription_Helper_API $api */
-        $api = Mage::helper('vindi_subscription/api');
+        return $this->api()->getCreditCardTypes();
+    }
 
-        return $api->getCreditCardTypes();
+    public function getSavedCc()
+    {
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+
+        if (! $userCode = $customer->getVindiUserCode()) {
+            return false;
+        }
+
+        return $this->api()->getCustomerPaymentProfile($userCode);
+    }
+
+    /**
+     * @return Vindi_Subscription_Helper_API
+     */
+    private function api()
+    {
+        return Mage::helper('vindi_subscription/api');
     }
 
 }

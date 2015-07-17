@@ -30,7 +30,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
     public function __construct()
     {
-        $this->version = (string)Mage::getConfig()->getModuleConfig('Vindi_Subscription')->version;
+        $this->version = (string) Mage::getConfig()->getModuleConfig('Vindi_Subscription')->version;
         $this->key = Mage::helper('vindi_subscription')->getKey();
     }
 
@@ -115,7 +115,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $dataToLog = null !== $dataToLog ? $this->buildBody($dataToLog) : $body;
 
         $this->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $requestId, $method, $url,
-                           $dataToLog));
+            $dataToLog));
 
         $ch = curl_init();
 
@@ -154,7 +154,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         if (! $responseBody) {
             $this->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $requestId,
-                               print_r($body, true)));
+                print_r($body, true)));
 
             return false;
         }
@@ -236,6 +236,25 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         return $this->request('payment_profiles', 'POST', $body, $dataToLog);
     }
 
+    public function getCustomerPaymentProfile($userCode)
+    {
+        $customerId = $this->findCustomerByCode($userCode);
+
+        if (false === $customerId) {
+            return false;
+        }
+        $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
+            . '%20status%3Dactive%20type%3DPaymentProfile%3A%3ACreditCard';
+
+        $response = $this->request($endpoint, 'GET');
+
+        if($response && $response['payment_profiles'] && count($response['payment_profiles'])) {
+            return $response['payment_profiles'][0];
+        }
+
+        return false;
+    }
+
     /**
      * Make an API request to create a Subscription.
      *
@@ -287,7 +306,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
                 if ('PaymentMethod::CreditCard' === $method['type']) {
                     $paymentMethods['credit_card'] = array_merge($paymentMethods['credit_card'],
-                                                                 $method['payment_companies']);
+                        $method['payment_companies']);
                 } else {
                     if ('PaymentMethod::BankSlip' === $method['type']) {
                         $paymentMethods['bank_slip'] = true;
@@ -296,7 +315,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             }
 
             $cache->save(serialize($paymentMethods), 'vindi_payment_methods', ['vindi_cache'],
-                         12 * 60 * 60); // 12 hours
+                12 * 60 * 60); // 12 hours
         } else {
             $paymentMethods = unserialize($paymentMethods);
         }
@@ -523,13 +542,13 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         if (false === $productId) {
             return $this->createProduct([
-                                            'name'           => 'Pagamento Único (não remover)',
-                                            'code'           => 'wc-pagtounico',
-                                            'status'         => 'active',
-                                            'pricing_schema' => [
-                                                'price' => 0,
-                                            ],
-                                        ]);
+                'name'           => 'Pagamento Único (não remover)',
+                'code'           => 'wc-pagtounico',
+                'status'         => 'active',
+                'pricing_schema' => [
+                    'price' => 0,
+                ],
+            ]);
         }
 
         return $productId;
