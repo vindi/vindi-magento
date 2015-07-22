@@ -236,6 +236,11 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         return $this->request('payment_profiles', 'POST', $body, $dataToLog);
     }
 
+    /**
+     * @param $userCode
+     *
+     * @return bool
+     */
     public function getCustomerPaymentProfile($userCode)
     {
         $customerId = $this->findCustomerByCode($userCode);
@@ -248,7 +253,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         $response = $this->request($endpoint, 'GET');
 
-        if($response && $response['payment_profiles'] && count($response['payment_profiles'])) {
+        if ($response && $response['payment_profiles'] && count($response['payment_profiles'])) {
             return $response['payment_profiles'][0];
         }
 
@@ -499,8 +504,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public
-    function createProduct(
+    public function createProduct(
         $body
     ) {
         if ($response = $this->request('products', 'POST', $body)) {
@@ -517,8 +521,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public
-    function findProductByCode(
+    public function findProductByCode(
         $code
     ) {
         $response = $this->request("products?query=code%3D{$code}", 'GET');
@@ -535,8 +538,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public
-    function findOrCreateUniquePaymentProduct()
+    public function findOrCreateUniquePaymentProduct()
     {
         $productId = $this->findProductByCode('wc-pagtounico');
 
@@ -559,8 +561,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public
-    function getMerchant()
+    public function getMerchant()
     {
         $cache = Mage::app()->getCache();
 
@@ -570,7 +571,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
             $response = $this->request('merchant', 'GET');
 
-            if (! $response || ! $response['merchant']) {
+            if (! $response || ! isset($response['merchant'])) {
                 return false;
             }
 
@@ -589,8 +590,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return boolean
      */
-    public
-    function isMerchantStatusTrial()
+    public function isMerchantStatusTrial()
     {
         if ($merchant = $this->getMerchant()) {
             return 'trial' === $merchant['status'];
@@ -599,4 +599,19 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         return false;
     }
 
+    /**
+     * @param $billId
+     *
+     * @return array|bool
+     */
+    public function getBill($billId)
+    {
+        $response = $this->request("bills/{$billId}", 'GET');
+
+        if (! $response || ! isset($response['bill'])) {
+            return false;
+        }
+
+        return $response['bill'];
+    }
 }

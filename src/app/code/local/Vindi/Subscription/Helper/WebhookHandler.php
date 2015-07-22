@@ -48,10 +48,10 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                 sleep(10);
 
                 return $this->billPaid($data);
-//            case 'charge_rejected':
-//                sleep(10);
-//
-//                return $this->chargeRejected($data);
+            case 'charge_rejected':
+                sleep(10);
+
+                return $this->chargeRejected($data);
             default:
                 $this->log(sprintf('Evento do webhook ignorado pelo plugin: "%s".', $type));
                 exit('0');
@@ -132,6 +132,52 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * @param $data
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function chargeRejected($data)
+    {
+        $charge = $data['charge'];
+
+        if (! ($order = $this->getOrderFromBill($charge['bill']['id']))) {
+            $this->log('Pedido não encontrado.');
+
+            return false;
+        }
+
+        $gatewayMessage = $charge['last_transaction']['gateway_message'];
+        $isLastAttempt = is_null($charge['next_attempt']);
+
+        if ($isLastAttempt) {
+            $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true, sprintf(
+                'Todas as tentativas de pagamento foram rejeitadas. Motivo: "%s".',
+                $gatewayMessage
+            ), true);
+            $this->log(sprintf(
+                'Todas as tentativas de pagamento do pedido %s foram rejeitadas. Motivo: "%s".',
+                $order->getId(),
+                $gatewayMessage
+            ));
+        } else {
+            $order->addStatusHistoryComment(sprintf(
+                'Tentativa de Pagamento rejeitada. Motivo: "%s". Uma nova tentativa será feita.',
+                $gatewayMessage
+            ));
+            $this->log(sprintf(
+                'Tentativa de pagamento do pedido %s foi rejeitada. Motivo: "%s". Uma nova tentativa será feita.',
+                $order->getId(),
+                $gatewayMessage
+            ));
+        }
+
+        $order->save();
+
+        return true;
+    }
+
+    /**
      * @param Mage_Sales_Model_Order $order
      *
      * @return bool
@@ -171,7 +217,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
      */
     private function getOrder($data)
     {
-        if ($data['bill'] && ($subscription = $data['bill']['subscription'])
+        if (isset($data['bill']) && isset($data['bill']['subscription']) && ($subscription = $data['bill']['subscription'])
             && ($subscriptionId = filter_var($subscription['id'], FILTER_SANITIZE_NUMBER_INT))
         ) {
             $order = $this->getOrderForPeriod($subscriptionId, $data['bill']['period']['cycle']);
@@ -187,6 +233,23 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         //TODO accept single payment
         return false;
+    }
+
+    /**
+     * @param $billId
+     *
+     * @return bool|\Mage_Sales_Model_Order
+     */
+    private function getOrderFromBill($billId)
+    {
+        /** @var Vindi_Subscription_Helper_API $api */
+        $api = Mage::helper('vindi_subscription/api');
+
+        if (! $bill = $api->getBill($billId)) {
+            return false;
+        }
+
+        return $this->getOrder(compact('bill'));
     }
 
     /**
