@@ -10,6 +10,7 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 - Pagamentos recorrentes por boleto bancário.
 - Aceita cálculo de descontos vitalícios e frete.
 - Mudança de status do pedido de "Pagamento Pendente" para "Processando" ao receber a confirmação de pagamento.
+- Atualização de pedido com informações de cobranças rejeitadas.
 - Geração de novos pedidos para os próximos períodos da recorrência dos planos.
 - Recuperação de informações do cartão já cadastrado do cliente, permitindo checkout com 1 clique.
 
@@ -66,10 +67,19 @@ Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.
 ## Roadmap
 Novos recursos que entrarão neste módulo, por ordem de prioridade:
 
-- Atualizar pedido com informações de cobranças rejeitadas.
 - Aceitar a venda de produtos simples/faturas avulsas. 
 - Integração com nota fiscal da Bling.
 - Frontend: Botão para download do boleto bancário ao concluir a compra e nos pedidos, para clientes.
 **Nota:** Independente destes botões, a plataforma da Vindi envia automaticamente o boleto para o cliente por e-mail.
 - Backend: Botões para download e envio por e-mail do boleto bancário ao acessar os pedidos, para gestores.
 - Melhorias na validação (processo de criação de cliente -> perfil de pagamento -> assinatura) e mensagens de erro.
+
+## Changelog
+
+### 0.0.2 - 17/07/2015
+- Atualização de pedido com informações de cobranças rejeitadas. Caso o sistema esteja configurado para realizar 
+novas tentativas de cobranças, apenas adiciona um comentário no pedido, senão, muda o status para "Cancelado".
+- Geração de novos pedidos na recorrência dos planos.
+
+### 0.0.1 - 03/07/2015
+- Versão Inicial
