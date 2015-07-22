@@ -2,6 +2,10 @@
 
 class Vindi_Subscription_Model_Product_Attribute_Plan extends Mage_Eav_Model_Entity_Attribute_Source_Abstract
 {
+    /**
+     * Get Plans from Vindi.
+     * @return array
+     */
     public function getAllOptions()
     {
         $this->_options = [

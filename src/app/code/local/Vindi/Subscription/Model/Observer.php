@@ -2,8 +2,14 @@
 
 class Vindi_Subscription_Model_Observer
 {
+    /**
+     * @var \Vindi_Subscription_Helper_Data
+     */
     private $_helper;
 
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         $this->_helper = Mage::helper('vindi_subscription');
