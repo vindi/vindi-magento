@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+    <!--OSC 6-->
     <onestepcheckout_index_index translate="label">
         <reference name="head">
             <action method="addItem">
@@ -12,6 +13,19 @@
             </action>
         </reference>
     </onestepcheckout_index_index>
+    <!--OSC 4-->
+    <onepagecheckout_index_index translate="label">
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>vindi_subscription/css/vindi_subscription.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>vindi_subscription/js/vindi_subscription.js</name>
+            </action>
+        </reference>
+    </onepagecheckout_index_index>
     <customer_account_edit translate="label">
         <reference name="head">
             <action method="addItem">
@@ -24,7 +38,6 @@
             </action>
         </reference>
     </customer_account_edit>
-
     <customer_address_form translate="label">
         <reference name="head">
             <action method="addItem">

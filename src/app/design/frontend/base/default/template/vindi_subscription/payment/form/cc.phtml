@@ -2,10 +2,11 @@
     <ul class="form-list" id="payment_form_<?php echo $code ?>" style="display:none;">
         <li>
             <div class="payment-companies">
-                <?php foreach ($ccs = $this->getCcAvailableTypes() as $typeCode => $typeName): ?>
-                    <img alt="<?php echo $typeName; ?>" title="<?php echo $typeName; ?>"
-                         src="https://s3.amazonaws.com/recurrent/payment_companies/<?php echo $typeCode; ?>.png"/>
-                <?php endforeach ?>
+                <?php foreach ($ccs = $this->getCcAvailableTypes() as $typeCode => $typeName) {
+                    echo '<img alt="' . $typeName . '" title="' . $typeName . '"
+                         src="https://s3.amazonaws.com/recurrent/payment_companies/' . $typeCode . '.png"/>';
+                }
+                ?>
             </div>
         </li>
         <?php if ($savedCc = $this->getSavedCc()): ?>
