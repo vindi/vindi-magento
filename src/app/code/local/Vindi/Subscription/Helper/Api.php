@@ -479,7 +479,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         $list = $cache->load('vindi_plans');
 
-        if ($list === false) {
+        if (($list === false) || ! count($list = unserialize($list))) {
 
             $list = [];
             $response = $this->request('plans?query=status:active', 'GET');
@@ -490,8 +490,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 }
             }
             $cache->save(serialize($list), 'vindi_plans', ['vindi_cache'], 10 * 60); // 10 minutes
-        } else {
-            $list = unserialize($list);
         }
 
         return $list;
