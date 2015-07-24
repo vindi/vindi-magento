@@ -97,18 +97,18 @@
         <events>
             <checkout_cart_update_items_before>
                 <observers>
-                    <vindi_subscription_checkQuantity>
+                    <vindi_subscription_updateItems>
                         <class>vindi_subscription/observer</class>
-                        <method>checkQuantity</method>
-                    </vindi_subscription_checkQuantity>
+                        <method>updateItems</method>
+                    </vindi_subscription_updateItems>
                 </observers>
             </checkout_cart_update_items_before>
             <checkout_cart_product_add_after>
                 <observers>
-                    <vindi_subscription_checkQuantity>
+                    <vindi_subscription_addToCart>
                         <class>vindi_subscription/observer</class>
-                        <method>checkQuantity</method>
-                    </vindi_subscription_checkQuantity>
+                        <method>addToCart</method>
+                    </vindi_subscription_addToCart>
                 </observers>
             </checkout_cart_product_add_after>
         </events>
