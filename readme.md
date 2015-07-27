@@ -1,4 +1,4 @@
-# Vindi Magento Recorrente
+# Vindi Magento Recorrente v0.0.3
 
 **Nota: Este módulo encontra-se em estágio de desenvolvimento, não sendo recomendada sua utilização em ambiente de produção.**
 
@@ -8,6 +8,8 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 ## Recursos
 - Pagamentos recorrentes por cartão de crédito.
 - Pagamentos recorrentes por boleto bancário.
+- Pagamentos avulsos (produtos simples) por cartão de crédito.
+- Pagamentos avulsos (produtos simples) por boleto bancário.
 - Aceita cálculo de descontos vitalícios e frete.
 - Mudança de status do pedido de "Pagamento Pendente" para "Processando" ao receber a confirmação de pagamento.
 - Atualização de pedido com informações de cobranças rejeitadas.
@@ -17,7 +19,7 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 ## Requerimentos
 - PHP 5.5 ou superior.
 - cURL habilitado para o PHP.
-- Magento Community Edition 1.9 ou superior.
+- Magento Community Edition 1.7 ou superior.
 - Módulo [One Step Checkout Brasil 6 Pro](https://github.com/deivisonarthur/OSC-Magento-Brasil-6-Pro).
 
 ## Instalação
@@ -59,15 +61,13 @@ Por exemplo, se a soma produto + frete + desconto resultar em *X*, esse valor *X
 e os demais ficarão com valor R$ 0,00 (zero reais).
 - Por conta da limitação acima, não é possível trabalhar de forma automática com items/produtos temporários, pois os mesmos terão valor zero.
 - Na recorrência, os pedidos são gerados com **o mesmo endereço** do pedido do período anterior.   
-- O módulo só aceita a venda de **Assinaturas Vindi**. Não é possível, no momento, efetuar venda de outros tipos de produtos / faturas avulsas.
-**Nota:** no momento, é possível contornar essa limitação criando planos com duração de apenas 1 período (ou seja, sem recorrência).
 - O módulo **não** gera pedidos do Magento para criação/recorrência de assinaturas que não possuam um pedido (no Magento) para o período anterior. 
 Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.  
   
 ## Roadmap
 Novos recursos que entrarão neste módulo, por ordem de prioridade:
 
-- Aceitar a venda de produtos simples/faturas avulsas. 
+- Parcelamento de vendas avulsas.
 - Integração com nota fiscal da Bling.
 - Frontend: Botão para download do boleto bancário ao concluir a compra e nos pedidos, para clientes.
 **Nota:** Independente destes botões, a plataforma da Vindi envia automaticamente o boleto para o cliente por e-mail.
@@ -75,6 +75,10 @@ Novos recursos que entrarão neste módulo, por ordem de prioridade:
 - Melhorias na validação (processo de criação de cliente -> perfil de pagamento -> assinatura) e mensagens de erro.
 
 ## Changelog
+
+### 0.0.3 - 27/07/2015
+- Venda de produtos simples/faturas avulsas.
+- Cache de requisições de clientes para aumento de performance.
 
 ### 0.0.2 - 17/07/2015
 - Atualização de pedido com informações de cobranças rejeitadas. Caso o sistema esteja configurado para realizar 

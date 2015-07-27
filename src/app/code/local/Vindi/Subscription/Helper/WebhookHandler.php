@@ -74,6 +74,12 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             return false;
         }
 
+        if (! isset($bill['subscription']) || is_null($bill['subscription'])) {
+            $this->log(sprintf('Ignorando o evento "bill_created" para venda avulsa.'));
+
+            return true;
+        }
+
         $period = intval($bill['period']['cycle']);
 
         if (isset($bill['period']) && ($period === 1)) {
@@ -132,7 +138,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return bool
      * @throws \Exception
@@ -191,7 +197,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         $this->log(sprintf('Gerando fatura para o pedido: %s.', $order->getId()));
 
         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true,
-            'O pagamento foi confirmado e a assinatura está sendo processada.', true);
+            'O pagamento foi confirmado e o pedido está sendo processado.', true);
 
         if (! $order->canInvoice()) {
             $this->log(sprintf('Impossível gerar fatura para o pedido %s.', $order->getId()));
@@ -217,7 +223,11 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
      */
     private function getOrder($data)
     {
-        if (isset($data['bill']) && isset($data['bill']['subscription']) && ($subscription = $data['bill']['subscription'])
+        if (! isset($data['bill'])) {
+            return false;
+        }
+
+        if (isset($data['bill']['subscription']) && ($subscription = $data['bill']['subscription'])
             && ($subscriptionId = filter_var($subscription['id'], FILTER_SANITIZE_NUMBER_INT))
         ) {
             $order = $this->getOrderForPeriod($subscriptionId, $data['bill']['period']['cycle']);
@@ -229,14 +239,21 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             }
 
             return $order;
-        }
+        } else {
+            $order = $this->getSingleOrder($data['bill']['id']);
 
-        //TODO accept single payment
-        return false;
+            if (! $order || ! $order->getId()) {
+                $this->log(sprintf('Nenhum pedido encontrado para a fatura: %d.', $data['bill']['id']));
+
+                return false;
+            }
+
+            return $order;
+        }
     }
 
     /**
-     * @param $billId
+     * @param int $billId
      *
      * @return bool|\Mage_Sales_Model_Order
      */
@@ -253,8 +270,8 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param $subscriptionId
-     * @param $subscriptionPeriod
+     * @param int $subscriptionId
+     * @param int $subscriptionPeriod
      *
      * @return Mage_Sales_Model_Order
      */
@@ -264,6 +281,19 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('*')
             ->addFieldToFilter('vindi_subscription_id', $subscriptionId)
             ->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
+            ->getFirstItem();
+    }
+
+    /**
+     * @param int $billId
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    private function getSingleOrder($billId)
+    {
+        return Mage::getModel('sales/order')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addFieldToFilter('vindi_bill_id', $billId)
             ->getFirstItem();
     }
 

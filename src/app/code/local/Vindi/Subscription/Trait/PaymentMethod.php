@@ -4,6 +4,33 @@ trait Vindi_Subscription_Trait_PaymentMethod
 {
 
     /**
+     * @param string $paymentAction
+     * @param object $stateObject
+     *
+     * @return bool|Mage_Payment_Model_Method_Abstract
+     */
+    public function initialize($paymentAction, $stateObject)
+    {
+        if ($this->checkForReorder()) {
+            return $this->processReorder($paymentAction, $stateObject);
+        }
+
+        return $this->processNewOrder($paymentAction, $stateObject);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function checkForReorder()
+    {
+        $session = Mage::getSingleton('core/session');
+        $isReorder = $session->getData('vindi_is_reorder', false);
+        $session->unsetData('vindi_is_reorder');
+
+        return $isReorder;
+    }
+
+    /**
      * @param Mage_Sales_Model_Order       $order
      * @param Mage_Customer_Model_Customer $customer
      *
@@ -64,6 +91,106 @@ trait Vindi_Subscription_Trait_PaymentMethod
     }
 
     /**
+     * @param string $paymentAction
+     * @param object $stateObject
+     *
+     * @return bool|Mage_Payment_Model_Method_Abstract
+     */
+    protected function processReorder($paymentAction, $stateObject)
+    {
+        $payment = $this->getInfoInstance();
+        $order = $payment->getOrder();
+
+        $payment->setAmount($order->getTotalDue());
+        $this->setStore($order->getStoreId());
+
+        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+            'Novo período da assinatura criado', true);
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
+            ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
+
+        return $this;
+    }
+
+    /**
+     * @param Mage_Payment_Model_Method_Abstract $payment
+     * @param Mage_Sales_Model_Order             $order
+     * @param int                                $customerId
+     *
+     * @return bool
+     * @throws \Mage_Core_Exception
+     */
+    protected function processSubscription($payment, $order, $customerId)
+    {
+        $subscription = $this->createSubscription($order, $customerId);
+
+        if ($subscription === false) {
+            Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
+
+            return false;
+        }
+
+        $payment->setAmount($order->getTotalDue());
+        $this->setStore($order->getStoreId());
+
+        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+            'Assinatura criada', true);
+
+        return true;
+    }
+
+    /**
+     * @param Mage_Payment_Model_Method_Abstract $payment
+     * @param Mage_Sales_Model_Order             $order
+     * @param int                                $customerId
+     *
+     * @return bool
+     * @throws \Mage_Core_Exception
+     */
+    protected function processSinglePayment($payment, $order, $customerId)
+    {
+        $uniquePaymentProduct = $this->api()->findOrCreateUniquePaymentProduct();
+
+        $this->log(sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct));
+
+        $body = [
+            'customer_id'         => $customerId,
+            'payment_method_code' => $this->getPaymentMethodCode(),
+            'bill_items'          => [
+                [
+                    'product_id' => $uniquePaymentProduct,
+                    'amount'     => $order->getGrandTotal(),
+                ],
+            ],
+        ];
+
+        //TODO add installments option
+
+        $billId = $this->api()->createBill($body);
+
+        if (! $billId) {
+            $this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
+
+            $message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
+            $payment->setStatus(
+                Mage_Sales_Model_Order::STATE_CANCELED,
+                Mage_Sales_Model_Order::STATE_CANCELED,
+                $message,
+                true
+            );
+
+            Mage::throwException($message);
+
+            return false;
+        }
+
+        $order->setVindiBillId($billId);
+        $order->save();
+
+        return $billId;
+    }
+
+    /**
      * @param Mage_Sales_Model_Order $order
      * @param int                    $customerId
      *
@@ -119,5 +246,19 @@ trait Vindi_Subscription_Trait_PaymentMethod
     protected function log($message, $level = null)
     {
         Mage::log($message, $level, $this->_code . '.log');
+    }
+
+    /*
+     * @param Mage_Sales_Model_Order $order
+     */
+    protected function isSingleOrder($order)
+    {
+        foreach ($order->getAllVisibleItems() as $item) {
+            if (($product = $item->getProduct()) && ($product->getTypeId() === 'subscription')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

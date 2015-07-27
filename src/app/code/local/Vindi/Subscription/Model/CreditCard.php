@@ -89,7 +89,8 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $info = $this->getInfoInstance();
 
         if ($data->getCcChoice() === 'saved') {
-            $info->setAdditionalInformation('use_saved_cc', true);
+            $info->setAdditionalInformation('PaymentMethod', $this->_code)
+                ->setAdditionalInformation('use_saved_cc', true);
 
             return $this;
         }
@@ -116,46 +117,8 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
      *
      * @return bool|Mage_Payment_Model_Method_Abstract
      */
-    public function initialize($paymentAction, $stateObject)
-    {
-        if ($this->checkForReorder()) {
-            return $this->processReorder($paymentAction, $stateObject);
-        }
-
-        return $this->processNewOrder($paymentAction, $stateObject);
-    }
-
-    /**
-     * @param string $paymentAction
-     * @param object $stateObject
-     *
-     * @return bool|Mage_Payment_Model_Method_Abstract
-     */
-    protected function processReorder($paymentAction, $stateObject)
-    {
-        $payment = $this->getInfoInstance();
-        $order = $payment->getOrder();
-
-        $payment->setAmount($order->getTotalDue());
-        $this->setStore($order->getStoreId());
-
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-            'Novo período da assinatura criado', true);
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
-            ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
-
-        return $this;
-    }
-
-    /**
-     * @param string $paymentAction
-     * @param object $stateObject
-     *
-     * @return bool|Mage_Payment_Model_Method_Abstract
-     */
     protected function processNewOrder($paymentAction, $stateObject)
     {
-        // TODO accept single payments
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
 
@@ -167,19 +130,16 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             $this->createPaymentProfile($customerId);
         }
 
-        $subscription = $this->createSubscription($order, $customerId);
+        if ($this->isSingleOrder($order)) {
+            $result = $this->processSinglePayment($payment, $order, $customerId);
+        } else {
+            $result = $this->processSubscription($payment, $order, $customerId);
+        }
 
-        if ($subscription === false) {
-            Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
-
+        if (! $result) {
             return false;
         }
 
-        $payment->setAmount($order->getTotalDue());
-        $this->setStore($order->getStoreId());
-
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-            'Assinatura criada', true);
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
             ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
 
@@ -214,18 +174,6 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         }
 
         return $paymentProfileId;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function checkForReorder()
-    {
-        $session = Mage::getSingleton('core/session');
-        $isReorder = $session->getData('vindi_is_reorder', false);
-        $session->unsetData('vindi_is_reorder');
-
-        return $isReorder;
     }
 
     /**
@@ -264,12 +212,12 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
 
         $info->setCcNumber($ccNumber);
 
-        if (! array_key_exists($info->getCcType(), $availableTypes)) {
-            $errorMsg = Mage::helper('payment')->__('Credit card type is not allowed for this payment method.');
-        }
-
         if (! $this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
             $errorMsg = Mage::helper('payment')->__('Incorrect credit card expiration date.');
+        }
+
+        if (! array_key_exists($info->getCcType(), $availableTypes)) {
+            $errorMsg = Mage::helper('payment')->__('Credit card type is not allowed for this payment method.');
         }
 
         if ($errorMsg) {

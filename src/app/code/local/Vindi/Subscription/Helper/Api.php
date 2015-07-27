@@ -44,6 +44,14 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * @return \Zend_Cache_Core
+     */
+    private function cache()
+    {
+        return Mage::app()->getCache();
+    }
+
+    /**
      * Build HTTP Query.
      *
      * @param array $data
@@ -191,13 +199,22 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function findCustomerByCode($code)
     {
-        $response = $this->request("customers/search?code={$code}", 'GET');
+        $customerId = $this->cache()->load("vindi_customer_by_code_{$code}");
 
-        if ($response && (1 === count($response['customers'])) && isset($response['customers'][0]['id'])) {
-            return $response['customers'][0]['id'];
+        if ($customerId === false) {
+            $response = $this->request("customers/search?code={$code}", 'GET');
+
+            if ($response && (1 === count($response['customers'])) && isset($response['customers'][0]['id'])) {
+                $customerId = $response['customers'][0]['id'];
+
+                $this->cache()->save(serialize($customerId), "vindi_customer_by_code_{$code}", ['vindi_cache'],
+                    5 * 60); // 5 minutes
+            }
+        } else {
+            $customerId = unserialize($customerId);
         }
 
-        return false;
+        return $customerId;
     }
 
     /**
@@ -248,16 +265,26 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         if (false === $customerId) {
             return false;
         }
-        $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
-            . '%20status%3Dactive%20type%3DPaymentProfile%3A%3ACreditCard';
 
-        $response = $this->request($endpoint, 'GET');
+        $paymentProfile = $this->cache()->load("vindi_payment_profile_{$customerId}");
 
-        if ($response && $response['payment_profiles'] && count($response['payment_profiles'])) {
-            return $response['payment_profiles'][0];
+        if ($paymentProfile === false) {
+            $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
+                . '%20status%3Dactive%20type%3DPaymentProfile%3A%3ACreditCard';
+
+            $response = $this->request($endpoint, 'GET');
+
+            if ($response && $response['payment_profiles'] && count($response['payment_profiles'])) {
+                $paymentProfile = $response['payment_profiles'][0];
+
+                $this->cache()->save(serialize($paymentProfile), "vindi_payment_profile_{$customerId}", ['vindi_cache'],
+                    5 * 60); // 5 minutes
+            }
+        } else {
+            $paymentProfile = unserialize($paymentProfile);
         }
 
-        return false;
+        return $paymentProfile;
     }
 
     /**
@@ -287,9 +314,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getPaymentMethods()
     {
-        $cache = Mage::app()->getCache();
-
-        $paymentMethods = $cache->load('vindi_payment_methods');
+        $paymentMethods = $this->cache()->load('vindi_payment_methods');
 
         if ($paymentMethods === false) {
 
@@ -319,7 +344,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 }
             }
 
-            $cache->save(serialize($paymentMethods), 'vindi_payment_methods', ['vindi_cache'],
+            $this->cache()->save(serialize($paymentMethods), 'vindi_payment_methods', ['vindi_cache'],
                 12 * 60 * 60); // 12 hours
         } else {
             $paymentMethods = unserialize($paymentMethods);
@@ -475,9 +500,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getPlans()
     {
-        $cache = Mage::app()->getCache();
-
-        $list = $cache->load('vindi_plans');
+        $list = $this->cache()->load('vindi_plans');
 
         if (($list === false) || ! count($list = unserialize($list))) {
 
@@ -489,7 +512,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                     $list[$plan['id']] = $plan['name'];
                 }
             }
-            $cache->save(serialize($list), 'vindi_plans', ['vindi_cache'], 10 * 60); // 10 minutes
+            $this->cache()->save(serialize($list), 'vindi_plans', ['vindi_cache'], 10 * 60); // 10 minutes
         }
 
         return $list;
@@ -502,9 +525,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function createProduct(
-        $body
-    ) {
+    public function createProduct($body)
+    {
         if ($response = $this->request('products', 'POST', $body)) {
             return $response['product']['id'];
         }
@@ -519,9 +541,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function findProductByCode(
-        $code
-    ) {
+    public function findProductByCode($code)
+    {
         $response = $this->request("products?query=code%3D{$code}", 'GET');
 
         if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
@@ -538,12 +559,12 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function findOrCreateUniquePaymentProduct()
     {
-        $productId = $this->findProductByCode('wc-pagtounico');
+        $productId = $this->findProductByCode('mag-pagtounico');
 
         if (false === $productId) {
             return $this->createProduct([
                 'name'           => 'Pagamento Único (não remover)',
-                'code'           => 'wc-pagtounico',
+                'code'           => 'mag-pagtounico',
                 'status'         => 'active',
                 'pricing_schema' => [
                     'price' => 0,
@@ -561,9 +582,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getMerchant()
     {
-        $cache = Mage::app()->getCache();
-
-        $merchant = $cache->load('vindi_merchant');
+        $merchant = $this->cache()->load('vindi_merchant');
 
         if ($merchant === false) {
 
@@ -575,7 +594,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
             $merchant = $response['merchant'];
 
-            $cache->save(serialize($merchant), 'vindi_merchant', ['vindi_cache'], 1 * 60 * 60); // 1 hour
+            $this->cache()->save(serialize($merchant), 'vindi_merchant', ['vindi_cache'], 1 * 60 * 60); // 1 hour
         } else {
             $merchant = unserialize($merchant);
         }

@@ -87,30 +87,27 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
      *
      * @return bool|Mage_Payment_Model_Method_Abstract
      */
-    public function initialize($paymentAction, $stateObject)
+    protected function processNewOrder($paymentAction, $stateObject)
     {
-        // TODO accept single payments
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
+
         $customer = Mage::getModel('customer/customer');
 
         $customerId = $this->createCustomer($order, $customer);
 
-        $subscription = $this->createSubscription($order, $customerId);
+        if ($this->isSingleOrder($order)) {
+            $result = $this->processSinglePayment($payment, $order, $customerId);
+        } else {
+            $result = $this->processSubscription($payment, $order, $customerId);
+        }
 
-        if ($subscription === false) {
-            Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
-
+        if (! $result) {
             return false;
         }
 
-        $payment->setAmount($order->getTotalDue());
-        $this->setStore($payment->getOrder()->getStoreId());
-
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                            'Assinatura criada', true);
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
-                    ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
+            ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
 
         return $this;
     }
@@ -128,7 +125,7 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
         $api = Mage::helper('vindi_subscription/api');
 
         return Mage::getStoreConfig('payment/vindi_bankslip/active')
-               && $api->acceptBankSlip();
+        && $api->acceptBankSlip();
     }
 
     /**
