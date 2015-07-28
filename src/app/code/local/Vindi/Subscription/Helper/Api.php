@@ -250,6 +250,9 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $dataToLog['card_number'] = '**** *' . substr($dataToLog['card_number'], -3);
         $dataToLog['card_cvv'] = '***';
 
+        $customerId = $body['customer_id'];
+        $this->cache()->remove("vindi_payment_profile_{$customerId}");
+
         return $this->request('payment_profiles', 'POST', $body, $dataToLog);
     }
 

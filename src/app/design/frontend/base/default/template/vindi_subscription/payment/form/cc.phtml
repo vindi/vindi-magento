@@ -9,6 +9,21 @@
                 ?>
             </div>
         </li>
+        <?php if($installments = $this->getInstallments()): ?>
+        <li>
+            <div id="<?php echo $code ?>_cc_type_installments_div" class="wide">
+                <label for="<?php echo $code ?>_cc_cid" class="required">
+                    <em>*</em>Parcelas
+                </label>
+
+                <div class="input-box">
+                    <select name="payment[cc_installments]" class="required-entry">
+                        <?php echo $installments; ?>
+                    </select>
+                </div>
+            </div>
+        </li>
+        <?php endif; ?>
         <?php if ($savedCc = $this->getSavedCc()): ?>
             <li class="payment-choice-saved-cc payment-choice">
                 <label class="label-choice label-choice-saved-cc">

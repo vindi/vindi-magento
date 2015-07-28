@@ -164,7 +164,9 @@ trait Vindi_Subscription_Trait_PaymentMethod
             ],
         ];
 
-        //TODO add installments option
+        if ( $installments = $payment->getAdditionalInformation('installments') ) {
+            $body['installments'] = (int) $installments;
+        }
 
         $billId = $this->api()->createBill($body);
 
@@ -253,6 +255,10 @@ trait Vindi_Subscription_Trait_PaymentMethod
      */
     protected function isSingleOrder($order)
     {
+        if (! $order) {
+            return false;
+        }
+
         foreach ($order->getAllVisibleItems() as $item) {
             if (($product = $item->getProduct()) && ($product->getTypeId() === 'subscription')) {
                 return false;

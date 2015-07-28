@@ -21,6 +21,9 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
         return $this->api()->getCreditCardTypes();
     }
 
+    /**
+     * @return bool
+     */
     public function getSavedCc()
     {
         $customer = Mage::getSingleton('customer/session')->getCustomer();
@@ -33,11 +36,57 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     }
 
     /**
+     * @return bool|string
+     */
+    public function getInstallments()
+    {
+        $maxInstallmentsNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
+        $minInstallmentsValue = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+
+        $installments = false;
+
+        if ($this->isSingleQuote($quote) && $maxInstallmentsNumber > 1) {
+
+            $total = $quote->getGrandTotal();
+
+            $installments = '<option value="">' . Mage::helper('catalog')->__('-- Please Select --') . '</option>';
+            for ($i = 1; $i <= $maxInstallmentsNumber; $i++) {
+                $value = ceil($total / $i * 100) / 100;
+
+                if ($value >= $minInstallmentsValue) {
+                    $price = Mage::helper('core')->currency($value, true, false);
+                    $installments .= '<option value="' . $i . '">' . sprintf('%dx de %s', $i, $price) . '</option>';
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return $installments;
+    }
+
+    /**
+     * @param Mage_Sales_Model_Quote $quote
+     *
+     * @return bool
+     */
+    protected function isSingleQuote($quote)
+    {
+        foreach ($quote->getAllVisibleItems() as $item) {
+            if (($product = $item->getProduct()) && ($product->getTypeId() === 'subscription')) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @return Vindi_Subscription_Helper_API
      */
     private function api()
     {
         return Mage::helper('vindi_subscription/api');
     }
-
 }

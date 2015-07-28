@@ -87,6 +87,11 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             $data = new Varien_Object($data);
         }
         $info = $this->getInfoInstance();
+        $quote = $info->getQuote();
+
+        if ($this->isSingleOrder($quote)) {
+            $info->setAdditionalInformation('installments', $data->getCcInstallments());
+        }
 
         if ($data->getCcChoice() === 'saved') {
             $info->setAdditionalInformation('PaymentMethod', $this->_code)
@@ -197,7 +202,27 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     public function validate()
     {
         $info = $this->getInfoInstance();
-        $errorMsg = false;
+
+        $quote = $info->getQuote();
+
+        $maxInstallmentsNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
+
+        if ($this->isSingleOrder($quote) && ($maxInstallmentsNumber > 1)) {
+            if (! $installments = $info->getAdditionalInformation('installments')) {
+                return $this->error('Você deve informar o número de parcelas.');
+            }
+
+            if ($installments > $maxInstallmentsNumber) {
+                return $this->error('O número de parcelas selecionado é inválido.');
+            }
+
+            $minInstallmentsValue = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
+            $installmentValue = ceil($quote->getGrandTotal() / $installments * 100) / 100;
+
+            if (($installmentValue < $minInstallmentsValue) || ($installments > $maxInstallmentsNumber)) {
+                return $this->error('O número de parcelas selecionado é inválido.');
+            }
+        }
 
         if ($info->getAdditionalInformation('use_saved_cc')) {
             return $this;
@@ -213,20 +238,27 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $info->setCcNumber($ccNumber);
 
         if (! $this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
-            $errorMsg = Mage::helper('payment')->__('Incorrect credit card expiration date.');
+            return $this->error(Mage::helper('payment')->__('Incorrect credit card expiration date.'));
         }
 
         if (! array_key_exists($info->getCcType(), $availableTypes)) {
-            $errorMsg = Mage::helper('payment')->__('Credit card type is not allowed for this payment method.');
-        }
-
-        if ($errorMsg) {
-            Mage::throwException($errorMsg);
-
-            return false;
+            return $this->error(Mage::helper('payment')->__('Credit card type is not allowed for this payment method.'));
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $errorMsg
+     *
+     * @return bool
+     * @throws \Mage_Core_Exception
+     */
+    private function error($errorMsg)
+    {
+        Mage::throwException($errorMsg);
+
+        return false;
     }
 
     /**

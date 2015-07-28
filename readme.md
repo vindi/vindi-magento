@@ -10,6 +10,7 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 - Pagamentos recorrentes por boleto bancário.
 - Pagamentos avulsos (produtos simples) por cartão de crédito.
 - Pagamentos avulsos (produtos simples) por boleto bancário.
+- Parcelamento de pagamentos avulsos.
 - Aceita cálculo de descontos vitalícios e frete.
 - Mudança de status do pedido de "Pagamento Pendente" para "Processando" ao receber a confirmação de pagamento.
 - Atualização de pedido com informações de cobranças rejeitadas.
@@ -67,7 +68,6 @@ Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.
 ## Roadmap
 Novos recursos que entrarão neste módulo, por ordem de prioridade:
 
-- Parcelamento de vendas avulsas.
 - Integração com nota fiscal da Bling.
 - Frontend: Botão para download do boleto bancário ao concluir a compra e nos pedidos, para clientes.
 **Nota:** Independente destes botões, a plataforma da Vindi envia automaticamente o boleto para o cliente por e-mail.
@@ -76,8 +76,9 @@ Novos recursos que entrarão neste módulo, por ordem de prioridade:
 
 ## Changelog
 
-### 0.0.3 - 27/07/2015
+### 0.0.3 - 28/07/2015
 - Venda de produtos simples/faturas avulsas.
+- Parcelamento de faturas avulsas.
 - Cache de requisições de clientes para aumento de performance.
 
 ### 0.0.2 - 17/07/2015

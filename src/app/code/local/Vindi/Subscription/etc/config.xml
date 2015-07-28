@@ -74,6 +74,8 @@
                 <title>Cart&#xE3;o de Cr&#xE9;dito</title>
                 <payment_action>capture</payment_action>
                 <allowspecific>0</allowspecific>
+                <min_installment_value>5</min_installment_value>
+                <max_installments_number>1</max_installments_number>
             </vindi_creditcard>
         </payment>
     </default>

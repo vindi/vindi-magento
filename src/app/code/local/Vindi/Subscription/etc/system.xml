@@ -8,7 +8,8 @@
     </tabs>
     <sections>
         <vindi_subscription translate="label" module="vindi_subscription">
-            <label><![CDATA[<img src="//www.vindi.com.br/image/favicon.png" style="float:left;margin-top:1px;width:16px;height:16px"/>&nbsp;Vindi Assinaturas]]></label>
+            <label>
+                <![CDATA[<img src="//www.vindi.com.br/image/favicon.png" style="float:left;margin-top:1px;width:16px;height:16px"/>&nbsp;Vindi Assinaturas]]></label>
             <tab>vindi</tab>
             <frontend_type>text</frontend_type>
             <sort_order>10</sort_order>
@@ -22,7 +23,8 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <comment><![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
+                    <comment>
+                        <![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
                     <fields>
                         <api_key>
                             <label>Chave da API</label>
@@ -52,7 +54,8 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>0</show_in_store>
-                    <comment><![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
+                    <comment>
+                        <![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
                     <fields>
                         <active translate="label">
                             <label>Ativo</label>
@@ -71,6 +74,35 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </title>
+                        <installments_heading translate="label">
+                            <label>Vendas Avulsas</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </installments_heading>
+                        <min_installment_value translate="label">
+                            <label>Valor mínimo da parcela</label>
+                            <comment>Valor mínimo da parcela, não deve ser inferior a R$ 5,00.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </min_installment_value>
+                        <max_installments_number translate="label">
+                            <label>Número máximo de parcelas</label>
+                            <comment>Número máximo de parcelas para vendas avulsas. Deixe em 1x para desativar o
+                                parcelamento.
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>vindi_subscription/config_installments</source_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_installments_number>
                     </fields>
                 </vindi_creditcard>
                 <vindi_bankslip translate="label" module="vindi_subscription">
@@ -79,7 +111,8 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>0</show_in_store>
-                    <comment><![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
+                    <comment>
+                        <![CDATA[<a href="https://app.vindi.com.br/prospects/new" target="_blank">Clique aqui para criar uma conta na Vindi.</a>]]></comment>
                     <fields>
                         <active translate="label">
                             <label>Ativo</label>
