@@ -1,4 +1,4 @@
-src/app/code/local/Vindi/Subscription     app/code/local/Vindi/Subscription
+src/app/code/community/Vindi/Subscription     app/code/community/Vindi/Subscription
 src/app/etc/modules/*    app/etc/modules/
 src/app/design/frontend/base/default/template/vindi_subscription/*  app/design/frontend/base/default/template/vindi_subscription/
 src/app/design/frontend/base/default/layout/*  app/design/frontend/base/default/layout/
