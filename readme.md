@@ -1,4 +1,4 @@
-# Vindi Magento Recorrente v0.0.3
+# Vindi Magento Recorrente v1.0.2
 
 **Nota: Este módulo encontra-se em estágio de desenvolvimento, não sendo recomendada sua utilização em ambiente de produção.**
 
@@ -75,6 +75,9 @@ Novos recursos que entrarão neste módulo, por ordem de prioridade:
 - Melhorias na validação (processo de criação de cliente -> perfil de pagamento -> assinatura) e mensagens de erro.
 
 ## Changelog
+
+### 1.0.2 - 29/07/2015
+- Atualizado para Versão estável.
 
 ### 0.0.3 - 28/07/2015
 - Venda de produtos simples/faturas avulsas.
