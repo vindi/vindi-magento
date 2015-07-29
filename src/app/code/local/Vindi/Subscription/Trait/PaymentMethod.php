@@ -31,6 +31,25 @@ trait Vindi_Subscription_Trait_PaymentMethod
     }
 
     /**
+     * @param Mage_Customer_Model_Customer $customer
+     *
+     * @return bool|string
+     * @throws \Mage_Core_Exception
+     */
+    protected function getCustomerTipoPessoa($customer)
+    {
+        $attribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'tipopessoa');
+
+        $tipopessoa = $customer->getTipopessoa();
+
+        if ($attribute && $attribute->usesSource() && $tipopessoa) {
+            return $attribute->getSource()->getOptionText($tipopessoa);
+        }
+
+        return false;
+    }
+
+    /**
      * @param Mage_Sales_Model_Order       $order
      * @param Mage_Customer_Model_Customer $customer
      *
@@ -68,6 +87,21 @@ trait Vindi_Subscription_Trait_PaymentMethod
             'code'          => $userCode,
             'address'       => $address,
         ];
+
+        if (Mage::getStoreConfig('vindi_subscription/general/send_nfe_information')) {
+            switch ($this->getCustomerTipoPessoa($customer)) {
+                case "Física":
+                    $customerVindi['metadata'] = [
+                        'carteira_de_identidade' => $customer->getIe(),
+                    ];
+                    break;
+                case "Jurídica":
+                    $customerVindi['metadata'] = [
+                        'inscricao_estadual' => $customer->getIe(),
+                    ];
+                    break;
+            }
+        }
 
         $customerId = $this->api()->findOrCreateCustomer($customerVindi);
 
@@ -164,7 +198,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
             ],
         ];
 
-        if ( $installments = $payment->getAdditionalInformation('installments') ) {
+        if ($installments = $payment->getAdditionalInformation('installments')) {
             $body['installments'] = (int) $installments;
         }
 
@@ -218,7 +252,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
             'customer_id'         => $customerId,
             'payment_method_code' => $this->getPaymentMethodCode(),
             'plan_id'             => $plan,
-            'code'                => $order->getIncrementId(),
+            'code'                => 'mag-' . $order->getIncrementId() . '-' . time(),
             'product_items'       => $productItems,
         ];
 

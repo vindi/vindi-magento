@@ -60,6 +60,11 @@
         </sales>
     </adminhtml>
     <default>
+        <vindi_subscription>
+            <general>
+                <send_nfe_information>0</send_nfe_information>
+            </general>
+        </vindi_subscription>
         <payment>
             <vindi_bankslip>
                 <active>0</active>
