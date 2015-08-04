@@ -22,10 +22,12 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 - PHP 5.5 ou superior.
 - cURL habilitado para o PHP.
 - Magento Community Edition 1.7 ou superior.
+
+## Recomendações
 - Módulo [One Step Checkout Brasil 6 Pro](https://github.com/deivisonarthur/OSC-Magento-Brasil-6-Pro).
 
 ## Instalação
-###1. Via [modman](https://github.com/colinmollenhour/modman): (recomendado) 
+###1. Via [modman](https://github.com/colinmollenhour/modman): (recomendado)
 ```
 modman clone https://github.com/vindi/vindi-magento.git
 ```
@@ -36,10 +38,10 @@ modman clone https://github.com/vindi/vindi-magento.git
 
 ###2. Via zip: (não recomendado)
 1. [Faça o download do zip](https://github.com/vindi/vindi-magento/archive/master.zip).
-2. extraia o conteúdo da pasta `src` em sua instalação do Magento. 
+2. extraia o conteúdo da pasta `src` em sua instalação do Magento.
 
 ## Atualização
-###1. Via [modman](https://github.com/colinmollenhour/modman): (recomendado) 
+###1. Via [modman](https://github.com/colinmollenhour/modman): (recomendado)
 ```
 modman update Vindi_Subscription
 ```
@@ -49,6 +51,7 @@ modman update Vindi_Subscription
 
 ## Configuração
 1. Configure o [One Step Checkout Brasil 6 Pro](https://github.com/deivisonarthur/OSC-Magento-Brasil-6-Pro) conforme instruções contidas em seu próprio link.
+Caso não deseje utilizá-lo, será necessário entrar em contato com a Vindi para alinhamento de como obter as informações de clientes como endereço e documentos (CPF/CNPJ, RG/IE).
 1. Em *System > Configuration > Vindi > Vindi Assinaturas*  informe a chave da API de sua conta Vindi e salve.
 1. Caso a conexão ocorra com sucesso, você verá um link para configuração dos *Webhooks*, que deverá ser feito no **painel da Vindi**.
 1. Em *System > Configuration > Sales > Payment Methods*, configure os métodos de pagamento **Vindi - Cartão de Crédito**  e **Vindi - Boleto Bancário**.
@@ -58,14 +61,14 @@ modman update Vindi_Subscription
 
 ## Limitações
 - O valor cobrado no checkout do Magento será o que efetivamente será recorrente para o cliente.
-Por exemplo, se a soma produto + frete + desconto resultar em *X*, esse valor *X* será cobrado todos os meses do cliente.  
-- No momento, o primeiro item/produto de um plano da Vindi deve ser permanente, pois o valor gerado no checkout do Magento será adicionado **integralmente** neste item, 
+Por exemplo, se a soma produto + frete + desconto resultar em *X*, esse valor *X* será cobrado todos os meses do cliente.
+- No momento, o primeiro item/produto de um plano da Vindi deve ser permanente, pois o valor gerado no checkout do Magento será adicionado **integralmente** neste item,
 e os demais ficarão com valor R$ 0,00 (zero reais).
 - Por conta da limitação acima, não é possível trabalhar de forma automática com items/produtos temporários, pois os mesmos terão valor zero.
-- Na recorrência, os pedidos são gerados com **o mesmo endereço** do pedido do período anterior.   
-- O módulo **não** gera pedidos do Magento para criação/recorrência de assinaturas que não possuam um pedido (no Magento) para o período anterior. 
-Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.  
-  
+- Na recorrência, os pedidos são gerados com **o mesmo endereço** do pedido do período anterior.
+- O módulo **não** gera pedidos do Magento para criação/recorrência de assinaturas que não possuam um pedido (no Magento) para o período anterior.
+Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.
+
 ## Roadmap
 Novos recursos que entrarão neste módulo, por ordem de prioridade:
 
@@ -87,7 +90,7 @@ Novos recursos que entrarão neste módulo, por ordem de prioridade:
 - Adicionada integração com nota fiscal da Bling.
 
 ### 0.0.2 - 17/07/2015
-- Atualização de pedido com informações de cobranças rejeitadas. Caso o sistema esteja configurado para realizar 
+- Atualização de pedido com informações de cobranças rejeitadas. Caso o sistema esteja configurado para realizar
 novas tentativas de cobranças, apenas adiciona um comentário no pedido, senão, muda o status para "Cancelado".
 - Geração de novos pedidos na recorrência dos planos.
 
