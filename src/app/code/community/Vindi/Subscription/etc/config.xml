@@ -58,6 +58,13 @@
                 </create>
             </order>
         </sales>
+        <layout>
+            <updates>
+                <vindi_subscription>
+                    <file>vindi_subscription.xml</file>
+                </vindi_subscription>
+            </updates>
+        </layout>
     </adminhtml>
     <default>
         <vindi_subscription>

@@ -12,6 +12,38 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     }
 
     /**
+     * @return bool
+     */
+    private function isAdmin()
+    {
+        return Mage::app()->getStore()->isAdmin();
+    }
+
+    /**
+     * @return \Mage_Customer_Model_Customer
+     */
+    private function getCustomer()
+    {
+        if ($this->isAdmin()) {
+            return Mage::getSingleton('adminhtml/session_quote')->getCustomer();
+        }
+
+        return Mage::getSingleton('customer/session')->getCustomer();
+    }
+
+    /**
+     * @return \Mage_Sales_Model_Quote
+     */
+    private function getQuote()
+    {
+        if ($this->isAdmin()) {
+            return Mage::getSingleton('adminhtml/session_quote')->getQuote();
+        }
+
+        return Mage::getSingleton('checkout/session')->getQuote();
+    }
+
+    /**
      * Retrieve available credit card types
      *
      * @return array
@@ -26,7 +58,7 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
      */
     public function getSavedCc()
     {
-        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $customer = $this->getCustomer();
 
         if (! $userCode = $customer->getVindiUserCode()) {
             return false;
@@ -42,7 +74,8 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     {
         $maxInstallmentsNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
         $minInstallmentsValue = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
+//        $quote = Mage::getSingleton('checkout/session')->getQuote();
+        $quote = $this->getQuote();
 
         $installments = false;
 

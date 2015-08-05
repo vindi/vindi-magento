@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_sales_order_create_index translate="label">
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>vindi_subscription/css/vindi_subscription.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>vindi_subscription/js/vindi_subscription.js</name>
+            </action>
+        </reference>
+    </adminhtml_sales_order_create_index>
+</layout>

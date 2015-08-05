@@ -6,6 +6,8 @@
             <codePool>community</codePool>
             <depends>
                 <Mage_Payment/>
+                <Mage_Adminhtml/>
+                <Mage_Sales/>
             </depends>
         </Vindi_Subscription>
     </modules>

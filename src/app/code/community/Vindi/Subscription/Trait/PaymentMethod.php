@@ -59,8 +59,13 @@ trait Vindi_Subscription_Trait_PaymentMethod
     {
         $billing = $order->getBillingAddress();
 
-        $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
-        $customer->loadByEmail($billing->getEmail());
+        if (Mage::app()->getStore()->isAdmin()) {
+            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
+        } else {
+            $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
+            $customer->loadByEmail($billing->getEmail());
+        }
+
         //TODO fix user being created again if validation fails
         if (! ($userCode = $customer->getVindiUserCode())) {
             $userCode = 'mag-' . $customer->getId() . '-' . time();
