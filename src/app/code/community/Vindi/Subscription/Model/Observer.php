@@ -93,6 +93,40 @@ class Vindi_Subscription_Model_Observer
     }
 
     /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function validateAdminHtmlOrder($observer)
+    {
+        /** @var Mage_Adminhtml_Model_Sales_Order_Create $order */
+        $order = $observer['order_create_model'];
+        $quote = $order->getQuote();
+        $quote->collectTotals();
+
+        $itemsCount = $quote->getItemsCount();
+        $itemsSummaryQty = $quote->getItemsSummaryQty();
+        $subscriptionsCount = $this->countSubscriptions($quote);
+
+        if (! $subscriptionsCount) {
+            return;
+        }
+
+        if (($subscriptionsCount > 1)) {
+            Mage::throwException('Você pode fazer apenas uma assinatura por vez.<br />
+                             Conclua a compra de uma única assinatura ou remova os excedentes dos itens.');
+        }
+
+        if (($itemsCount === 1) && ($itemsSummaryQty > 1)) {
+            Mage::throwException('Você pode fazer apenas uma assinatura por vez.<br />
+                             Por favor, tente novamente.');
+        }
+
+        if ($itemsCount > 1) {
+            Mage::throwException('Você não pode adicionar assinaturas e outros tipos de produtos em um mesmo pedido.<br />
+                                     Conclua a compra da assinatura ou remova-a do carrinho.');
+        }
+    }
+
+    /**
      * @param $message
      */
     private function addNotice($message)

@@ -65,6 +65,16 @@
                 </vindi_subscription>
             </updates>
         </layout>
+        <events>
+            <adminhtml_sales_order_create_process_data>
+                <observers>
+                    <vindi_subscription_saveAdminHtmlOrder>
+                        <class>vindi_subscription/observer</class>
+                        <method>validateAdminHtmlOrder</method>
+                    </vindi_subscription_saveAdminHtmlOrder>
+                </observers>
+            </adminhtml_sales_order_create_process_data>
+        </events>
     </adminhtml>
     <default>
         <vindi_subscription>
