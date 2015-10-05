@@ -315,8 +315,15 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         $quote = $order->getQuote();
 
+        $shippingMethod = $oldOrder->getShippingMethod();
+        $activedShippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')->getActivedShippingMethodsValues();
+
+        if(!in_array($shippingMethod, $activedShippingMethods)){
+            $shippingMethod = Mage::getStoreConfig('vindi_subscription/general/default_shipping_method');
+        }
+
         $quote->getShippingAddress()
-            ->setShippingMethod($oldOrder->getShippingMethod())
+            ->setShippingMethod($shippingMethod)
             ->setCollectShippingRates(true)
             ->collectShippingRates()
             ->collectTotals()
@@ -332,7 +339,18 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         try {
             $order = $order->createOrder();
         } catch (Exception $e) {
-            $this->log("Erro ao criar pedido!\n" . $e->getMessage());
+            $this->log("Erro ao criar pedido!");
+            if($e->getMessage()){
+                $this->log($e->getMessage());
+                echo $e->getMessage();
+            }else{
+                $messages = $order->getSession()->getMessages(true);
+                foreach($messages->getItems() as $message)
+                {
+                   $this->log($message->getText());
+                   echo $message->getText();
+                }
+            }
 
             return false;
         }
