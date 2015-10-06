@@ -7,8 +7,23 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
      * @param int|null $level
      */
     public function log($message, $level = null)
-    {
+    {        
         Mage::log($message, $level, 'vindi_webhooks.log');
+        
+        switch ($level) {
+            case 4:
+                http_response_code(422);
+                exit($message);
+                break;
+            case 5:
+                echo $message;
+                return false;
+                break;
+            default:
+                return true;
+                break;
+        }
+
     }
 
     /**
@@ -30,9 +45,8 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             $type = $jsonBody['event']['type'];
             $data = $jsonBody['event']['data'];
         } catch (Exception $e) {
-            $this->log(sprintf('Falha ao interpretar JSON do webhook: %s', $e->getMessage()));
-            http_response_code(422);
-            exit('0');
+            $this->log(sprintf('Falha ao interpretar JSON do webhook: %s', $e->getMessage()), 5);
+            return false;
         }
 
         switch ($type) {
@@ -53,7 +67,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
                 return $this->chargeRejected($data);
             default:
-                $this->log(sprintf('Evento do webhook ignorado pelo plugin: "%s".', $type));
+                $this->log(sprintf('Evento do webhook ignorado pelo plugin: "%s".', $type), 5);
                 exit('0');
         }
     }
@@ -69,36 +83,36 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
     public function billCreated($data)
     {
         if (! ($bill = $data['bill'])) {
-            $this->log('Erro ao interpretar webhook "bill_created".');
+            $this->log('Erro ao interpretar webhook "bill_created".', 5);
 
             return false;
         }
 
         if (! isset($bill['subscription']) || is_null($bill['subscription'])) {
-            $this->log(sprintf('Ignorando o evento "bill_created" para venda avulsa.'));
+            $this->log(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 5);
 
-            return true;
+            return false;
         }
 
         $period = intval($bill['period']['cycle']);
 
         if (isset($bill['period']) && ($period === 1)) {
-            $this->log(sprintf('Ignorando o evento "bill_created" para o primeiro ciclo.'));
+            $this->log(sprintf('Ignorando o evento "bill_created" para o primeiro ciclo.'), 5);
 
-            return true;
+            return false;
         }
 
         if (($order = $this->getOrder($data))) {
-            $this->log(sprintf('Já existe o pedido %s para o evento "bill_created".', $order->getId()));
+            $this->log(sprintf('Já existe o pedido %s para o evento "bill_created".', $order->getId()), 5);
 
-            return true;
+            return false;
         }
 
         $subscriptionId = $bill['subscription']['id'];
         $lastPeriodOrder = $this->getOrderForPeriod($subscriptionId, $period - 1);
 
         if (! $lastPeriodOrder || ! $lastPeriodOrder->getId()) {
-            $this->log('Pedido anterior não encontrado. Ignorando evento.');
+            $this->log('Pedido anterior não encontrado. Ignorando evento.', 4);
 
             return false;
         }
@@ -106,7 +120,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         $order = $this->createOrder($lastPeriodOrder);
 
         if (! $order) {
-            $this->log('Impossível gerar novo pedido!');
+            $this->log('Impossível gerar novo pedido!', 4);
 
             return false;
         }
@@ -131,6 +145,12 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
     public function billPaid($data)
     {
         if (! ($order = $this->getOrder($data))) {
+            $this->log(sprintf('Ainda não existe um pedido para ciclo %s da assinatura: %d.',
+                $data['bill']['period']['cycle'], 
+                $data['bill']['subscription']['id']), 
+                4
+            );
+
             return false;
         }
 
@@ -148,7 +168,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         $charge = $data['charge'];
 
         if (! ($order = $this->getOrderFromBill($charge['bill']['id']))) {
-            $this->log('Pedido não encontrado.');
+            $this->log('Pedido não encontrado.', 4);
 
             return false;
         }
@@ -200,7 +220,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             'O pagamento foi confirmado e o pedido está sendo processado.', true);
 
         if (! $order->canInvoice()) {
-            $this->log(sprintf('Impossível gerar fatura para o pedido %s.', $order->getId()));
+            $this->log(sprintf('Impossível gerar fatura para o pedido %s.', $order->getId()), 4);
 
             // TODO define how to handle this
 
@@ -340,6 +360,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             $order = $order->createOrder();
         } catch (Exception $e) {
             $this->log("Erro ao criar pedido!");
+            
             if($e->getMessage()){
                 $this->log($e->getMessage());
                 echo $e->getMessage();
