@@ -1,6 +1,6 @@
 <?php
 
-class Vindi_Subscription_Model_Config_ShippingMethod
+class Vindi_Subscription_Model_Config_Shippingmethod
 {
     public function toOptionArray()
     {
