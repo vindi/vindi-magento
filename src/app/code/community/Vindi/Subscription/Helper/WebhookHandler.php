@@ -59,12 +59,8 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             case 'bill_created':
                 return $this->billCreated($data);
             case 'bill_paid':
-                sleep(10);
-
                 return $this->billPaid($data);
             case 'charge_rejected':
-                sleep(10);
-
                 return $this->chargeRejected($data);
             default:
                 $this->log(sprintf('Evento do webhook ignorado pelo plugin: "%s".', $type), 5);
