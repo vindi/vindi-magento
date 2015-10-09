@@ -478,22 +478,55 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param int   $planId
-     * @param float $orderTotal
+     * @param Mage_Sales_Model_Order $order
      *
      * @return array
      */
-    public function buildPlanItemsForSubscription($planId, $orderTotal)
+    public function buildPlanItemsForSubscription($order)
     {
         $list = [];
-
-        foreach ($this->getPlanItems($planId) as $item) {
-            $list[] = [
-                'product_id'     => $item,
-                'pricing_schema' => ['price' => $orderTotal],
-            ];
-            $orderTotal = 0;
+        $orderItems = $order->getItemsCollection();
+        $orderSubtotal = $order->getQuote()->getSubtotal();
+        $orderDiscount = $order->getDiscountAmount() * -1;
+        
+        $discount = null;
+        if(!empty($orderDiscount)){
+            $discountPercentage = $orderDiscount * 100 / $orderSubtotal;
+            $discountPercentage = number_format(floor($discountPercentage*100)/100, 2);
+            
+            $discount = [[
+                        'discount_type' => 'percentage',
+                        'percentage' => $discountPercentage
+                    ]];
         }
+
+        foreach($orderItems as $item)
+        {
+            $product = Mage::getModel('catalog/product')->load($item->getProductId());
+            if ($product->getTypeID() !== 'subscription') {
+                Mage::throwException("O produto {$item->getName()} não é uma assinatura.");
+
+                return false;
+            }
+
+            $productVindiId = $this->findOrCreateProduct(array( 'sku' => $item->getSku(), 'name' => $item->getName()));
+            
+            for ($i=1; $i <= $item->getQtyOrdered() ; $i++) { 
+                $list[] = [
+                    'product_id'     => $productVindiId,
+                    'pricing_schema' => ['price' => $item->getPrice()],
+                    'discounts'       => $discount,
+                ];
+            }
+        }
+
+        // Create product for shipping
+        $productVindiId = $this->findOrCreateProduct(array( 'sku' => 'frete', 'name' => 'Frete'));
+
+        $list[] = [
+                'product_id'     => $productVindiId,
+                'pricing_schema' => ['price' => $order->getShippingAmount()],
+            ];
 
         return $list;
     }
@@ -563,11 +596,34 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function findOrCreateUniquePaymentProduct()
     {
         $productId = $this->findProductByCode('mag-pagtounico');
-
         if (false === $productId) {
             return $this->createProduct([
                 'name'           => 'Pagamento Único (não remover)',
                 'code'           => 'mag-pagtounico',
+                'status'         => 'active',
+                'pricing_schema' => [
+                    'price' => 0,
+                ],
+            ]);
+        }
+        return $productId;
+    }
+
+    /**
+     * Make an API request to retrieve a Product or to create it if not found.
+     * @param array $product
+     *
+     * @return array|bool|mixed
+     */
+    public function findOrCreateProduct($product)
+    {
+        //
+        $productId = $this->findProductByCode($product['sku']);
+
+        if (false === $productId) {
+            return $this->createProduct([
+                'name'           => $product['name'],
+                'code'           => $product['sku'],
                 'status'         => 'active',
                 'pricing_schema' => [
                     'price' => 0,

@@ -243,22 +243,19 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $item = $orderItems->getFirstItem();
         $product = Mage::getModel('catalog/product')->load($item->getProductId());
 
-        if ($product->getTypeID() !== 'subscription') {
-            Mage::throwException('Produto escolhido não é uma assinatura.');
-
-            return false;
-        }
-
         $plan = $product->getData('vindi_subscription_plan');
 
-        $productItems = $this->api()->buildPlanItemsForSubscription($plan, $order->getGrandTotal());
+        $productItems = $this->api()->buildPlanItemsForSubscription($order);
+        if(!$productItems){
+            return false;
+        }
 
         $body = [
             'customer_id'         => $customerId,
             'payment_method_code' => $this->getPaymentMethodCode(),
             'plan_id'             => $plan,
             'code'                => 'mag-' . $order->getIncrementId() . '-' . time(),
-            'product_items'       => $productItems,
+            'product_items'       => $productItems
         ];
 
         $subscription = $this->api()->createSubscription($body);
