@@ -145,6 +145,22 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         $order->setVindiSubscriptionPeriod($period);
         $order->save();
 
+        if(Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment'))
+        {
+            foreach ($data['bill']['charges'] as $charge)
+            {
+                if ($charge['payment_method']['type'] == 'PaymentMethod::BankSlip')
+                {
+                    $order->addStatusHistoryComment(sprintf(
+                        '<a target="_blank" href="%s">Clique aqui</a> para visualizar o boleto.',
+                        $charge['print_url']
+                    ))
+                    ->setIsVisibleOnFront(true);
+                    $order->save();
+                }
+            }
+        }
+
         return true;
     }
 
