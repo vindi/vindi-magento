@@ -113,8 +113,26 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             return false;
         }
 
-        $order = $this->createOrder($lastPeriodOrder);
+        $vindiData = [
+                    'bill'     => [
+                                    'id'    => $data['bill']['id'],
+                                    'amout' => $data['bill']['amount']
+                                ],
+                    'products' => [],
+                    'shipping' => [],     
+                ];
+        foreach ($data['bill']['bill_items'] as $billItem)
+        {
+            if($billItem['product']['code'] == 'frete')
+            {
+                $vindiData['shipping'] = $billItem;
+            }else{
+                $vindiData['products'][] = $billItem;
+            }
+        }
 
+        $order = $this->createOrder($lastPeriodOrder, $vindiData);
+        
         if (! $order) {
             $this->log('Impossível gerar novo pedido!', 4);
 
@@ -126,6 +144,22 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         $order->setVindiSubscriptionId($subscriptionId);
         $order->setVindiSubscriptionPeriod($period);
         $order->save();
+
+        if(Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment'))
+        {
+            foreach ($data['bill']['charges'] as $charge)
+            {
+                if ($charge['payment_method']['type'] == 'PaymentMethod::BankSlip')
+                {
+                    $order->addStatusHistoryComment(sprintf(
+                        '<a target="_blank" href="%s">Clique aqui</a> para visualizar o boleto.',
+                        $charge['print_url']
+                    ))
+                    ->setIsVisibleOnFront(true);
+                    $order->save();
+                }
+            }
+        }
 
         return true;
     }
@@ -320,7 +354,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
      *
      * @return Mage_Sales_Model_Order;
      */
-    private function createOrder($oldOrder)
+    private function createOrder($oldOrder, $vindiData)
     {
         $oldOrder->setReordered(true);
 
@@ -331,19 +365,81 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         $quote = $order->getQuote();
 
+        // get shipping method
         $shippingMethod = $oldOrder->getShippingMethod();
         $activedShippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')->getActivedShippingMethodsValues();
 
+        // verify if current shipping method is active
         if(!in_array($shippingMethod, $activedShippingMethods)){
+            $oldShippingMethod = $shippingMethod;
             $shippingMethod = Mage::getStoreConfig('vindi_subscription/general/default_shipping_method');
+            $this->log(sprintf("Erro ao utilizar o método de envio %s alterado para o método padrão %s.",
+                        $oldShippingMethod,
+                        $shippingMethod
+                    ));
+            unset($oldShippingMethod);
         }
 
+        // quote shipping method
         $quote->getShippingAddress()
             ->setShippingMethod($shippingMethod)
             ->setCollectShippingRates(true)
             ->collectShippingRates()
-            ->collectTotals()
-            ->save();
+            ->collectTotals();
+
+        if(isset($vindiData['shipping']['pricing_schema']['price']) && !empty(isset($vindiData['shipping']['pricing_schema']['price'])))
+        {
+            // set shipping price
+            $billShippingPrice = $vindiData['shipping']['pricing_schema']['price'];
+
+            $quote->setPrice($billShippingPrice)
+                ->setCost($billShippingPrice);
+
+            $address = $quote->getShippingAddress();
+            $address->setShippingAmount($billShippingPrice);
+            $address->setBaseShippingAmount($billShippingPrice);
+
+            $rates = $address->collectShippingRates()
+                            ->getGroupedAllShippingRates();
+            foreach ($rates as $carrier) {
+                foreach ($carrier as $rate) {
+                    $rate->setPrice($billShippingPrice);
+                    $rate->save();
+                }
+            }
+            $address->save();
+
+        }
+
+        $quote->save();
+
+        foreach ($vindiData['products'] as $item) {
+            $magentoProduct = Mage::getModel('catalog/product')->loadByAttribute('vindi_product_id', $item['product']['id']);
+            if(!$magentoProduct)
+            {
+                $this->log(sprintf('O produto com ID Vindi #%s não existe no Magento.', $item['product']['id']), 5);
+                return false;
+            }
+            
+            if(number_format($magentoProduct->getPrice(), 2) !== number_format($item['pricing_schema']['price'], 2)){
+                $this->log(sprintf("Divergencia de valores na fatura #%s: produto %s: ID Magento #%s , ID Vindi #%s: Valor Magento R$ %s , Valor Vindi R$ %s",
+                            $vindiData['bill']['id'],
+                            $magentoProduct->getName(),
+                            $magentoProduct->getId(),
+                            $item['product']['id'],
+                            $magentoProduct->getPrice(),
+                            $item['pricing_schema']['price'])
+                        );
+
+                $quote->getItemByProduct($magentoProduct)
+                    // ->setPrice($item['pricing_schema']['price'])
+                    // ->setCost($item['pricing_schema']['price'])
+                    ->setOriginalCustomPrice($item['pricing_schema']['price'])
+                    ->setCustomPrice($item['pricing_schema']['price'])
+                    ->save();
+
+            }
+        }
 
         $quote->setTotalsCollectedFlag(false)
             ->collectTotals()
@@ -358,14 +454,12 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             $this->log("Erro ao criar pedido!");
             
             if($e->getMessage()){
-                $this->log($e->getMessage());
-                echo $e->getMessage();
+                $this->log($e->getMessage(), 5);
             }else{
                 $messages = $order->getSession()->getMessages(true);
                 foreach($messages->getItems() as $message)
                 {
-                   $this->log($message->getText());
-                   echo $message->getText();
+                   $this->log($message->getText(), 5);
                 }
             }
 
