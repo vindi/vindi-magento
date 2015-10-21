@@ -371,15 +371,13 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         // verify if current shipping method is active
         if(!in_array($shippingMethod, $activedShippingMethods)){
+            $oldShippingMethod = $shippingMethod;
             $shippingMethod = Mage::getStoreConfig('vindi_subscription/general/default_shipping_method');
             $this->log(sprintf("Erro ao utilizar o método de envio %s alterado para o método padrão %s.",
-                        $vindiData['bill']['id'],
-                        $magentoProduct->getName(),
-                        $magentoProduct->getId(),
-                        $item['product']['id'],
-                        $magentoProduct->getPrice(),
-                        $item['pricing_schema']['price'])
-                    );
+                        $oldShippingMethod,
+                        $shippingMethod
+                    ));
+            unset($oldShippingMethod);
         }
 
         // quote shipping method

@@ -1,6 +1,4 @@
-# Vindi Magento Recorrente v1.0.3
-
-**Nota: Este módulo encontra-se em estágio de desenvolvimento, não sendo recomendada sua utilização em ambiente de produção.**
+# Vindi Magento Recorrente v1.0.5
 
 ## Descrição
 A integração do módulo da Vindi permite criação e gestão de planos e assinaturas através do Magento de forma transparente.
@@ -24,7 +22,7 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 - Magento Community Edition 1.7 ou superior.
 
 ## Recomendações
-- Módulo [One Step Checkout Brasil 6 Pro](https://github.com/deivisonarthur/OSC-Magento-Brasil-6-Pro).
+- Módulo [One Step Checkout Brasil 6 Pro](https://github.com/vindi/OSC-Magento-Brasil-6-Pro).
 
 ## Instalação
 ###1. Via [modman](https://github.com/colinmollenhour/modman): (recomendado)
@@ -60,11 +58,6 @@ Caso não deseje utilizá-lo, será necessário entrar em contato com a Vindi pa
 1. Pronto! Agora é só efetuar a venda e a assinatura será registrada.
 
 ## Limitações
-- O valor cobrado no checkout do Magento será o que efetivamente será recorrente para o cliente.
-Por exemplo, se a soma produto + frete + desconto resultar em *X*, esse valor *X* será cobrado todos os meses do cliente.
-- No momento, o primeiro item/produto de um plano da Vindi deve ser permanente, pois o valor gerado no checkout do Magento será adicionado **integralmente** neste item,
-e os demais ficarão com valor R$ 0,00 (zero reais).
-- Por conta da limitação acima, não é possível trabalhar de forma automática com items/produtos temporários, pois os mesmos terão valor zero.
 - Na recorrência, os pedidos são gerados com **o mesmo endereço** do pedido do período anterior.
 - O módulo **não** gera pedidos do Magento para criação/recorrência de assinaturas que não possuam um pedido (no Magento) para o período anterior.
 Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.
@@ -72,12 +65,22 @@ Ou seja, um pedido captado fora do Magento não irá ser criado no mesmo.
 ## Roadmap
 Novos recursos que entrarão neste módulo, por ordem de prioridade:
 
+- Adicionar recorrência para todos os tipos de produtos
+- Melhorias na validação (processo de criação de cliente -> perfil de pagamento -> assinatura) e mensagens de erro.
 - Frontend: Botão para download do boleto bancário ao concluir a compra e nos pedidos, para clientes.
 **Nota:** Independente destes botões, a plataforma da Vindi envia automaticamente o boleto para o cliente por e-mail.
-- Backend: Botões para download e envio por e-mail do boleto bancário ao acessar os pedidos, para gestores.
-- Melhorias na validação (processo de criação de cliente -> perfil de pagamento -> assinatura) e mensagens de erro.
 
 ## Changelog
+### 1.0.5 - 21/10/2015
+- Adicionado suporte a descontos nos produtos Assinatura Vindi.
+- Envio de frete e produtos separadamente
+- Recorrências respeitam o valor recebido através dos webhooks
+- Opção de mostrar o link para os boletos nos comentários dos pedidos (backend e frontend)
+- Melhorias de performance nos webhooks
+
+### 1.0.4 - 06/10/2015
+- Adicionado método de envio padrão como fallback.
+- Http Headers para retentativa dos weebhooks.
 
 ### 1.0.3 - 06/08/2015
 - Adicionado suporte para criação de pedidos pelo painel de administração.
