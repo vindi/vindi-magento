@@ -48,7 +48,7 @@ modman update Vindi_Subscription
 2. extraia o conteúdo da pasta `src` em sua instalação do Magento.
 
 ## Configuração
-1. Configure o [One Step Checkout Brasil 6 Pro](https://github.com/deivisonarthur/OSC-Magento-Brasil-6-Pro) conforme instruções contidas em seu próprio link.
+1. Configure o [One Step Checkout Brasil 6 Pro](https://github.com/vindi/OSC-Magento-Brasil-6-Pro) conforme instruções contidas em seu próprio link.
 Caso não deseje utilizá-lo, será necessário entrar em contato com a Vindi para alinhamento de como obter as informações de clientes como endereço e documentos (CPF/CNPJ, RG/IE).
 1. Em *System > Configuration > Vindi > Vindi Assinaturas*  informe a chave da API de sua conta Vindi e salve.
 1. Caso a conexão ocorra com sucesso, você verá um link para configuração dos *Webhooks*, que deverá ser feito no **painel da Vindi**.

@@ -50,7 +50,8 @@
                         <default_shipping_method>
                             <label>Método de envio padrão</label>
                             <comment><![CDATA[
-                            
+                            Utilizado na criacão de um novo ciclo. 
+                            Em caso de falha no método de envio do ciclo anterior o método padrão é definido para o novo pedido.
                             ]]></comment>
                             <frontend_type>select</frontend_type>
                             <source_model>vindi_subscription/config_shippingmethod</source_model>
