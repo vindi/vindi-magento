@@ -136,6 +136,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             CURLOPT_HEADER         => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT      => 'Vindi-Magento/' . $this->version,
+            CURLOPT_SSLVERSION     => 'CURL_SSLVERSION_TLSv1_2',
             CURLOPT_USERPWD        => $this->key . ':',
             CURLOPT_URL            => $url,
             CURLOPT_CUSTOMREQUEST  => $method,
@@ -488,12 +489,12 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $orderItems = $order->getItemsCollection();
         $orderSubtotal = $order->getQuote()->getSubtotal();
         $orderDiscount = $order->getDiscountAmount() * -1;
-        
+
         $discount = null;
         if(!empty($orderDiscount)){
             $discountPercentage = $orderDiscount * 100 / $orderSubtotal;
             $discountPercentage = number_format(floor($discountPercentage*100)/100, 2);
-            
+
             $discount = [[
                         'discount_type' => 'percentage',
                         'percentage' => $discountPercentage
@@ -510,8 +511,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             }
 
             $productVindiId = $this->findOrCreateProduct(array( 'sku' => $item->getSku(), 'name' => $item->getName()));
-            
-            for ($i=1; $i <= $item->getQtyOrdered() ; $i++) { 
+
+            for ($i=1; $i <= $item->getQtyOrdered() ; $i++) {
                 $list[] = [
                     'product_id'     => $productVindiId,
                     'pricing_schema' => ['price' => $item->getPrice()],
