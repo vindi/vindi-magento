@@ -13,10 +13,10 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 - Conta ativa na [Vindi](https://www.vindi.com.br "Vindi").
 
 # Instalação
-Atualmente existem duas maneiras de instalar o Módulo Vindi Magento, a mais recomendada é atravéz do [modman](https://github.com/colinmollenhour/modman) pois instalando destá maneira é possível gerenciar facilmente o módulo e suas atualizações. A segunda maneira é atravéz de um arquivo .zip onde é preciso inserir todos os arquivos do módulo nos diretórios da aplicação do Magento e todas as atualizações terão que ser realizadas manualmente.
+Atualmente existem duas maneiras de instalar o Módulo Vindi Magento, a mais recomendada é através do [modman](https://github.com/colinmollenhour/modman) pois instalando destá maneira é possível gerenciar facilmente o módulo e suas atualizações. A segunda maneira é através de um arquivo .zip onde é preciso inserir todos os arquivos do módulo nos diretórios da aplicação do Magento e todas as atualizações terão que ser realizadas manualmente.
 
 #### - Via [modman](https://github.com/colinmollenhour/modman)
-1. Clonar o módulo atravéz do [modman](https://github.com/colinmollenhour/modman)
+1. Clonar o módulo através do [modman](https://github.com/colinmollenhour/modman)
 ```bash
 modman clone https://github.com/vindi/vindi-magento.git
 ```
@@ -47,12 +47,12 @@ modman update vindi-magento
     1. Na aba *Vindi* selecione o *Plano da Vindi* e associe a assinatura a um produto.
 
 ## Dúvidas
-Caso necessite de informações sobre a plataforma ou API por favor siga atravéz do canal [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
+Caso necessite de informações sobre a plataforma ou API por favor siga através do canal [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)
 
 ## Contribuindo
 Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Caso tenha alguma sugestão ou bug para reportar por favor nos comunique atravéz das [issues](https://github.com/vindi/vindi-magento/issues).
+Caso tenha alguma sugestão ou bug para reportar por favor nos comunique através das [issues](https://github.com/vindi/vindi-magento/issues).
 
 ## Changelog
 Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md).
