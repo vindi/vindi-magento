@@ -26,6 +26,19 @@
             </action>
         </reference>
     </onepagecheckout_index_index>
+    <!--Native Checkout Page-->
+    <checkout_onepage_index translate="label">
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>vindi_subscription/css/vindi_subscription.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>vindi_subscription/js/vindi_subscription.js</name>
+            </action>
+        </reference>
+    </checkout_onepage_index>
     <customer_account_edit translate="label">
         <reference name="head">
             <action method="addItem">
