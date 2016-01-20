@@ -3,10 +3,10 @@
 - Adicionado suporte ao checkout nativo
 
 ### 1.0.6 - 24/11/2015
-- Requests para a API terão coom padrão o protocolo TSL 1.2 
+- Requests para a API terão como padrão o protocolo TSL 1.2 
 
 ### 1.0.5 - 21/10/2015
-- Adicionado suporte a descontos nos produtos Assinatura Vindi.
+- Adicionado suporte a descontos nos produtos Assinatura Vindi
 - Envio de frete e produtos separadamente
 - Recorrências respeitam o valor recebido através dos webhooks
 - Opção de mostrar o link para os boletos nos comentários dos pedidos (backend e frontend)
