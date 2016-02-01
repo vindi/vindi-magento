@@ -1,9 +1,12 @@
 # Changelog
+### 1.0.8 - 01/02/2016
+- Ajustes nos valores recebidos através dos webhooks
+
 ### 1.0.7 - 11/01/2016
 - Adicionado suporte ao checkout nativo
 
 ### 1.0.6 - 24/11/2015
-- Requests para a API terão como padrão o protocolo TSL 1.2 
+- Requests para a API terão como padrão o protocolo TSL 1.2
 
 ### 1.0.5 - 21/10/2015
 - Adicionado suporte a descontos nos produtos Assinatura Vindi

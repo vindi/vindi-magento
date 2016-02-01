@@ -7,9 +7,9 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
      * @param int|null $level
      */
     public function log($message, $level = null)
-    {        
+    {
         Mage::log($message, $level, 'vindi_webhooks.log');
-        
+
         switch ($level) {
             case 4:
                 http_response_code(422);
@@ -119,7 +119,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                                     'amout' => $data['bill']['amount']
                                 ],
                     'products' => [],
-                    'shipping' => [],     
+                    'shipping' => [],
                 ];
         foreach ($data['bill']['bill_items'] as $billItem)
         {
@@ -132,7 +132,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         }
 
         $order = $this->createOrder($lastPeriodOrder, $vindiData);
-        
+
         if (! $order) {
             $this->log('Impossível gerar novo pedido!', 4);
 
@@ -176,8 +176,8 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
     {
         if (! ($order = $this->getOrder($data))) {
             $this->log(sprintf('Ainda não existe um pedido para ciclo %s da assinatura: %d.',
-                $data['bill']['period']['cycle'], 
-                $data['bill']['subscription']['id']), 
+                $data['bill']['period']['cycle'],
+                $data['bill']['subscription']['id']),
                 4
             );
 
@@ -418,26 +418,25 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             if(!$magentoProduct)
             {
                 $this->log(sprintf('O produto com ID Vindi #%s não existe no Magento.', $item['product']['id']), 5);
-                return false;
-            }
-            
-            if(number_format($magentoProduct->getPrice(), 2) !== number_format($item['pricing_schema']['price'], 2)){
-                $this->log(sprintf("Divergencia de valores na fatura #%s: produto %s: ID Magento #%s , ID Vindi #%s: Valor Magento R$ %s , Valor Vindi R$ %s",
-                            $vindiData['bill']['id'],
-                            $magentoProduct->getName(),
-                            $magentoProduct->getId(),
-                            $item['product']['id'],
-                            $magentoProduct->getPrice(),
-                            $item['pricing_schema']['price'])
-                        );
+            }else{
+                if(number_format($magentoProduct->getPrice(), 2) !== number_format($item['pricing_schema']['price'], 2)){
+                    $this->log(sprintf("Divergencia de valores na fatura #%s: produto %s: ID Magento #%s , ID Vindi #%s: Valor Magento R$ %s , Valor Vindi R$ %s",
+                                $vindiData['bill']['id'],
+                                $magentoProduct->getName(),
+                                $magentoProduct->getId(),
+                                $item['product']['id'],
+                                $magentoProduct->getPrice(),
+                                $item['pricing_schema']['price'])
+                            );
 
-                $quote->getItemByProduct($magentoProduct)
-                    // ->setPrice($item['pricing_schema']['price'])
-                    // ->setCost($item['pricing_schema']['price'])
-                    ->setOriginalCustomPrice($item['pricing_schema']['price'])
-                    ->setCustomPrice($item['pricing_schema']['price'])
-                    ->save();
+                    $quote->getItemByProduct($magentoProduct)
+                        // ->setPrice($item['pricing_schema']['price'])
+                        // ->setCost($item['pricing_schema']['price'])
+                        ->setOriginalCustomPrice($item['pricing_schema']['price'])
+                        ->setCustomPrice($item['pricing_schema']['price'])
+                        ->save();
 
+                }
             }
         }
 
@@ -452,7 +451,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             $order = $order->createOrder();
         } catch (Exception $e) {
             $this->log("Erro ao criar pedido!");
-            
+
             if($e->getMessage()){
                 $this->log($e->getMessage(), 5);
             }else{
