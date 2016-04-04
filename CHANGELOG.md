@@ -1,4 +1,6 @@
 # Changelog
+### 1.0.10 - 04/04/2016
+- Ajustes nas exibição das informações sobre o cartão no pedido.
 ### 1.0.9 - 28/03/2016
 - Ajustes no calculo parcelas mínimas
 
