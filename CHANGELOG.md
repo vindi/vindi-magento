@@ -1,4 +1,7 @@
 # Changelog
+### 1.0.10 - 04/04/2016
+- Ajustes no calculo parcelas mínimas
+
 ### 1.0.9 - 28/03/2016
 - Ajustes no calculo parcelas mínimas
 
