@@ -106,8 +106,8 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
             return false;
         }
 
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
-            ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
+            ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
         return $this;
     }

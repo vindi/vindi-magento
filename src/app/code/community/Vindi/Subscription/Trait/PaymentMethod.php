@@ -143,10 +143,10 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $payment->setAmount($order->getTotalDue());
         $this->setStore($order->getStoreId());
 
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+        $payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
             'Novo período da assinatura criado', true);
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
-            ->setState(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW);
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
+            ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
         return $this;
     }
@@ -172,7 +172,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $payment->setAmount($order->getTotalDue());
         $this->setStore($order->getStoreId());
 
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW, Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+        $payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
             'Assinatura criada', true);
 
         return true;
