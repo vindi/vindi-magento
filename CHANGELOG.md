@@ -1,25 +1,28 @@
 # Changelog
+### 1.0.11 - 24/08/2016
+- Adicionado parcelamento com base no pais de origem da compra.
+
 ### 1.0.10 - 04/04/2016
 - Ajustes na exibição das informações sobre o cartão no pedido.
 
 ### 1.0.9 - 28/03/2016
-- Ajustes no calculo parcelas mínimas
+- Ajustes no calculo parcelas mínimas.
 
 ### 1.0.8 - 01/02/2016
-- Ajustes nos valores recebidos através dos webhooks
+- Ajustes nos valores recebidos através dos webhooks.
 
 ### 1.0.7 - 11/01/2016
-- Adicionado suporte ao checkout nativo
+- Adicionado suporte ao checkout nativo.
 
 ### 1.0.6 - 24/11/2015
-- Requests para a API terão como padrão o protocolo TSL 1.2
+- Requests para a API terão como padrão o protocolo TSL 1.2.
 
 ### 1.0.5 - 21/10/2015
-- Adicionado suporte a descontos nos produtos Assinatura Vindi
-- Envio de frete e produtos separadamente
-- Recorrências respeitam o valor recebido através dos webhooks
-- Opção de mostrar o link para os boletos nos comentários dos pedidos (backend e frontend)
-- Melhorias de performance nos webhooks
+- Adicionado suporte a descontos nos produtos Assinatura Vindi.
+- Envio de frete e produtos separadamente.
+- Recorrências respeitam o valor recebido através dos webhooks.
+- Opção de mostrar o link para os boletos nos comentários dos pedidos (backend e frontend).
+- Melhorias de performance nos webhooks.
 
 ### 1.0.4 - 06/10/2015
 - Adicionado método de envio padrão como fallback.
@@ -44,4 +47,4 @@ novas tentativas de cobranças, apenas adiciona um comentário no pedido, senão
 - Geração de novos pedidos na recorrência dos planos.
 
 ### 0.0.1 - 03/07/2015
-- Versão Inicial
+- Versão Inicial.
