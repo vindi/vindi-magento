@@ -68,31 +68,45 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     }
 
     /**
+     * @return bool
+     */
+    public function allowInstallments()
+    {    
+        $installmentsInStoreConfig = Mage::getStoreConfig('vindi_subscription/general/installments_per_country');
+        $installments = explode(',', $installmentsInStoreConfig);
+        $customerCountry = $this->getQuote()->getShippingAddress()->getCountry();
+        
+        return in_array($customerCountry, $installments);
+    }
+
+    /**
      * @return bool|string
      */
     public function getInstallments()
     {
-        $maxInstallmentsNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
-        $minInstallmentsValue  = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
-        // $quote              = Mage::getSingleton('checkout/session')->getQuote();
-        $quote                 = $this->getQuote();
-        $installments          = false;
+        $allowInstallments          = $this->allowInstallments();
+        $maxInstallmentsNumber      = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
+        $minInstallmentsValue       = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
+        // $quote                   = Mage::getSingleton('checkout/session')->getQuote();
+        $quote                      = $this->getQuote();
+        $installments               = false;
+        
+            if ($this->isSingleQuote($quote) && $maxInstallmentsNumber > 1 && $allowInstallments == true) {
+                $total             = $quote->getGrandTotal();
+                $installmentsTimes = floor($total / $minInstallmentsValue);
+                $installments      = '<option value="">' . Mage::helper('catalog')->__('-- Please Select --') . '</option>';
 
-        if ($this->isSingleQuote($quote) && $maxInstallmentsNumber > 1) {
-            $total             = $quote->getGrandTotal();
-            $installmentsTimes = floor($total / $minInstallmentsValue);
-            $installments      = '<option value="">' . Mage::helper('catalog')->__('-- Please Select --') . '</option>';
+                for ($i = 1; $i <= $maxInstallmentsNumber; $i++) {
+                    $value = ceil($total / $i * 100) / 100;
+                    $price = Mage::helper('core')->currency($value, true, false);
 
-            for ($i = 1; $i <= $maxInstallmentsNumber; $i++) {
-                $value = ceil($total / $i * 100) / 100;
-                $price = Mage::helper('core')->currency($value, true, false);
+                    $installments .= '<option value="' . $i . '">' . sprintf('%dx de %s', $i, $price) . '</option>';
 
-                $installments .= '<option value="' . $i . '">' . sprintf('%dx de %s', $i, $price) . '</option>';
-
-                if(($i + 1) > $installmentsTimes)
-                    break;
+                    if(($i + 1) > $installmentsTimes)
+                        break;
+                }
             }
-        }
+            
         return $installments;
     }
 
