@@ -68,15 +68,14 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     }
 
     /**
-     * @return bool
+     * @return boll
      */
-    public function allowInstallments()
+    public function isInstallmentsAllowedInStore()
     {    
-        $installmentsInStoreConfig = Mage::getStoreConfig('vindi_subscription/general/installments_per_country');
-        $installments = explode(',', $installmentsInStoreConfig);
-        $customerCountry = $this->getQuote()->getShippingAddress()->getCountry();
-        
-        return in_array($customerCountry, $installments);
+        $allowedStores = Mage::getStoreConfig('payment/vindi_creditcard/installments_per_store_view');
+        $activeStore = Mage::app()->getStore()->getStoreId();
+          
+        return in_array($activeStore, explode(',', $allowedStores));
     }
 
     /**
@@ -84,13 +83,12 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
      */
     public function getInstallments()
     {
-        $allowInstallments          = $this->allowInstallments();
+        $allowInstallments          = $this->isInstallmentsAllowedInStore();
         $maxInstallmentsNumber      = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
         $minInstallmentsValue       = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
-        // $quote                   = Mage::getSingleton('checkout/session')->getQuote();
         $quote                      = $this->getQuote();
         $installments               = false;
-        
+     
             if ($this->isSingleQuote($quote) && $maxInstallmentsNumber > 1 && $allowInstallments == true) {
                 $total             = $quote->getGrandTotal();
                 $installmentsTimes = floor($total / $minInstallmentsValue);

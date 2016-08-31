@@ -73,19 +73,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </bankslip_link_in_order_comment>
-                        <installments_per_country>
-                            <label>Habilita parcelamento</label>
-                            <comment><![CDATA[
-                            Habilita a opção de parcelamento para os países selecionados
-                            ]]></comment>
-                            <frontend_type>multiselect</frontend_type>
-                            <source_model>adminhtml/system_config_source_country</source_model>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <can_be_empty>1</can_be_empty>
-                        </installments_per_country>
                         <information>
                             <label>Informações</label>
                             <frontend_model>vindi_subscription/config_information</frontend_model>
@@ -134,11 +121,24 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </installments_heading>
+                        <installments_per_store_view translate="label">
+                            <label>Habilita parcelamento</label>
+                            <comment><![CDATA[
+                            Habilita a opção de parcelamento nas store views selecionadas
+                            ]]></comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_store</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </installments_per_store_view>                        
                         <min_installment_value translate="label">
                             <label>Valor mínimo da parcela</label>
                             <comment>Valor mínimo da parcela, não deve ser inferior a R$ 5,00.</comment>
                             <frontend_type>text</frontend_type>
-                            <sort_order>11</sort_order>
+                            <sort_order>12</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -150,7 +150,7 @@
                             </comment>
                             <frontend_type>select</frontend_type>
                             <source_model>vindi_subscription/config_installments</source_model>
-                            <sort_order>12</sort_order>
+                            <sort_order>13</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
