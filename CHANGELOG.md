@@ -1,6 +1,6 @@
 # Changelog
-### 1.0.11 - 24/08/2016
-- Adicionado parcelamento com base no pais de origem da compra.
+### 1.0.11 - 31/08/2016
+- Adicionado parcelamento por Store View.
 
 ### 1.0.10 - 04/04/2016
 - Ajustes na exibição das informações sobre o cartão no pedido.

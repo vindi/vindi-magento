@@ -68,7 +68,7 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     }
 
     /**
-     * @return boll
+     * @return bool
      */
     public function isInstallmentsAllowedInStore()
     {    
