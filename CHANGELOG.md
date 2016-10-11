@@ -1,4 +1,7 @@
 # Changelog
+### 1.0.12 - 11/10/2016
+- Ajustes no problema de comunicação com a API da Vindi.
+
 ### 1.0.11 - 31/08/2016
 - Adicionado parcelamento por Store View.
 
