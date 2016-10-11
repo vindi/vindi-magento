@@ -60,7 +60,13 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     private function buildBody($data)
     {
-        return json_encode($data);
+        $body = null;
+
+        if(!empty($data)) {
+            $body = json_encode($data);
+        }
+
+        return $body;
     }
 
     /**
@@ -126,9 +132,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             $dataToLog));
 
         $ch = curl_init();
-
-        curl_setopt_array($ch, [
-            CURLOPT_HTTPHEADER     => [
+        $ch_options = [
+            CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json',
             ],
             CURLOPT_TIMEOUT        => 60,
@@ -139,9 +144,14 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             CURLOPT_SSLVERSION     => 'CURL_SSLVERSION_TLSv1_2',
             CURLOPT_USERPWD        => $this->key . ':',
             CURLOPT_URL            => $url,
-            CURLOPT_CUSTOMREQUEST  => $method,
-            CURLOPT_POSTFIELDS     => $body,
-        ]);
+            CURLOPT_CUSTOMREQUEST  => $method
+        ];
+
+        if (!empty($body)) {
+            $ch_options[CURLOPT_POSTFIELDS] = $body;
+        }
+
+        curl_setopt_array($ch, $ch_options);
 
         $response = curl_exec($ch);
 
