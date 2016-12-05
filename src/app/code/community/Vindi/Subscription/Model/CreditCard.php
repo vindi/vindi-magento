@@ -171,6 +171,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             'card_cvv'             => $payment->getCcCid() ?: '000',
             'customer_id'          => $customerId,
             'payment_company_code' => $payment->getCcType(),
+            'payment_method_code'  =>  $this->getPaymentMethodCode()
         ];
 
         $paymentProfileId = $this->api()->createCustomerPaymentProfile($creditCardData);
