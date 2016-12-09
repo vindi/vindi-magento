@@ -1,4 +1,7 @@
 # Changelog
+### 1.0.13 - 09/12/2016
+- Pequenos ajustes na criação do perfil de pagamento.
+
 ### 1.0.12 - 11/10/2016
 - Ajustes no problema de comunicação com a API da Vindi.
 
