@@ -71,11 +71,8 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
      * @return bool
      */
     public function isInstallmentsAllowedInStore()
-    {    
-        $allowedStores = Mage::getStoreConfig('payment/vindi_creditcard/installments_per_store_view');
-        $activeStore = Mage::app()->getStore()->getStoreId();
-          
-        return in_array($activeStore, explode(',', $allowedStores));
+    {
+        return Mage::getStoreConfig('payment/vindi_creditcard/enable_installments');
     }
 
     /**
