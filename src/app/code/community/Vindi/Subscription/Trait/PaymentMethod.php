@@ -161,7 +161,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
      */
     protected function processSubscription($payment, $order, $customerId)
     {
-        $subscription = $this->createSubscription($order, $customerId);
+        $subscription = $this->createSubscription($payment, $order, $customerId);
 
         if ($subscription === false) {
             Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
@@ -207,12 +207,16 @@ trait Vindi_Subscription_Trait_PaymentMethod
             $body['installments'] = (int) $installments;
         }
 
+        $test = $payment->getAdditionalInformation('installments');
+
+        $this->log($test);
+
         $billId = $this->api()->createBill($body);
 
         if (! $billId) {
             $this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
 
-            $message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
+            $message = sprintf("Houve um problema na confirmação do pagamento, por favor entre em contato com o banco emissor do cartão. (%s)", $this->api()->lastError);
             $payment->setStatus(
                 Mage_Sales_Model_Order::STATE_CANCELED,
                 Mage_Sales_Model_Order::STATE_CANCELED,
@@ -232,17 +236,17 @@ trait Vindi_Subscription_Trait_PaymentMethod
     }
 
     /**
-     * @param Mage_Sales_Model_Order $order
-     * @param int                    $customerId
+     * @param Mage_Payment_Model_Method_Abstract    $payment
+     * @param Mage_Sales_Model_Order                $order
+     * @param int                                   $customerId
      *
      * @return bool
      */
-    protected function createSubscription($order, $customerId)
+    protected function createSubscription($payment, $order, $customerId)
     {
         $orderItems = $order->getItemsCollection();
         $item = $orderItems->getFirstItem();
         $product = Mage::getModel('catalog/product')->load($item->getProductId());
-
         $plan = $product->getData('vindi_subscription_plan');
 
         $productItems = $this->api()->buildPlanItemsForSubscription($order);
@@ -255,10 +259,18 @@ trait Vindi_Subscription_Trait_PaymentMethod
             'payment_method_code' => $this->getPaymentMethodCode(),
             'plan_id'             => $plan,
             'code'                => 'mag-' . $order->getIncrementId() . '-' . time(),
-            'product_items'       => $productItems
+            'product_items'       => $productItems,
         ];
 
+        if ($installments = $payment->getAdditionalInformation('installments')) {
+            $body['installments'] = (int) $installments;
+        }
+
         $subscription = $this->api()->createSubscription($body);
+
+        $test = $payment->getAdditionalInformation();
+
+        $this->log($test);
 
         if (! isset($subscription['id']) || empty($subscription['id'])) {
             $message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
