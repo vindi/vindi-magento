@@ -70,13 +70,16 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     {
         $quote  = $this->getQuote();
 
-        if(! $this->isSingleQuote($quote)) {
-            // $a      = $quote->getAllVisibleItems();
-            // $b      = $a->getProduct();
-            
-            // var_dump($a);
+        foreach($quote->getAllVisibleItems() as $item){
+            $product = Mage::getModel('catalog/product')->load($item->getProductId());
+            $plan = $product->getData('vindi_subscription_plan');
+        }
 
-            return $installments = 12;
+        $installments = $this->api()->getPlanInstallments($plan);
+
+        if(! $this->isSingleQuote($quote)) {
+
+            return $installments;
         }
     }
 
