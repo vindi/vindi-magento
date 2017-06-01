@@ -207,10 +207,6 @@ trait Vindi_Subscription_Trait_PaymentMethod
             $body['installments'] = (int) $installments;
         }
 
-        $test = $payment->getAdditionalInformation('installments');
-
-        $this->log($test);
-
         $billId = $this->api()->createBill($body);
 
         if (! $billId) {
