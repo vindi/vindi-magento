@@ -82,12 +82,6 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
             return $installments;
         }
     }
-
-    public function logCc($message, $level = null)
-    {
-        Mage::log($message, $level, $this->_code . '.log');
-    }
-
     /**
      * @return bool
      */
