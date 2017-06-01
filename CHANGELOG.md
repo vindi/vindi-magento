@@ -1,4 +1,7 @@
 # Changelog
+### 1.0.14 - 01/06/2016
+- Melhorias no suporte para parcelamento de assinaturas.
+
 ### 1.0.13 - 09/12/2016
 - Pequenos ajustes na criação do perfil de pagamento.
 
