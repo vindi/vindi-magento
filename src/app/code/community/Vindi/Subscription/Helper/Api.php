@@ -565,6 +565,16 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         return $list;
     }
 
+    public function getPlanInstallments($id)
+    {
+        $response = $this->request("plans/{$id}", 'GET');
+        $plan = $response['plan'];
+        $installments = $plan['installments'];
+
+        return $installments;
+    }
+
+
     /**
      * Make an API request to create a Product.
      *

@@ -89,9 +89,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $info = $this->getInfoInstance();
         $quote = $info->getQuote();
 
-        if ($this->isSingleOrder($quote)) {
-            $info->setAdditionalInformation('installments', $data->getCcInstallments());
-        }
+        $info->setAdditionalInformation('installments', $data->getCcInstallments());
 
         if ($data->getCcChoice() === 'saved') {
             $info->setAdditionalInformation('PaymentMethod', $this->_code)
