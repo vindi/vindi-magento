@@ -78,6 +78,8 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
      */
     public function assignData($data)
     {
+        $info = $this->getInfoInstance();
+        $info->setAdditionalInformation('installments', 1);
         return $this;
     }
 
