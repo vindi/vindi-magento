@@ -1,5 +1,8 @@
 # Changelog
-### 1.0.14 - 01/06/2016
+### 1.0.15 - 27/06/2017
+- Correção na compra de assinaturas com parcelamento no boleto.
+
+### 1.0.14 - 01/06/2017
 - Melhorias no suporte para parcelamento de assinaturas.
 
 ### 1.0.13 - 09/12/2016
