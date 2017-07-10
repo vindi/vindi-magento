@@ -1,4 +1,8 @@
 # Changelog
+
+### 1.0.16 - 10/07/2017
+- Alterações para parcelamento de pedidos pelo Painel Administrativo e em múltiplas lojas.
+
 ### 1.0.15 - 27/06/2017
 - Correção na compra de assinaturas com parcelamento no boleto.
 
