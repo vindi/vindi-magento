@@ -387,7 +387,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             ->collectShippingRates()
             ->collectTotals();
 
-        if(isset($vindiData['shipping']['pricing_schema']['price']) && !empty(isset($vindiData['shipping']['pricing_schema']['price'])))
+        if(isset($vindiData['shipping']['pricing_schema']['price']) && !empty($vindiData['shipping']['pricing_schema']['price']))
         {
             // set shipping price
             $billShippingPrice = $vindiData['shipping']['pricing_schema']['price'];
