@@ -33,6 +33,6 @@ class Vindi_Subscription_Block_Form_BankSlip extends Mage_Payment_Block_Form
     	if('subscription' == $this->getQuoteType($quote))
     		return 'enviado mensalmente';	
    
-    		return 'enviado';
+    	return 'enviado';
     }
 }
