@@ -4,9 +4,21 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 {
 
     /**
-     * @const string API base path.
+     * @return string API base path.
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    private function basePath() {
+        if('yes' == Mage::getStoreConfig('vindi_subscription/general/sandbox')) {
+            return 'https://sandbox.app.vindi.com.br/api/v1';
+        }
+
+        return 'https://app.vindi.com.br/api/v1/';
+    }
+
+
+    // /**
+    //  * @const string API base path.
+    //  */
+    // const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
 
     /**
      * @var string
@@ -121,7 +133,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             return false;
         }
 
-        $url = static::BASE_PATH . $endpoint;
+        $url = $this->basePath() . $endpoint;
         $body = $this->buildBody($data);
 
         $requestId = rand();
