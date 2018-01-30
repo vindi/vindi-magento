@@ -279,6 +279,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
         }
 
         $order->setVindiSubscriptionId($subscription['id']);
+        $order->setVindiBillId($subscription['bill']['id']);
         $order->setVindiSubscriptionPeriod(1);
         $order->save();
 
