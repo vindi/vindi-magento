@@ -78,15 +78,6 @@ class Vindi_Subscription_Model_Observer
                 $this->addNotice('Você pode fazer apenas uma assinatura por vez.<br />
                              Por favor, tente novamente.');
             }
-
-            $this->addNotice('Você não pode adicionar assinaturas e outros tipos de produtos em um mesmo carrinho.<br />
-                            Conclua a compra dos produtos ou remova-os do carrinho.');
-
-        }
-
-        if ($this->countSubscriptions($quote)) {
-            $this->addNotice('Você não pode adicionar assinaturas e outros tipos de produtos em um mesmo carrinho.<br />
-                                     Conclua a compra da assinatura ou remova-a do carrinho.');
         }
 
         return;
@@ -118,11 +109,6 @@ class Vindi_Subscription_Model_Observer
         if (($itemsCount === 1) && ($itemsSummaryQty > 1)) {
             Mage::throwException('Você pode fazer apenas uma assinatura por vez.<br />
                              Por favor, tente novamente.');
-        }
-
-        if ($itemsCount > 1) {
-            Mage::throwException('Você não pode adicionar assinaturas e outros tipos de produtos em um mesmo pedido.<br />
-                                     Conclua a compra da assinatura ou remova-a do carrinho.');
         }
     }
 
