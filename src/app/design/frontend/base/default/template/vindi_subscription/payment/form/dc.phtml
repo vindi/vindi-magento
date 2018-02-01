@@ -1,0 +1,163 @@
+<?php $code = $this->getMethodCode(); ?>
+    <ul class="form-list" id="payment_form_<?php echo $code ?>" style="display:none;">
+        <li>
+            <div class="payment-companies">
+                <?php foreach ($dcs = $this->getDcAvailableTypes() as $typeCode => $typeName) {
+                    echo '<img alt="' . $typeName . '" title="' . $typeName . '"
+                         src="https://s3.amazonaws.com/recurrent/payment_companies/' . $typeCode . '.png"/>';
+                }
+                ?>
+            </div>
+        </li>
+        <?php if($installments = $this->getInstallments()): ?>
+            <li>
+                <div id="<?php echo $code ?>_dc_type_installments_div" class="wide">
+                    <label for="<?php echo $code ?>_dc_cid" class="required">
+                        <em>*</em>Parcelas
+                    </label>
+
+                    <div class="input-box">
+                        <select name="payment[dc_installments]" class="required-entry">
+                            <?php echo $installments; ?>
+                        </select>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+        <?php if ($savedDc = $this->getSavedDc()): ?>
+            <li class="payment-choice-saved-dc payment-choice">
+                <label class="label-choice label-choice-saved-dc">
+                    <input type="radio" name="payment[dc_choice]" checked="checked" value="saved"/>
+                    Usar cartão salvo
+                </label>
+
+                <div class="block-choice-saved-dc block-choice">
+                    <img alt="<?php echo $dcType = $savedDc['payment_company']['name']; ?>"
+                         title="<?php echo $dcType; ?>"
+                         src="https://s3.amazonaws.com/recurrent/payment_companies/<?php echo $savedDc['payment_company']['code']; ?>.png"/>
+
+                    <div class="block-choice-saved-dc-details">
+                        <div class="nowrap block-choice-saved-dc-holder-name">
+                            <span class="text-upper">Portador</span>
+                            <span title="<?php echo $name = $savedDc['holder_name']; ?>"><?php echo $name ?></span>
+                        </div>
+                        <span class="nowrap">
+                        <span class="text-upper">Final</span>
+                            <?php echo $savedDc['card_number_last_four']; ?>&nbsp;
+                    </span>
+                        <span class="nowrap">
+                        <span class="text-upper">Validade</span>
+                            <?php echo date("m/Y", strtotime($savedDc['card_expiration'])); ?>
+                    </span>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+        <li class="payment-choice-new-dc payment-choice">
+            <?php if ($savedDc): ?>
+
+                <label class="label-choice label-choice-new-dc">
+                    <input type="radio" name="payment[dc_choice]" value="new"/>
+                    Novo cartão de crédito
+                </label>
+            <?php else : ?>
+                <input type="hidden" name="payment[dc_choice]" value="new"/>
+            <?php endif; ?>
+
+            <div class="block-choice-new-dc block-choice" <?php if ($savedDc): ?>style="display:none;"<?php endif; ?>>
+                <div class="wide">
+                    <label for="<?php echo $code ?>_dc_owner" class="required">
+                        <em>*</em><?php echo $this->__('Name on Card') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Name on Card') ?>"
+                               class="input-text required-entry"
+                               id="<?php echo $code ?>_dc_owner" name="payment[dc_owner]"
+                               value="<?php echo $this->escapeHtml($this->getInfoData('dc_owner')) ?>"/>
+                    </div>
+                </div>
+                <div class="wide">
+                    <label for="<?php echo $code ?>_dc_type" class="required">
+                        <em>*</em><?php echo $this->__('Debit Card Type') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <select id="<?php echo $code ?>_dc_type" name="payment[dc_type]" class="required-entry"
+                                title="<?php echo $this->__('Debit Card Type') ?>">
+                            <option value=""><?php echo $this->__('--Please Select--') ?></option>
+                            <?php foreach ($this->getDcAvailableTypes() as $typeCode => $typeName): ?>
+                                <option value="<?php echo $typeCode ?>">
+                                    <?php echo $typeName ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="wide">
+                    <label for="<?php echo $code ?>_dc_number" class="required">
+                        <em>*</em><?php echo $this->__('Debit Card Number') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" id="<?php echo $code ?>_dc_number" name="payment[dc_number]"
+                               title="<?php echo $this->__('Debit Card Number') ?>" class="input-text" value=""
+                               placeholder="•••• •••• •••• ••••"/>
+                    </div>
+                </div>
+                <div id="<?php echo $code ?>_dc_type_exp_div" class="wide">
+                    <label for="<?php echo $code ?>_expiration" class="required">
+                        <em>*</em><?php echo $this->__('Expiration Date') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <div class="v-fix">
+                            <select id="<?php echo $code ?>_expiration" name="payment[dc_exp_month]"
+                                    class="month validate-dc-exp required-entry">
+                                <?php foreach ($this->getCcMonths() as $k => $v): ?>
+                                    <option value="<?php echo $k ? $k : '' ?>">
+                                        <?php echo $v ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="v-fix">
+                            <select id="<?php echo $code ?>_expiration_yr" name="payment[dc_exp_year]"
+                                    class="year required-entry">
+                                <?php foreach ($this->getCcYears() as $k => $v): ?>
+                                    <option value="<?php echo $k ? $k : '' ?>">
+                                        <?php echo $v ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="<?php echo $code ?>_dc_type_cvv_div" class="wide">
+                    <label for="<?php echo $code ?>_dc_cid" class="required">
+                        <em>*</em><?php echo $this->__('Card Verification Number') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <div class="v-fix">
+                            <input type="text" title="<?php echo $this->__('Card Verification Number') ?>"
+                                   class="input-text cvv required-entry" id="<?php echo $code ?>_dc_cid"
+                                   name="payment[dc_cid]" value=""/>
+                        </div>
+                        <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+<?php if ($savedDc): ?>
+    <script type="text/javascript">
+        var VindiSubscriptionDC = new VindiSubscriptionDebitCard({
+            paymentChoiceSavedDcSelector: '.payment-choice-new-dc',
+            paymentChoiceNewDcSelector: '.payment-choice-saved-dc',
+            blockChoiceSavedDcSelector: '.block-choice-saved-dc',
+            blockChoiceNewDcSelector: '.block-choice-new-dc',
+        });
+    </script>
+<?php endif; ?>

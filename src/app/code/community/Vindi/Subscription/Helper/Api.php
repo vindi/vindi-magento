@@ -6,7 +6,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @const string API base path.
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    const BASE_PATH = 'https://sandbox-app.vindi.com.br/api/v1/';
 
     /**
      * @var string
@@ -334,6 +334,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
             $paymentMethods = [
                 'credit_card' => [],
+                'debit_card' => [],
                 'bank_slip'   => false,
             ];
 
@@ -349,8 +350,15 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 }
 
                 if ('PaymentMethod::CreditCard' === $method['type']) {
-                    $paymentMethods['credit_card'] = array_merge($paymentMethods['credit_card'],
-                        $method['payment_companies']);
+                    $paymentMethods['credit_card'] = array_merge(
+                        $paymentMethods['credit_card'],
+                        $method['payment_companies']
+                    );
+                }elseif('PaymentMethod::DebitCard' === $method['type']) {
+                    $paymentMethods['debit_card'] = array_merge(
+                        $paymentMethods['debit_card'],
+                        $method['payment_companies']
+                    );
                 } else {
                     if ('PaymentMethod::BankSlip' === $method['type']) {
                         $paymentMethods['bank_slip'] = true;
@@ -380,6 +388,23 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $types = [];
 
         foreach ($methods['credit_card'] as $type) {
+            $types[$type['code']] = $type['name'];
+        }
+
+        return $types;
+    }
+
+    /**
+     * Retrieve Credit Card Types from Payment Methods.
+     *
+     * @return array
+     */
+    public function getDebitCardTypes()
+    {
+        $methods = $this->getPaymentMethods();
+        $types = [];
+
+        foreach ($methods['debit_card'] as $type) {
             $types[$type['code']] = $type['name'];
         }
 
