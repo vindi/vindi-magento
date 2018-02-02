@@ -359,10 +359,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                         $paymentMethods['debit_card'],
                         $method['payment_companies']
                     );
-                } else {
-                    if ('PaymentMethod::BankSlip' === $method['type']) {
-                        $paymentMethods['bank_slip'] = true;
-                    }
+                } elseif ('PaymentMethod::BankSlip' === $method['type']) {
+                    $paymentMethods['bank_slip'] = true;
                 }
             }
 

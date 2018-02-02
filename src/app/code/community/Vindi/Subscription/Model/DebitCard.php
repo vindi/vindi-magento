@@ -72,7 +72,7 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
     /**
      * @var string
      */
-    protected $_infoBlockType = 'payment/info_dc';
+    protected $_infoBlockType = 'vindi_subscription/info_dc';
 
     /**
      * Assign data to info model instance
