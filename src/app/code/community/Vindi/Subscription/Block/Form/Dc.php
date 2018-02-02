@@ -44,13 +44,13 @@ class Vindi_Subscription_Block_Form_Dc extends Mage_Payment_Block_Form_Cc
     }
 
     /**
-     * Retrieve available credit card types
+     * Retrieve available debit card types
      *
      * @return array
      */
     public function getDcAvailableTypes()
     {
-        return $this->api()->getCreditCardTypes();
+        return $this->api()->getDebitCardTypes();
     }
     /**
      * @return bool

@@ -9,21 +9,6 @@
                 ?>
             </div>
         </li>
-        <?php if($installments = $this->getInstallments()): ?>
-            <li>
-                <div id="<?php echo $code ?>_dc_type_installments_div" class="wide">
-                    <label for="<?php echo $code ?>_dc_cid" class="required">
-                        <em>*</em>Parcelas
-                    </label>
-
-                    <div class="input-box">
-                        <select name="payment[dc_installments]" class="required-entry">
-                            <?php echo $installments; ?>
-                        </select>
-                    </div>
-                </div>
-            </li>
-        <?php endif; ?>
         <?php if ($savedDc = $this->getSavedDc()): ?>
             <li class="payment-choice-saved-dc payment-choice">
                 <label class="label-choice label-choice-saved-dc">
