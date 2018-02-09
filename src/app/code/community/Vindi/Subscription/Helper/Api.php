@@ -393,7 +393,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Retrieve Credit Card Types from Payment Methods.
+     * Retrieve Debit Card Types from Payment Methods.
      *
      * @return array
      */

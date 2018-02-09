@@ -89,8 +89,6 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
         $info = $this->getInfoInstance();
         $quote = $info->getQuote();
 
-        $info->setAdditionalInformation('installments', $data->getDcInstallments());
-
         if ($data->getDcChoice() === 'saved') {
             $info->setAdditionalInformation('PaymentMethod', $this->_code)
                 ->setAdditionalInformation('use_saved_dc', true);
@@ -98,18 +96,22 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
             return $this;
         }
 
-        $info->setDcType($data->getDcType())
-            ->setDcOwner($data->getDcOwner())
-            ->setDcLast4(substr($data->getDcNumber(), -4))
-            ->setDcNumber($data->getDcNumber())
-            ->setDcCid($data->getDcCid())
-            ->setDcExpMonth($data->getDcExpMonth())
-            ->setDcExpYear($data->getDcExpYear())
-            ->setDcSsIssue($data->getDcSsIssue())
-            ->setDcSsStartMonth($data->getDcSsStartMonth())
-            ->setDcSsStartYear($data->getDcSsStartYear())
+        $info->setCcType($data->getDcType())
+            ->setCcTypeName($data->getDcTypeName())
+            ->setCcOwner($data->getDcOwner())
+            ->setCcLast4(substr($data->getDcNumber(), -4))
+            ->setCcNumber($data->getDcNumber())
+            ->setCcCid($data->getDcCid())
+            ->setCcExpMonth($data->getDcExpMonth())
+            ->setCcExpYear($data->getDcExpYear())
+            ->setCcSsIssue($data->getDcSsIssue())
+            ->setCcSsStartMonth($data->getDcSsStartMonth())
+            ->setCcSsStartYear($data->getDcSsStartYear())
             ->setAdditionalInformation('PaymentMethod', $this->_code)
             ->setAdditionalInformation('use_saved_dc', false);
+
+        $info->addData($data->getData());
+        $info->save();
 
         return $this;
     }
@@ -192,10 +194,10 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
         $savedDc = $api->getCustomerPaymentProfile($customerVindiId);
         $info    = $this->getInfoInstance();
 
-        $info->setDcType($savedDc['payment_company']['name'])
-             ->setDcOwner($savedDc['holder_name'])
-             ->setDcLast4($savedDc['card_number_last_four'])
-             ->setDcNumber($savedDc['card_number_last_four'])
+        $info->setCcType($savedDc['payment_company']['name'])
+             ->setCcOwner($savedDc['holder_name'])
+             ->setCcLast4($savedDc['card_number_last_four'])
+             ->setCcNumber($savedDc['card_number_last_four'])
              ->setAdditionalInformation('use_saved_dc', true);
     }
 
@@ -223,47 +225,39 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
 
         $quote = $info->getQuote();
 
-        $maxInstallmentsNumber = Mage::getStoreConfig('payment/vindi_debitcard/max_installments_number');
-
-        if ($this->isSingleOrder($quote) && ($maxInstallmentsNumber > 1)) {
-            if (! $installments = $info->getAdditionalInformation('installments')) {
-                return $this->error('Você deve informar o número de parcelas.');
-            }
-
-            if ($installments > $maxInstallmentsNumber) {
-                return $this->error('O número de parcelas selecionado é inválido.');
-            }
-
-            $minInstallmentsValue = Mage::getStoreConfig('payment/vindi_debitcard/min_installment_value');
-            $installmentValue = ceil($quote->getGrandTotal() / $installments * 100) / 100;
-
-            if (($installmentValue < $minInstallmentsValue) && ($installments > 1)) {
-                return $this->error('O número de parcelas selecionado é inválido.');
-            }
-        }
-
         if ($info->getAdditionalInformation('use_saved_dc')) {
             return $this;
         }
 
         $availableTypes = $this->api()->getDebitCardTypes();
 
-        $dcNumber = $info->getDcNumber();
+        $dcNumber = $info->getCcNumber();
 
         // remove debit card non-numbers
         $dcNumber = preg_replace('/\D/', '', $dcNumber);
 
-        $info->setDcNumber($dcNumber);
+        $info->setCcNumber($dcNumber);
 
-        if (! $this->_validateExpDate($info->getDcExpYear(), $info->getDcExpMonth())) {
+        if (! $this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
             return $this->error(Mage::helper('payment')->__('Incorrect debit card expiration date.'));
         }
 
-        if (! array_key_exists($info->getDcType(), $availableTypes)) {
+        if (! array_key_exists($info->getCcType(), $availableTypes)) {
             return $this->error(Mage::helper('payment')->__('Debit card type is not allowed for this payment method.'));
         }
 
         return $this;
+    }
+
+    protected function _validateExpDate($expYear, $expMonth)
+    {
+        $date = Mage::app()->getLocale()->date();
+        if (!$expYear || !$expMonth || ($date->compareYear($expYear) == 1)
+            || ($date->compareYear($expYear) == 0 && ($date->compareMonth($expMonth) == 1))
+        ) {
+            return false;
+        }
+        return true;
     }
 
     /**
