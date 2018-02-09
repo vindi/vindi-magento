@@ -13,7 +13,7 @@ class Vindi_Subscription_Block_Info_Dc extends Mage_Payment_Block_Info_Cc
 
 
     /**
-     * Prepare credit card related payment info
+     * Prepare debit card related payment info
      *
      * @param Varien_Object|array $transport
      * @return Varien_Object
@@ -27,15 +27,16 @@ class Vindi_Subscription_Block_Info_Dc extends Mage_Payment_Block_Info_Cc
         $transport = Mage_Payment_Block_Info::_prepareSpecificInformation($transport);
 
         $data = array();
-        if ($ccType = $this->getCcTypeName()) {
-            $data[Mage::helper('payment')->__('Debit Card Type')] = $ccType;
+
+        if ($dcType = $this->getCcTypeName()) {
+            $data[Mage::helper('payment')->__('Debit Card Type')] = $dcType;
         }
         if ($this->getInfo()->getCcLast4()) {
             $data[Mage::helper('payment')->__('Debit Card Number')] = sprintf('xxxx-%s', $this->getInfo()->getCcLast4());
         }
         if (!$this->getIsSecureMode()) {
-            if ($ccSsIssue = $this->getInfo()->getCcSsIssue()) {
-                $data[Mage::helper('payment')->__('Switch/Solo/Maestro Issue Number')] = $ccSsIssue;
+            if ($dcSsIssue = $this->getInfo()->getCcSsIssue()) {
+                $data[Mage::helper('payment')->__('Switch/Solo/Maestro Issue Number')] = $dcSsIssue;
             }
             $year = $this->getInfo()->getCcSsStartYear();
             $month = $this->getInfo()->getCcSsStartMonth();
