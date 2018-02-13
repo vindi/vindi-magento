@@ -80,6 +80,7 @@
         <vindi_subscription>
             <general>
                 <send_nfe_information>0</send_nfe_information>
+                <sandbox_mode>https://app.vindi.com.br/api/v1/</sandbox_mode>
             </general>
         </vindi_subscription>
         <payment>
