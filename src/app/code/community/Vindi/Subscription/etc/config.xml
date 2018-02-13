@@ -80,6 +80,15 @@
                 </observers>
             </adminhtml_sales_order_create_process_data>
         </events>
+        <translate>
+            <modules>
+                <subscription>
+                    <files>
+                        <default>Vindi_Subscription.csv</default>
+                    </files>
+                </subscription>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <vindi_subscription>
