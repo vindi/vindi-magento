@@ -31,6 +31,11 @@
             <vindi_subscription>
                 <class>Vindi_Subscription_Block</class>
             </vindi_subscription>
+            <checkout>
+                <rewrite>
+                    <onepage_success>Vindi_Subscription_Block_Onepage_Success</onepage_success>
+                </rewrite>
+            </checkout>
         </blocks>
         <helpers>
             <vindi_subscription>
@@ -138,5 +143,14 @@
                 </observers>
             </checkout_cart_product_add_after>
         </events>
+        <translate>
+            <modules>
+                <subscription>
+                    <files>
+                        <default>Vindi_Subscription.csv</default>
+                    </files>
+                </subscription>
+            </modules>
+        </translate>
     </frontend>
 </config>
