@@ -139,12 +139,12 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
         }
 
         if ($this->isSingleOrder($order)) {
-            $result = $this->processSinglePayment($payment, $order, $customerId);
+            $billId = $this->processSinglePayment($payment, $order, $customerId);
         } else {
-            $result = $this->processSubscription($payment, $order, $customerId);
+            $billId = $this->processSubscription($payment, $order, $customerId);
         }
 
-        if (! $result) {
+        if (! $billId) {
             return false;
         }
 
