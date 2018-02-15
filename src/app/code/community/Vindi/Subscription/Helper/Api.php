@@ -6,7 +6,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @const string API base path.
      */
-    const BASE_PATH = 'https://sandbox-app.vindi.com.br/api/v1/';
+    private $base_path ;
 
     /**
      * @var string
@@ -30,6 +30,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
     public function __construct()
     {
+        $this->base_path = Mage::getStoreConfig('vindi_subscription/general/sandbox_mode');
         $this->version = (string) Mage::getConfig()->getModuleConfig('Vindi_Subscription')->version;
         $this->key = Mage::helper('vindi_subscription')->getKey();
     }
@@ -121,7 +122,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             return false;
         }
 
-        $url = static::BASE_PATH . $endpoint;
+        $url = $this->base_path . $endpoint;
         $body = $this->buildBody($data);
 
         $requestId = rand();
@@ -536,13 +537,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         foreach($orderItems as $item)
         {
-            $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            if ($product->getTypeID() !== 'subscription') {
-                Mage::throwException("O produto {$item->getName()} não é uma assinatura.");
-
-                return false;
-            }
-
             $productVindiId = $this->findOrCreateProduct(array( 'sku' => $item->getSku(), 'name' => $item->getName()));
 
             for ($i=1; $i <= $item->getQtyOrdered() ; $i++) {
