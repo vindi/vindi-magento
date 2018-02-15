@@ -46,7 +46,7 @@
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
         <reference name="checkout.success">
-            <action method="setTemplate"><template>vindi_subscription/success.phtml</template></action>
+            <action method="setTemplate"><template>vindi_subscription/payment/success.phtml</template></action>
         </reference>
     </checkout_onepage_success>
     <customer_account_edit translate="label">
