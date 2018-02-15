@@ -734,4 +734,18 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         return $response['bill'];
     }
+
+    public function getDebitCardRedirectUrl($billId)
+    {
+
+        $bill = $this->request('bills/'.$billId, 'GET');
+
+        $chargeId = $bill['bill']['charges'][0]['id'];
+        $charged = $this->request('charges/'.$chargeId.'/charge', 'POST', [
+            'id' => $bill['bill']['payment_profile']['id']
+        ]);
+
+        return $charged['charge']['last_transaction']['gateway_response_fields']['authorization_url'];
+
+    }
 }
