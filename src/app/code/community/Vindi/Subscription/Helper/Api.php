@@ -284,7 +284,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         if ($paymentProfile === false) {
             $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
-                . '%20status%3Dactive%20type%3DPaymentProfile%3A%3A'. $type;//trocar para debit card quando for debito e remover o status=active
+                . '%20status%3Dactive%20type%3DPaymentProfile%3A%3A'. $type;
 
             $response = $this->request($endpoint, 'GET');
 
