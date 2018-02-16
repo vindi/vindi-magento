@@ -146,6 +146,17 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             return false;
         }
 
+        $billData = $this->api()->request("bills/".$result, 'GET');
+        $installments = $billData['bill']['installments'];
+        $nsu = $billData['bill']['charges'][0]['last_transaction']['gateway_response_fields']['nsu'];
+
+        $this->getInfoInstance()->setAdditionalInformation()(
+            [
+                'installments' => $installments,
+                'nsu' => $nsu
+            ]
+        );
+    
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
             ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
