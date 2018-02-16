@@ -270,6 +270,14 @@ trait Vindi_Subscription_Trait_PaymentMethod
             $body['installments'] = (int) $installments;
         }
 
+        $paymentProfile = $payment->getPaymentProfile();
+
+        if($paymentProfile) {
+            $body['payment_profile'] = [
+                'id'=>$paymentProfile['payment_profile']['id']
+            ];
+        }
+
         $subscription = $this->api()->createSubscription($body);
 
         $test = $payment->getAdditionalInformation();

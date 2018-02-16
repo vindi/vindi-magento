@@ -283,7 +283,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         $paymentProfile = $this->cache()->load("vindi_payment_profile_{$customerId}");
 
-        if ($paymentProfile === false) {
+        if ($paymentProfile === false || strpos($paymentProfile, $type) === false) {
             $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
                 . '%20status%3Dactive%20type%3DPaymentProfile%3A%3A'. $type;
 
@@ -294,6 +294,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
                 $this->cache()->save(serialize($paymentProfile), "vindi_payment_profile_{$customerId}", ['vindi_cache'],
                     5 * 60); // 5 minutes
+            }else{
+                $paymentProfile = false;
             }
         } else {
             $paymentProfile = unserialize($paymentProfile);
