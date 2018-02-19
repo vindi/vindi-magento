@@ -200,8 +200,16 @@ trait Vindi_Subscription_Trait_PaymentMethod
                     'product_id' => $uniquePaymentProduct,
                     'amount'     => $order->getGrandTotal(),
                 ],
-            ],
+            ]
         ];
+
+        $paymentProfile = $payment->getPaymentProfile();
+
+        if($paymentProfile) {
+            $body['payment_profile'] = [
+                'id'=>$paymentProfile['payment_profile']['id']
+            ];
+        }
 
         if ($installments = $payment->getAdditionalInformation('installments')) {
             $body['installments'] = (int) $installments;
@@ -209,7 +217,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
 
         $billId = $this->api()->createBill($body);
 
-        if (! $billId) {
+        if (!$billId) {
             $this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
 
             $message = sprintf("Houve um problema na confirmação do pagamento, por favor entre em contato com o banco emissor do cartão. (%s)", $this->api()->lastError);
@@ -260,6 +268,14 @@ trait Vindi_Subscription_Trait_PaymentMethod
 
         if ($installments = $payment->getAdditionalInformation('installments')) {
             $body['installments'] = (int) $installments;
+        }
+
+        $paymentProfile = $payment->getPaymentProfile();
+
+        if($paymentProfile) {
+            $body['payment_profile'] = [
+                'id'=>$paymentProfile['payment_profile']['id']
+            ];
         }
 
         $subscription = $this->api()->createSubscription($body);
