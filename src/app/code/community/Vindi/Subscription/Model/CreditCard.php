@@ -72,7 +72,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     /**
      * @var string
      */
-    protected $_infoBlockType = 'payment/info_cc';
+    protected $_infoBlockType = 'vindi_subscription/info_cc';
 
     /**
      * Assign data to info model instance
@@ -150,7 +150,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $installments = $billData['bill']['installments'];
         $nsu = $billData['bill']['charges'][0]['last_transaction']['gateway_response_fields']['nsu'];
 
-        $this->getInfoInstance()->setAdditionalInformation()(
+        $this->getInfoInstance()->setAdditionalInformation(
             [
                 'installments' => $installments,
                 'nsu' => $nsu
