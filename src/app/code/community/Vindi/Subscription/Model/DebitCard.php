@@ -1,13 +1,14 @@
 <?php
 
-class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
+class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
 {
     use Vindi_Subscription_Trait_PaymentMethod;
 
+    public static $METHOD = "DebitCard";
     /**
      * @var string
      */
-    protected $_code = 'vindi_creditcard';
+    protected $_code = 'vindi_debitcard';
 
     /**
      * @var bool
@@ -62,17 +63,17 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     /**
      * @var bool
      */
-    protected $_canSaveCc = false;
+    protected $_canSaveDc = false;
 
     /**
      * @var string
      */
-    protected $_formBlockType = 'vindi_subscription/form_cc';
+    protected $_formBlockType = 'vindi_subscription/form_dc';
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'vindi_subscription/info_cc';
+    protected $_infoBlockType = 'vindi_subscription/info_dc';
 
     /**
      * Assign data to info model instance
@@ -89,27 +90,26 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $info = $this->getInfoInstance();
         $quote = $info->getQuote();
 
-        $info->setAdditionalInformation('installments', $data->getCcInstallments());
-
-        if ($data->getCcChoice() === 'saved') {
+        if ($data->getDcChoice() === 'saved') {
             $info->setAdditionalInformation('PaymentMethod', $this->_code)
-                ->setAdditionalInformation('use_saved_cc', true);
+                ->setAdditionalInformation('use_saved_dc', true);
 
             return $this;
         }
 
-        $info->setCcType($data->getCcType())
-            ->setCcOwner($data->getCcOwner())
-            ->setCcLast4(substr($data->getCcNumber(), -4))
-            ->setCcNumber($data->getCcNumber())
-            ->setCcCid($data->getCcCid())
-            ->setCcExpMonth($data->getCcExpMonth())
-            ->setCcExpYear($data->getCcExpYear())
-            ->setCcSsIssue($data->getCcSsIssue())
-            ->setCcSsStartMonth($data->getCcSsStartMonth())
-            ->setCcSsStartYear($data->getCcSsStartYear())
+        $info->setCcType($data->getDcType())
+            ->setCcTypeName($data->getDcTypeName())
+            ->setCcOwner($data->getDcOwner())
+            ->setCcLast4(substr($data->getDcNumber(), -4))
+            ->setCcNumber($data->getDcNumber())
+            ->setCcCid($data->getDcCid())
+            ->setCcExpMonth($data->getDcExpMonth())
+            ->setCcExpYear($data->getDcExpYear())
+            ->setCcSsIssue($data->getDcSsIssue())
+            ->setCcSsStartMonth($data->getDcSsStartMonth())
+            ->setCcSsStartYear($data->getDcSsStartYear())
             ->setAdditionalInformation('PaymentMethod', $this->_code)
-            ->setAdditionalInformation('use_saved_cc', false);
+            ->setAdditionalInformation('use_saved_dc', false);
 
         return $this;
     }
@@ -130,33 +130,22 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $customerId      = $this->createCustomer($order, $customer);
         $customerVindiId = $customer->getVindiUserCode();
 
-        if (! $payment->getAdditionalInformation('use_saved_cc')) {
+        if (! $payment->getAdditionalInformation('use_saved_dc')) {
             $this->createPaymentProfile($customerId);
         } else {
             $this->assignDataFromPreviousPaymentProfile($customerVindiId);
         }
 
         if ($this->isSingleOrder($order)) {
-            $result = $this->processSinglePayment($payment, $order, $customerId);
+            $billId = $this->processSinglePayment($payment, $order, $customerId);
         } else {
-            $result = $this->processSubscription($payment, $order, $customerId);
+            $billId = $this->processSubscription($payment, $order, $customerId);
         }
 
-        if (! $result) {
+        if (! $billId) {
             return false;
         }
 
-        $billData = $this->api()->request("bills/".$result, 'GET');
-        $installments = $billData['bill']['installments'];
-        $nsu = $billData['bill']['charges'][0]['last_transaction']['gateway_response_fields']['nsu'];
-
-        $this->getInfoInstance()->setAdditionalInformation(
-            [
-                'installments' => $installments,
-                'nsu' => $nsu
-            ]
-        );
-    
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
             ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
@@ -172,7 +161,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     {
         $payment = $this->getInfoInstance();
 
-        $creditCardData = [
+        $debitCardData = [
             'holder_name'          => $payment->getCcOwner(),
             'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
                 . '/' . $payment->getCcExpYear(),
@@ -183,7 +172,8 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             'payment_method_code'  =>  $this->getPaymentMethodCode()
         ];
 
-        $paymentProfileId = $this->api()->createCustomerPaymentProfile($creditCardData);
+        $paymentProfileId = $this->api()->createCustomerPaymentProfile($debitCardData);
+        $payment->setPaymentProfile($paymentProfileId);
 
         if ($paymentProfileId === false) {
             Mage::throwException('Erro ao informar os dados de cartão de crédito. Verifique os dados e tente novamente!');
@@ -200,14 +190,14 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     protected function assignDataFromPreviousPaymentProfile($customerVindiId)
     {
         $api     = Mage::helper('vindi_subscription/api');
-        $savedCc = $api->getCustomerPaymentProfile($customerVindiId);
+        $savedDc = $api->getCustomerPaymentProfile($customerVindiId);
         $info    = $this->getInfoInstance();
 
-        $info->setCcType($savedCc['payment_company']['name'])
-             ->setCcOwner($savedCc['holder_name'])
-             ->setCcLast4($savedCc['card_number_last_four'])
-             ->setCcNumber($savedCc['card_number_last_four'])
-             ->setAdditionalInformation('use_saved_cc', true);
+        $info->setCcType($savedDc['payment_company']['name'])
+             ->setCcOwner($savedDc['holder_name'])
+             ->setCcLast4($savedDc['card_number_last_four'])
+             ->setCcNumber($savedDc['card_number_last_four'])
+             ->setAdditionalInformation('use_saved_dc', true);
     }
 
     /**
@@ -219,7 +209,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
      */
     public function isAvailable($quote = null)
     {
-        return Mage::getStoreConfig('payment/vindi_creditcard/active')
+        return Mage::getStoreConfig('payment/vindi_debitcard/active')
         && Mage::helper('vindi_subscription')->getKey();
     }
 
@@ -234,47 +224,39 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
 
         $quote = $info->getQuote();
 
-        $maxInstallmentsNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
-
-        if ($this->isSingleOrder($quote) && ($maxInstallmentsNumber > 1)) {
-            if (! $installments = $info->getAdditionalInformation('installments')) {
-                return $this->error('Você deve informar o número de parcelas.');
-            }
-
-            if ($installments > $maxInstallmentsNumber) {
-                return $this->error('O número de parcelas selecionado é inválido.');
-            }
-
-            $minInstallmentsValue = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
-            $installmentValue = ceil($quote->getGrandTotal() / $installments * 100) / 100;
-
-            if (($installmentValue < $minInstallmentsValue) && ($installments > 1)) {
-                return $this->error('O número de parcelas selecionado é inválido.');
-            }
-        }
-
-        if ($info->getAdditionalInformation('use_saved_cc')) {
+        if ($info->getAdditionalInformation('use_saved_dc')) {
             return $this;
         }
 
-        $availableTypes = $this->api()->getCreditCardTypes();
+        $availableTypes = $this->api()->getDebitCardTypes();
 
-        $ccNumber = $info->getCcNumber();
+        $dcNumber = $info->getCcNumber();
 
-        // remove credit card non-numbers
-        $ccNumber = preg_replace('/\D/', '', $ccNumber);
+        // remove debit card non-numbers
+        $dcNumber = preg_replace('/\D/', '', $dcNumber);
 
-        $info->setCcNumber($ccNumber);
+        $info->setCcNumber($dcNumber);
 
         if (! $this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
-            return $this->error(Mage::helper('payment')->__('Incorrect credit card expiration date.'));
+            return $this->error(Mage::helper('payment')->__('Incorrect debit card expiration date.'));
         }
 
         if (! array_key_exists($info->getCcType(), $availableTypes)) {
-            return $this->error(Mage::helper('payment')->__('Credit card type is not allowed for this payment method.'));
+            return $this->error(Mage::helper('payment')->__('Debit card type is not allowed for this payment method.'));
         }
 
         return $this;
+    }
+
+    protected function _validateExpDate($expYear, $expMonth)
+    {
+        $date = Mage::app()->getLocale()->date();
+        if (!$expYear || !$expMonth || ($date->compareYear($expYear) == 1)
+            || ($date->compareYear($expYear) == 0 && ($date->compareMonth($expMonth) == 1))
+        ) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -296,6 +278,6 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     protected function getPaymentMethodCode()
     {
         // TODO fix it to proper method code
-        return 'credit_card';
+        return 'debit_card';
     }
 }

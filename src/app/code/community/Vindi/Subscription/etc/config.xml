@@ -31,6 +31,11 @@
             <vindi_subscription>
                 <class>Vindi_Subscription_Block</class>
             </vindi_subscription>
+            <checkout>
+                <rewrite>
+                    <onepage_success>Vindi_Subscription_Block_Onepage_Success</onepage_success>
+                </rewrite>
+            </checkout>
         </blocks>
         <helpers>
             <vindi_subscription>
@@ -75,11 +80,21 @@
                 </observers>
             </adminhtml_sales_order_create_process_data>
         </events>
+        <translate>
+            <modules>
+                <subscription>
+                    <files>
+                        <default>Vindi_Subscription.csv</default>
+                    </files>
+                </subscription>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <vindi_subscription>
             <general>
                 <send_nfe_information>0</send_nfe_information>
+                <sandbox_mode>https://app.vindi.com.br/api/v1/</sandbox_mode>
             </general>
         </vindi_subscription>
         <payment>
@@ -100,6 +115,13 @@
                 <min_installment_value>5</min_installment_value>
                 <max_installments_number>1</max_installments_number>
             </vindi_creditcard>
+            <vindi_debitcard>
+                <active>0</active>
+                <model>vindi_subscription/debitCard</model>
+                <title>Cart&#xE3;o de D&#xE9;bito</title>
+                <payment_action>capture</payment_action>
+                <allowspecific>0</allowspecific>
+            </vindi_debitcard>
         </payment>
     </default>
     <frontend>
@@ -137,5 +159,14 @@
                 </observers>
             </checkout_cart_product_add_after>
         </events>
+        <translate>
+            <modules>
+                <subscription>
+                    <files>
+                        <default>Vindi_Subscription.csv</default>
+                    </files>
+                </subscription>
+            </modules>
+        </translate>
     </frontend>
 </config>
