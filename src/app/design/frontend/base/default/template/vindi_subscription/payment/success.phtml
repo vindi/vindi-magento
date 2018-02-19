@@ -63,6 +63,10 @@
     <?php echo $this->__('Your order has not been paid yet. <a href="%s" target="_blank">Click here to print</a> your Boleto Bancário.', $this->getBankSlipDownload()) ?>
 <?php endif; ?>
 
+<?php if ($this->isVindiDebitCard()): ?>
+    <?php echo $this->__('Your order has not been paid yet. <a href="%s" target="_blank">Click here to aprove</a> the Debit.', $this->getDebitCardRedirectUrl()) ?>
+<?php endif; ?>
+
 <div class="buttons-set">
     <button type="button" class="button" title="<?php echo $this->__('Continue Shopping') ?>" onclick="window.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
 </div>
