@@ -31,6 +31,11 @@
             <vindi_subscription>
                 <class>Vindi_Subscription_Block</class>
             </vindi_subscription>
+            <checkout>
+                <rewrite>
+                    <onepage_success>Vindi_Subscription_Block_Onepage_Success</onepage_success>
+                </rewrite>
+            </checkout>
         </blocks>
         <helpers>
             <vindi_subscription>
@@ -75,11 +80,21 @@
                 </observers>
             </adminhtml_sales_order_create_process_data>
         </events>
+        <translate>
+            <modules>
+                <subscription>
+                    <files>
+                        <default>Vindi_Subscription.csv</default>
+                    </files>
+                </subscription>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <vindi_subscription>
             <general>
                 <send_nfe_information>0</send_nfe_information>
+                <sandbox_mode>https://app.vindi.com.br/api/v1/</sandbox_mode>
             </general>
         </vindi_subscription>
         <payment>
@@ -137,5 +152,14 @@
                 </observers>
             </checkout_cart_product_add_after>
         </events>
+        <translate>
+            <modules>
+                <subscription>
+                    <files>
+                        <default>Vindi_Subscription.csv</default>
+                    </files>
+                </subscription>
+            </modules>
+        </translate>
     </frontend>
 </config>

@@ -1,0 +1,166 @@
+<?php
+$code = $this->getMethodCode();
+$class = 'required-entry';
+?>
+    <ul class="form-list" id="payment_form_<?php echo $code ?>" style="display:none;">
+        <li>
+            <div class="payment-companies">
+                <?php foreach ($ccs = $this->getCcAvailableTypes() as $typeCode => $typeName) {
+                    echo '<img alt="' . $typeName . '" title="' . $typeName . '"
+                         src="https://s3.amazonaws.com/recurrent/payment_companies/' . $typeCode . '.png"/>';
+                }
+                ?>
+            </div>
+        </li>
+        <?php if ($installments = $this->getInstallments()): ?>
+            <li>
+                <div id="<?php echo $code ?>_cc_type_installments_div" class="wide">
+                    <label for="<?php echo $code ?>_cc_cid" class="required">
+                        <em>*</em>Parcelas
+                    </label>
+
+                    <div class="input-box">
+                        <select name="payment[cc_installments]" class="required-entry">
+                            <?php echo $installments; ?>
+                        </select>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+        <?php if ($savedCc = $this->getSavedCc()): ?>
+            <?php $class = 'not-required-entry';?>
+            <li class="payment-choice-saved-cc payment-choice">
+                <label class="label-choice label-choice-saved-cc">
+                    <input type="radio" name="payment[cc_choice]" checked="checked" value="saved"/>
+                    Usar cartão salvo
+                </label>
+
+                <div class="block-choice-saved-cc block-choice">
+                    <img alt="<?php echo $ccType = $savedCc['payment_company']['name']; ?>"
+                         title="<?php echo $ccType; ?>"
+                         src="https://s3.amazonaws.com/recurrent/payment_companies/<?php echo $savedCc['payment_company']['code']; ?>.png"/>
+
+                    <div class="block-choice-saved-cc-details">
+                        <div class="nowrap block-choice-saved-cc-holder-name">
+                            <span class="text-upper">Portador</span>
+                            <span title="<?php echo $name = $savedCc['holder_name']; ?>"><?php echo $name ?></span>
+                        </div>
+                    <span class="nowrap">
+                        <span class="text-upper">Final</span>
+                        <?php echo $savedCc['card_number_last_four']; ?>&nbsp;
+                    </span>
+                    <span class="nowrap">
+                        <span class="text-upper">Validade</span>
+                        <?php echo date("m/Y", strtotime($savedCc['card_expiration'])); ?>
+                    </span>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+        <li class="payment-choice-new-cc payment-choice">
+            <?php if ($savedCc): ?>
+
+                <label class="label-choice label-choice-new-cc">
+                    <input type="radio" name="payment[cc_choice]" value="new"/>
+                    Novo cartão de crédito
+                </label>
+            <?php else : ?>
+                <input type="hidden" name="payment[cc_choice]" value="new"/>
+            <?php endif; ?>
+
+            <div class="block-choice-new-cc block-choice" <?php if ($savedCc): ?>style="display:none;"<?php endif; ?>>
+                <div class="wide">
+                    <label for="<?php echo $code ?>_cc_owner" class="required">
+                        <em>*</em><?php echo $this->__('Name on Card') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Name on Card') ?>"
+                               class="input-text <?php echo $class; ?>"
+                               id="<?php echo $code ?>_cc_owner" name="payment[cc_owner]"
+                               value="<?php echo $this->escapeHtml($this->getInfoData('cc_owner')) ?>"/>
+                    </div>
+                </div>
+                <div class="wide">
+                    <label for="<?php echo $code ?>_cc_type" class="required">
+                        <em>*</em><?php echo $this->__('Credit Card Type') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <select id="<?php echo $code ?>_cc_type" name="payment[cc_type]" class="<?php echo $class; ?>"
+                                title="<?php echo $this->__('Credit Card Type') ?>">
+                            <option value=""><?php echo $this->__('--Please Select--') ?></option>
+                            <?php foreach ($this->getCcAvailableTypes() as $typeCode => $typeName): ?>
+                                <option value="<?php echo $typeCode ?>">
+                                    <?php echo $typeName ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="wide">
+                    <label for="<?php echo $code ?>_cc_number" class="required">
+                        <em>*</em><?php echo $this->__('Credit Card Number') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" id="<?php echo $code ?>_cc_number" name="payment[cc_number]"
+                               title="<?php echo $this->__('Credit Card Number') ?>" class="input-text" value=""
+                               placeholder="•••• •••• •••• ••••"/>
+                    </div>
+                </div>
+                <div id="<?php echo $code ?>_cc_type_exp_div" class="wide">
+                    <label for="<?php echo $code ?>_expiration" class="required">
+                        <em>*</em><?php echo $this->__('Expiration Date') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <div class="v-fix">
+                            <select id="<?php echo $code ?>_expiration" name="payment[cc_exp_month]"
+                                    class="month validate-cc-exp <?php echo $class; ?>">
+                                <?php foreach ($this->getCcMonths() as $k => $v): ?>
+                                    <option value="<?php echo $k ? $k : '' ?>">
+                                        <?php echo $v ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="v-fix">
+                            <select id="<?php echo $code ?>_expiration_yr" name="payment[cc_exp_year]"
+                                    class="year <?php echo $class; ?>">
+                                <?php foreach ($this->getCcYears() as $k => $v): ?>
+                                    <option value="<?php echo $k ? $k : '' ?>">
+                                        <?php echo $v ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="<?php echo $code ?>_cc_type_cvv_div" class="wide">
+                    <label for="<?php echo $code ?>_cc_cid" class="required">
+                        <em>*</em>Número de Segurança
+                    </label>
+
+                    <div class="input-box">
+                        <div class="v-fix">
+                            <input type="text" title="Número de Segurança"
+                                   class="input-text cvv <?php echo $class; ?>" id="<?php echo $code ?>_cc_cid"
+                                   name="payment[cc_cid]" value=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+<?php if ($savedCc): ?>
+    <script type="text/javascript">
+        var VindiSubscriptionCC = new VindiSubscriptionCreditCard({
+            paymentChoiceSavedCcSelector: '.payment-choice-new-cc',
+            paymentChoiceNewCcSelector: '.payment-choice-saved-cc',
+            blockChoiceSavedCcSelector: '.block-choice-saved-cc',
+            blockChoiceNewCcSelector: '.block-choice-new-cc',
+        });
+    </script>
+<?php endif; ?>

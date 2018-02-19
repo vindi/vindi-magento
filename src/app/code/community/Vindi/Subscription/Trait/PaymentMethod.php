@@ -175,7 +175,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
             'Assinatura criada', true);
 
-        return true;
+        return $order->getVindiBillId();
     }
 
     /**
@@ -279,6 +279,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
         }
 
         $order->setVindiSubscriptionId($subscription['id']);
+        $order->setVindiBillId($subscription['bill']['id']);
         $order->setVindiSubscriptionPeriod(1);
         $order->save();
 
