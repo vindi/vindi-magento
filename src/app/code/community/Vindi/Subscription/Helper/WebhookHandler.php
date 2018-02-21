@@ -137,10 +137,6 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             $this->log('Impossível gerar novo pedido!', 4);
             return false;
         }
-        else {
-            $this->log('Testes Magento Repair');
-            $this->log($order);
-        }
 
         $this->log(sprintf('Novo pedido gerado: %s.', $order->getId()));
 
