@@ -50,12 +50,38 @@ trait Vindi_Subscription_Trait_PaymentMethod
     }
 
     /**
+     * @param array Customer phones $phone
+     * @return array
+     */
+    public function format_phone($phone)
+    {
+        $phone = preg_replace('/^0/', '', $phone);
+        $phone = preg_replace('/\D+/', '', '55'. $phone);
+
+        switch(strlen($phone)) {
+            case 12:
+                $phone_type = 'landline';
+                break;
+            case 13:
+                $phone_type = 'mobile';
+                break;
+        }
+
+        if (isset($phone_type)) {
+            return [
+                'phone_type' => $phone_type,
+                'number'     => $phone
+            ];
+        }
+    }
+
+    /**
      * @param Mage_Sales_Model_Order       $order
      * @param Mage_Customer_Model_Customer $customer
      *
      * @return bool|int|null
      */
-    protected function createCustomer($order, $customer)
+   protected function createCustomer($order, $customer)
     {
         $billing = $order->getBillingAddress();
 
@@ -66,7 +92,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
             $customer->loadByEmail($billing->getEmail());
         }
 
-        //TODO fix user being created again if validation fails
+        //TODO fix user being created again if validation fails 
         if (! ($userCode = $customer->getVindiUserCode())) {
             $userCode = 'mag-' . $customer->getId() . '-' . time();
 
@@ -90,7 +116,8 @@ trait Vindi_Subscription_Trait_PaymentMethod
             'email'         => $order->getBillingAddress()->getEmail(),
             'registry_code' => $order->getData('customer_taxvat'),
             'code'          => $userCode,
-            'address'       => $address,
+            'phones'        => $this->format_phone($order->getBillingAddress()->getTelephone()),
+            'address'       => $address
         ];
 
         if (Mage::getStoreConfig('vindi_subscription/general/send_nfe_information')) {
