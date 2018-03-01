@@ -133,9 +133,8 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         $order = $this->createOrder($lastPeriodOrder, $vindiData);
 
-        if (! $order) {
+        if ($order === false) {
             $this->log('Impossível gerar novo pedido!', 4);
-
             return false;
         }
 
