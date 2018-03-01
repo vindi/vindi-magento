@@ -55,8 +55,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
      */
     public function format_phone($phone)
     {
-        $phone = preg_replace('/^0/', '', $phone);
-        $phone = preg_replace('/\D+/', '', '55'. $phone);
+        $phone = '55' . preg_replace('/^0|\D+/', '', $phone);
 
         switch(strlen($phone)) {
             case 12:
