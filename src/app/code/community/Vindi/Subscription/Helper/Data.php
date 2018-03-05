@@ -9,6 +9,10 @@ class Vindi_Subscription_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getKey()
     {
+        if('yes' == Mage::getStoreConfig('vindi_subscription/general/sandbox')) {
+            return Mage::getStoreConfig('vindi_subscription/general/api_key_sandbox') ?: false;
+        }
+
         return Mage::getStoreConfig('vindi_subscription/general/api_key') ?: false;
     }
 
