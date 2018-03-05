@@ -6,7 +6,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @const string API base path.
      */
-    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
+    private $base_path ;
 
     /**
      * @var string
@@ -30,6 +30,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
     public function __construct()
     {
+        $this->base_path = Mage::getStoreConfig('vindi_subscription/general/sandbox_mode');
         $this->version = (string) Mage::getConfig()->getModuleConfig('Vindi_Subscription')->version;
         $this->key = Mage::helper('vindi_subscription')->getKey();
     }
@@ -121,7 +122,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             return false;
         }
 
-        $url = static::BASE_PATH . $endpoint;
+        $url = $this->base_path . $endpoint;
         $body = $this->buildBody($data);
 
         $requestId = rand();
@@ -272,7 +273,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    public function getCustomerPaymentProfile($userCode)
+    public function getCustomerPaymentProfile($userCode, $type = "CreditCard")
     {
         $customerId = $this->findCustomerByCode($userCode);
 
@@ -282,9 +283,9 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         $paymentProfile = $this->cache()->load("vindi_payment_profile_{$customerId}");
 
-        if ($paymentProfile === false) {
+        if ($paymentProfile === false || strpos($paymentProfile, $type) === false) {
             $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
-                . '%20status%3Dactive%20type%3DPaymentProfile%3A%3ACreditCard';
+                . '%20status%3Dactive%20type%3DPaymentProfile%3A%3A'. $type;
 
             $response = $this->request($endpoint, 'GET');
 
@@ -293,6 +294,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
                 $this->cache()->save(serialize($paymentProfile), "vindi_payment_profile_{$customerId}", ['vindi_cache'],
                     5 * 60); // 5 minutes
+            }else{
+                $paymentProfile = false;
             }
         } else {
             $paymentProfile = unserialize($paymentProfile);
@@ -334,6 +337,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
             $paymentMethods = [
                 'credit_card' => [],
+                'debit_card' => [],
                 'bank_slip'   => false,
             ];
 
@@ -349,12 +353,17 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 }
 
                 if ('PaymentMethod::CreditCard' === $method['type']) {
-                    $paymentMethods['credit_card'] = array_merge($paymentMethods['credit_card'],
-                        $method['payment_companies']);
-                } else {
-                    if ('PaymentMethod::BankSlip' === $method['type']) {
-                        $paymentMethods['bank_slip'] = true;
-                    }
+                    $paymentMethods['credit_card'] = array_merge(
+                        $paymentMethods['credit_card'],
+                        $method['payment_companies']
+                    );
+                }elseif('PaymentMethod::DebitCard' === $method['type']) {
+                    $paymentMethods['debit_card'] = array_merge(
+                        $paymentMethods['debit_card'],
+                        $method['payment_companies']
+                    );
+                } elseif ('PaymentMethod::BankSlip' === $method['type']) {
+                    $paymentMethods['bank_slip'] = true;
                 }
             }
 
@@ -380,6 +389,23 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $types = [];
 
         foreach ($methods['credit_card'] as $type) {
+            $types[$type['code']] = $type['name'];
+        }
+
+        return $types;
+    }
+
+    /**
+     * Retrieve Debit Card Types from Payment Methods.
+     *
+     * @return array
+     */
+    public function getDebitCardTypes()
+    {
+        $methods = $this->getPaymentMethods();
+        $types = [];
+
+        foreach ($methods['debit_card'] as $type) {
             $types[$type['code']] = $type['name'];
         }
 
@@ -513,13 +539,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         foreach($orderItems as $item)
         {
-            $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            if ($product->getTypeID() !== 'subscription') {
-                Mage::throwException("O produto {$item->getName()} não é uma assinatura.");
-
-                return false;
-            }
-
             $productVindiId = $this->findOrCreateProduct(array( 'sku' => $item->getSku(), 'name' => $item->getName()));
 
             for ($i=1; $i <= $item->getQtyOrdered() ; $i++) {
@@ -710,5 +729,19 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         }
 
         return $response['bill'];
+    }
+
+    public function getDebitCardRedirectUrl($billId)
+    {
+
+        $bill = $this->request('bills/'.$billId, 'GET');
+
+        $chargeId = $bill['bill']['charges'][0]['id'];
+        $charged = $this->request('charges/'.$chargeId.'/charge', 'POST', [
+            'id' => $bill['bill']['payment_profile']['id']
+        ]);
+
+        return $charged['charge']['last_transaction']['gateway_response_fields']['authorization_url'];
+
     }
 }
