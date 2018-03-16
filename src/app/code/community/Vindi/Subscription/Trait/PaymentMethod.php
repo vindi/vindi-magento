@@ -67,10 +67,10 @@ trait Vindi_Subscription_Trait_PaymentMethod
         }
 
         if (isset($phone_type)) {
-            return [
+            return [[
                 'phone_type' => $phone_type,
                 'number'     => $phone
-            ];
+            ]];
         }
     }
 
