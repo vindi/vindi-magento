@@ -30,6 +30,8 @@ class Vindi_Subscription_Block_Form_BankSlip extends Mage_Payment_Block_Form
     */
     public function setMessageBankSlip()
     {
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+
     	if('subscription' == $this->getQuoteType($quote))
     		return 'enviado mensalmente';	
    
