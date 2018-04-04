@@ -210,7 +210,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $savedCc = $api->getCustomerPaymentProfile($customerVindiId);
         $info    = $this->getInfoInstance();
 
-        $info->setCcType($savedCc['payment_company']['name'])
+        $info->setCcType($savedCc['payment_company']['code'])
              ->setCcOwner($savedCc['holder_name'])
              ->setCcLast4($savedCc['card_number_last_four'])
              ->setCcNumber($savedCc['card_number_last_four'])
