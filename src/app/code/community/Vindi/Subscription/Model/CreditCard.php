@@ -146,7 +146,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             return false;
         }
 
-        $billData = $this->api()->request("bills/" . $result, 'GET');
+        $billData = $this->api()->getBill($result);
         $installments = $billData['bill']['installments'];
         $nsu = $billData['bill']['charges'][0]['last_transaction']['gateway_response_fields']['nsu'];
 
