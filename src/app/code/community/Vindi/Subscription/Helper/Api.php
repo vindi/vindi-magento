@@ -6,7 +6,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @const string API base path.
      */
-    const BASE_PATH = 'https://sandbox-app.vindi.com.br/api/v1/';
+    const BASE_PATH = 'https://app.vindi.com.br/api/v1/';
 
     /**
      * @var string
