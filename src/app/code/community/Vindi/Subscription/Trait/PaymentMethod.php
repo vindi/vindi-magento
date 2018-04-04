@@ -231,9 +231,9 @@ trait Vindi_Subscription_Trait_PaymentMethod
 
         $paymentProfile = $payment->getPaymentProfile();
 
-        if($paymentProfile) {
+        if ($paymentProfile) {
             $body['payment_profile'] = [
-                'id'=>$paymentProfile['payment_profile']['id']
+                'id' => $paymentProfile['payment_profile']['id']
             ];
         }
 
@@ -298,9 +298,9 @@ trait Vindi_Subscription_Trait_PaymentMethod
 
         $paymentProfile = $payment->getPaymentProfile();
 
-        if($paymentProfile) {
+        if ($paymentProfile) {
             $body['payment_profile'] = [
-                'id'=>$paymentProfile['payment_profile']['id']
+                'id' => $paymentProfile['payment_profile']['id']
             ];
         }
 
