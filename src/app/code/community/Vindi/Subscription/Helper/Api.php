@@ -514,13 +514,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         foreach($orderItems as $item)
         {
-            $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            if ($product->getTypeID() !== 'subscription') {
-                Mage::throwException("O produto {$item->getName()} não é uma assinatura.");
-
-                return false;
-            }
-
             $productVindiId = $this->findOrCreateProduct(array( 'sku' => $item->getSku(), 'name' => $item->getName()));
 
             for ($i=1; $i <= $item->getQtyOrdered() ; $i++) {
