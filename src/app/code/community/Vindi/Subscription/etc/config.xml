@@ -31,6 +31,11 @@
             <vindi_subscription>
                 <class>Vindi_Subscription_Block</class>
             </vindi_subscription>
+            <checkout>
+                <rewrite>
+                    <onepage_success>Vindi_Subscription_Block_Onepage_Success</onepage_success>
+                </rewrite>
+            </checkout>
         </blocks>
         <helpers>
             <vindi_subscription>
