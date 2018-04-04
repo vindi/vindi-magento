@@ -72,7 +72,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     /**
      * @var string
      */
-    protected $_infoBlockType = 'payment/info_cc';
+    protected $_infoBlockType = 'vindi_subscription/info_cc';
 
     /**
      * Assign data to info model instance
@@ -145,6 +145,24 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         if (! $result) {
             return false;
         }
+
+        $billData = $this->api()->getBill($result);
+        $installments = $billData['installments'];
+        $response_fields = $billData['charges'][0]['last_transaction']['gateway_response_fields'];
+        $possible = ['nsu', 'proof_of_sale'];
+        $nsu = '';
+        foreach ($possible as $nsu_field) {
+            if ($response_fields[$nsu_field]) {
+                $nsu = $response_fields[$nsu_field];
+            }
+        }
+
+        $this->getInfoInstance()->setAdditionalInformation(
+            [
+                'installments' => $installments,
+                'nsu' => $nsu
+            ]
+        );
 
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
             ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
