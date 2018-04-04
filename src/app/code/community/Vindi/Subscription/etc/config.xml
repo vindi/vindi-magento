@@ -115,6 +115,13 @@
                 <min_installment_value>5</min_installment_value>
                 <max_installments_number>1</max_installments_number>
             </vindi_creditcard>
+            <vindi_debitcard>
+                <active>0</active>
+                <model>vindi_subscription/debitCard</model>
+                <title>Cart&#xE3;o de D&#xE9;bito</title>
+                <payment_action>capture</payment_action>
+                <allowspecific>0</allowspecific>
+            </vindi_debitcard>
         </payment>
     </default>
     <frontend>
