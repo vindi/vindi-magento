@@ -70,6 +70,10 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     {
         $quote  = $this->getQuote();
 
+        if ($this->isSingleQuote($quote)) {
+            return;
+        }
+
         foreach($quote->getAllVisibleItems() as $item){
             $product = Mage::getModel('catalog/product')->load($item->getProductId());
             $plan = $product->getData('vindi_subscription_plan');
@@ -77,16 +81,13 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
 
         $installments = $this->api()->getPlanInstallments($plan);
 
-        if(! $this->isSingleQuote($quote)) {
-
-            return $installments;
-        }
+        return $installments;
     }
     /**
      * @return bool
      */
     public function isInstallmentsAllowedInStore()
-    {    
+    {
         return Mage::getStoreConfig('payment/vindi_creditcard/enable_installments');
     }
     /**
@@ -99,12 +100,12 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
         $minInstallmentsValue       = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
         $quote                      = $this->getQuote();
         $installments               = false;
-     
+
             if ($maxInstallmentsNumber > 1 && $allowInstallments == true) {
                 $total             = $quote->getGrandTotal();
                 $installmentsTimes = floor($total / $minInstallmentsValue);
                 $installments      = '<option value="">' . Mage::helper('catalog')->__('-- Please Select --') . '</option>';
-                
+
                     for ($i = 1; $i <= $maxInstallmentsNumber; $i++) {
                         $value = ceil($total / $i * 100) / 100;
                         $price = Mage::helper('core')->currency($value, true, false);
@@ -113,12 +114,12 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
                             break;
                     }
             }
-            
+
         return $installments;
     }
     /**
      *  @return int
-     */    
+     */
     public function getMaxInstallmentsNumber()
     {
         $quote                      = $this->getQuote();
@@ -129,7 +130,7 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
             return $maxInstallmentsNumber;
         } else{
             return $subscriptionInstallments;
-        }    
+        }
     }
     /**
      * @param Mage_Sales_Model_Quote $quote
