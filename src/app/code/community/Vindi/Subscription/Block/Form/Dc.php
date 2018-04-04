@@ -58,7 +58,7 @@ class Vindi_Subscription_Block_Form_Dc extends Mage_Payment_Block_Form_Cc
     public function getSavedDc()
     {
         $customer = $this->getCustomer();
-        if (! $userCode = $customer->getVindiUserCode()) {
+        if (!$userCode = $customer->getVindiUserCode()) {
             return false;
         }
         return $this->api()->getCustomerPaymentProfile($userCode, Vindi_Subscription_Model_DebitCard::$METHOD);
