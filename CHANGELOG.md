@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.0.17 - 11/04/2018
+- NSU e número de parcelas de compras de cartões de crédito no administrador
+- Possibilidade de utilizar o ambiente de sandbox para testes
+- Cartão de débito
+- URL do boleto na confirmação do checkout
+- Captura do campo 'telefone'
+
 ### 1.0.16 - 10/07/2017
 - Alterações para parcelamento de pedidos pelo Painel Administrativo e em múltiplas lojas.
 
