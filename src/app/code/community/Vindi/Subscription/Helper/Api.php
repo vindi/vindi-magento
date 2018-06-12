@@ -269,6 +269,18 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Make an API request to verify a Payment Profile to a Customer.
+     *
+     * @param $id integer 
+     *
+     * @return array|bool|mixed
+     */
+    public function verifyCustomerPaymentProfile($id)
+    {
+        return $this->request('payment_profiles/' . $id . '/verify', 'POST');
+    }
+
+    /**
      * @param $userCode
      *
      * @return bool
