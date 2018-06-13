@@ -215,7 +215,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
     public function verifyPaymentProfile($paymentProfileId)
     {
         $verify_status = $this->api()->verifyCustomerPaymentProfile($paymentProfileId);
-        return !($verify_status['status'] === 'rejected');
+        return !($verify_status['transaction']['status'] === 'rejected');
     }
     
     /**
