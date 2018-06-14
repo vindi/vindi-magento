@@ -262,11 +262,9 @@ trait Vindi_Subscription_Trait_PaymentMethod
             true
         );
 
-        Mage::throwException($message);
-
         $this->api()->deleteBill($billId);
-
-        return false;
+        
+        Mage::throwException($message);
     }
 
     /**
