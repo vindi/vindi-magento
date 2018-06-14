@@ -245,7 +245,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $billId = $currentBill['id'];
 
         if ($billId) {
-            if ($currentBill['payment_method_code'] === "bank_slip" || $currentBill['status'] === "paid"){
+            if ($currentBill['payment_method_code'] === "bank_slip" || $currentBill['status'] === "paid" || $currentBill['status'] === "review"){
                 $order->setVindiBillId($billId);
                 $order->save();
                 return $billId;
@@ -263,6 +263,8 @@ trait Vindi_Subscription_Trait_PaymentMethod
         );
 
         Mage::throwException($message);
+
+        $this->api()->deleteBill($billId);
 
         return false;
     }

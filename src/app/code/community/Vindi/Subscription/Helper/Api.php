@@ -462,6 +462,14 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
     /**
      * @param $billId
+     */
+    public function deleteBill($billId)
+    {
+        $this->request("bills/{$billId}", 'DELETE');
+    }
+
+    /**
+     * @param $billId
      *
      * @return string
      */
