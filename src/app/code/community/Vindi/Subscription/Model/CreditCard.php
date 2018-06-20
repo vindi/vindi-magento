@@ -190,17 +190,34 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             'payment_method_code'  =>  $this->getPaymentMethodCode()
         ];
 
-        $paymentProfileId = $this->api()->createCustomerPaymentProfile($creditCardData);
+        $paymentProfile = $this->api()->createCustomerPaymentProfile($creditCardData);
 
-        if ($paymentProfileId === false) {
+        if ($paymentProfile === false) {
             Mage::throwException('Erro ao informar os dados de cartão de crédito. Verifique os dados e tente novamente!');
 
             return false;
         }
 
-        return $paymentProfileId;
+        $verifyMethod = Mage::getStoreConfig('vindi_subscription/general/verify_method');
+
+        if ($verifyMethod && !$this->verifyPaymentProfile($paymentProfile['payment_profile']['id'])) {
+            Mage::throwException('Não foi possível realizar a verificação do seu cartão de crédito!');
+            return false;
+        }
+        return $paymentProfile;    
     }
 
+    /**
+     * @param int $paymentProfileId
+     *
+     * @return array|bool
+     */
+    public function verifyPaymentProfile($paymentProfileId)
+    {
+        $verify_status = $this->api()->verifyCustomerPaymentProfile($paymentProfileId);
+        return ($verify_status['transaction']['status'] === 'success');
+    }
+    
     /**
      * @param int $customerVindiId
      */
