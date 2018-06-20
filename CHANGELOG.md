@@ -1,4 +1,6 @@
 # Changelog
+### 1.1.0 - 20/06/2018
+- Adição da feature Transação de Verificação para Cartões de crédito.
 
 ### 1.0.17 - 11/04/2018
 - NSU e número de parcelas de compras de cartões de crédito no administrador
