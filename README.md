@@ -8,7 +8,7 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 # Requisitos
 - PHP 5.5.19 ou superior.
 - cURL habilitado para o PHP.
-- Magento Community Edition 1.7 ou superior.
+- Magento Community Edition 1.7 a 1.9.2
 - Certificado SSL.
 - Conta ativa na [Vindi](https://www.vindi.com.br "Vindi").
 
