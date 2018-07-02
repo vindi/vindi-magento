@@ -11,9 +11,6 @@ Nós aceitamos contribuições por Pull Requests em [GitHub](https://github.com/
 
 - **Um pull request por recurso** - Se você deseja ajudar em mais de uma coisa, envie múltiplos pull requests.
 
-- **História coerente** - Certifique-se de que cada commit individual em seu pull request é significativo.
-Se você tem que fazer vários commit intermediários enquanto desenvolve, por favor faça [squash](http://www.git-scm.com/book/en/v2/Git-Tools-Rewriting-History#Changing-Multiple-Commit-Messages) dos mesmos antes de enviar.
-
 - **Clareza** - Além de uma boa descrição sobre a motivação e a solução proposta, inclua imagens ou animações que demonstrem quaisquer modificações visuais na interface.
 
 - **Foco** - Um pull request deve possuir um único objetivo bem definido. Evite mais de um viés (bug-fix, feature, refactoring) no mesmo pull request.
