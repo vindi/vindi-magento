@@ -254,7 +254,10 @@ trait Vindi_Subscription_Trait_PaymentMethod
 
         $this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
 
-        $message = sprintf("Houve um problema na confirmação do pagamento, por favor entre em contato com o banco emissor do cartão. (%s)", $this->api()->lastError);
+        $errorCode = empty($currentBill['charges'])?'':$currentBill['charges']['0']['last_transaction']['gateway_response_code'];
+        $errorMessage = empty($currentBill['charges'])?'':$currentBill['charges']['0']['last_transaction']['gateway_message'];
+
+        $message = "Houve um problema na confirmação do pagamento, por favor entre em contato com o banco emissor do cartão. ($errorCode $errorMessage)";
         $payment->setStatus(
             Mage_Sales_Model_Order::STATE_CANCELED,
             Mage_Sales_Model_Order::STATE_CANCELED,
@@ -263,7 +266,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
         );
 
         $this->api()->deleteBill($billId);
-        
+      
         Mage::throwException($message);
     }
 
