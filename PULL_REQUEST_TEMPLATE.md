@@ -14,7 +14,7 @@ Exemplo de **Motivação** com uma **Solução Proposta**:
 > - O modelo de negócio atual da Vindi, requer que caso o pagamento não seja aprovado na primeira tentativa (compras avulsas ou primeiro ciclo de uma assinatura), para que a fatura e o pedido sejam cancelados.
 > - Porém, no Magento o cliente recebe a informação que o pedido foi registrado com sucesso, e posteriormente recebe a informação de falha no pagamento.
 
-> Solução proposta
+> Solução Proposta
 
 > - Adicionar o cancelamento automático de faturas na Vindi após a recusa de uma transação no Magento.
 > - As compras via Boleto ou pendente de revisões do Antifraude não são canceladas automaticamente.
