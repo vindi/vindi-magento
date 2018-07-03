@@ -1,6 +1,6 @@
 ## Requisitos de um bom Pull Request para o vindi-magento
 
-:clap::grin: Antes de mais nada, **muito brigado** por seu **Pull Request (PR)**  :thumbsup:
+:clap::grin: Antes de mais nada, **muito obrigado** por seu **Pull Request (PR)**  :thumbsup:
 
 - **Branches separadas** - Recomendamos que o PR não seja a partir da sua branch `master`.
 
