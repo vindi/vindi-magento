@@ -52,6 +52,15 @@
                 <class>Vindi_Subscription_Trait_PaymentMethod</class>
             </vindi_subscription>
         </traits>
+        <sales>
+            <order>
+                <states>
+                    <pending_payment>
+                        <visible_on_front>1</visible_on_front>
+                    </pending_payment>
+                </states>
+            </order>
+        </sales>
     </global>
     <adminhtml>
         <sales>
