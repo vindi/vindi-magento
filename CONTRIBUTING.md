@@ -28,13 +28,15 @@ Exemplo de **Motivação** com uma **Solução Proposta**:
 - **Foco** - Um PR deve possuir um único objetivo bem definido. Evite mais de um viés (bug-fix, feature, refactoring) no mesmo PR.
 
 - **Formatação de código** - Não reformate código que não foi modificado. A reformatação de código deve ser feita exclusiva e obrigatoriamente nos trechos de código que foram afetados pelo contexto da sua alteração.
+Obs.: Gostamos muito do [PSR-1](https://www.php-fig.org/psr/psr-1/) e [PSR-2](https://www.php-fig.org/psr/psr-2/) :smile:
 
 - **Fragmentação** - Quando um PR for parte de uma tarefa e não entregar valor de forma isolada, será necessário explicitar na motivação quais são os objetivos da tarefa, e na solução proposta, os objetivos que foram concluídos no PR em questão e os que serão concluídos em PRs futuros.
 
 
-## Revisão da Vindi
+## Revisão da Comunidade
 
-A nossa revisão deve verificar se o pull request atende aos requisitos abaixo, na ordem que são apresentados.
+A revisão deve verificar se o PR atende aos requisitos abaixo, na ordem que são apresentados e a decisão final ficaria com a 
+Equipe Vindi quanto a prioridade.
 
 #### Correto
 
