@@ -1,46 +1,54 @@
-# Contributor Covenant Code of Conduct
+# Código de Conduta
 
-## Our Pledge
+Este código de conduta delineia nossas expectativas para os participantes dentro da comunidade, bem como as etapas para relatar comportamento inaceitável. Estamos comprometidos em fornecer uma comunidade acolhedora e inspiradora para todos e esperamos que nosso código de conduta seja honrado. Qualquer pessoa que viole este código de conduta pode ser banida da comunidade.
 
-In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-## Our Standards
+## Nosso Compromisso
 
-Examples of behavior that contributes to creating a positive environment include:
+No interesse de promover um ambiente aberto e acolhedor, nós, como colaboradores e mantenedores, comprometemo-nos a tornar a participação em nosso projeto e em nossa comunidade uma experiência livre de assédio para todos, independentemente da idade, tamanho do corpo, deficiência, etnia, identidade e expressão de gênero. nível de experiência, nacionalidade, aparência pessoal, raça, religião, status social e econômico ou identidade e orientação sexual.
 
-* Using welcoming and inclusive language
-* Being respectful of differing viewpoints and experiences
-* Gracefully accepting constructive criticism
-* Focusing on what is best for the community
-* Showing empathy towards other community members
+## O que acreditamos e como agimos 
 
-Examples of unacceptable behavior by participants include:
+- Nossa comunidade é baseada no respeito mútuo, tolerância e encorajamento.
+- Acreditamos que uma comunidade diversificada onde as pessoas se tratam com respeito é mais forte, mais vibrante e tem mais contribuintes em potencial e mais fontes de ideias. 
+- Nosso objetivo é ter mais diversidade.
+- Somos gentis, acolhedores e corteses com todos.
+- Somos respeitosos com os outros, suas posições, suas habilidades, seus compromissos e seus esforços.
+- Respeitamos que as pessoas tenham diferenças de opinião.
+- Estamos atentos às nossas comunicações, seja pessoalmente ou on-line, e temos o cuidado de abordar pontos de vista diferentes.
+- Estamos conscientes de que a linguagem molda a realidade. Assim, usamos linguagem inclusiva e neutra em termos de gênero nos documentos que fornecemos e quando falamos com as pessoas.
+- Ao nos referirmos a um grupo de pessoas, pretendemos usar termos neutros de gênero, como "equipe", "pessoal", "todos". (Para detalhes, recomendamos este post).
 
-* The use of sexualized language or imagery and unwelcome sexual attention or advances
-* Trolling, insulting/derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or electronic address, without explicit permission
-* Other conduct which could reasonably be considered inappropriate in a professional setting
+## Exemplos de NÃOs:
 
-## Our Responsibilities
+- Não seja malvado ou grosseiro.
+- Não discrimine ninguém.
+- O sexismo e racismo de qualquer tipo (incluindo “piadas” sexistas e racistas), humilhando ou insultando o comportamento e o assédio são vistos como violações diretas a este Código de Conduta. O assédio inclui comentários verbais ofensivos relacionados à idade, tamanho do corpo, cultura, etnia, expressão de gênero, identidade de gênero, nível de experiência, nacionalidade, capacidade ou deficiência pessoal, aparência física, diferença física ou mental, raça, religião, conjunto de habilidades orientação, status social e econômico. O assédio também inclui imagens sexuais em espaços públicos, intimidação deliberada, perseguição, perseguição, fotografia ou gravação de assédio, contato físico inadequado e atenção sexual indesejada.
+- Respeite que alguns indivíduos e culturas consideram o uso ocasional de palavrões ofensivo e desconcertante.
+- Desvios, argumentos de tom e outras formas de jogar com os desejos das pessoas de serem gentis não são bem-vindos, especialmente em discussões sobre violações a este Código de Conduta.
+- Por favor, evite críticas não construtivas.
+- Da mesma forma, qualquer spamming, trolling, flaming, baiting ou outro comportamento de roubo de atenção não é bem-vindo.
+- Patrocinadores do vindi-magento também estão sujeitos a este Código de Conduta. Em particular, os patrocinadores são obrigados a não usar imagens sexualizadas, atividades ou outro material que não esteja de acordo com este Código de Conduta.
 
-Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+## Nossas Responsabilidades
 
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
+Os mantenedores do projeto são responsáveis por esclarecer os padrões de comportamento aceitável e devem tomar medidas corretivas apropriadas e justas em resposta a quaisquer casos de comportamento inaceitável.
 
-## Scope
+Os mantenedores do projeto têm o direito e a responsabilidade de remover, editar ou rejeitar comentários, commits, códigos, edições do wiki, questões e outras contribuições que não estejam alinhadas a este Código de Conduta, ou banir temporariamente ou permanentemente qualquer colaborador por outros comportamentos que julgam inapropriado, ameaçador, ofensivo ou prejudicial.
 
-This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.
+## Escopo
 
-## Enforcement
+Este Código de Conduta se aplica tanto nos espaços do projeto quanto nos espaços públicos quando um indivíduo está representando o projeto ou sua comunidade. Exemplos de representação de um projeto ou comunidade incluem o uso de um endereço de e-mail oficial do projeto, postagem por meio de uma conta oficial de mídia social ou a atuação como um representante nomeado em um evento on-line ou off-line. A representação de um projeto pode ser definida e esclarecida pelos mantenedores do projeto.
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at atendimento@vindi.com.br. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
+## Cumprimento
 
-Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
+Casos de comportamento abusivo, ofensivo ou inaceitável podem ser relatados entrando em contato com a equipe do projeto em atendimento@vindi.com.br. A equipe do projeto analisará e investigará todas as reclamações e responderá da maneira que julgar apropriada às circunstâncias. A equipe do projeto é obrigada a manter a confidencialidade em relação ao relator de um incidente. Detalhes adicionais de políticas de execução específicas podem ser publicados separadamente. Esse código de conduta delineia nossas expectativas para os participantes da comunidade vindi-magento, bem como as etapas para relatar comportamento inaceitável. Estamos comprometidos em fornecer uma comunidade acolhedora e inspiradora para todos e esperamos que nosso código de conduta seja honrado. Qualquer pessoa que viole este código de conduta pode ser banida da comunidade.
 
-## Attribution
+Os mantenedores do projeto que não seguem ou aplicam o Código de Conduta de boa fé podem enfrentar repercussões temporárias ou permanentes, conforme determinado por outros membros da liderança do projeto.
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4, available at [http://contributor-covenant.org/version/1/4][version]
+## Atribuição
+
+Este Código de Conduta foi uma adaptação do [Contributor Covenant] [homepage], versão 1.4, disponível em [http://contributor-covenant.org/version/1/4][version]
 
 [homepage]: http://contributor-covenant.org
-[version]: http://contributor-covenant.org/version/1/4/
+[versão]: http://contributor-covenant.org/version/1/4/
