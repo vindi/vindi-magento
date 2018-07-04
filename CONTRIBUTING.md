@@ -4,7 +4,7 @@
 
 [**Contribuições**](https://github.com/vindi/vindi-magento/projects) são **bem vindas** e serão totalmente [**creditadas**](https://github.com/vindi/vindi-magento/graphs/contributors).
 
-Nós valorizamos muito as [**contribuições por Pull Requests (PR)**](https://github.com/vindi/vindi-magento/projects/1) em [GitHub](https://github.com/vindi/vindi-magento), mas também adoramos [**sugestões de novas features**](https://github.com/vindi/vindi-magento/issues/new/choose) ou caso seja verificado a existência de um bug :beetle:, e queira [**reportar o bug :rotating_light:**](https://github.com/vindi/vindi-magento/issues/new/choose), ou até queira [**parabenizar :tada: o projeto vindi-magento**](https://github.com/vindi/vindi-magento/issues/new/choose)
+Nós valorizamos muito as [**contribuições por Pull Requests (PR)**](https://github.com/vindi/vindi-magento/pulls) em [GitHub](https://github.com/vindi/vindi-magento), mas também adoramos [**sugestões de novas features**](https://github.com/vindi/vindi-magento/issues/new/choose) ou caso seja verificado a existência de um bug :beetle:, e queira [**reportar o bug :rotating_light:**](https://github.com/vindi/vindi-magento/issues/new/choose), ou até queira [**parabenizar :tada: o projeto vindi-magento**](https://github.com/vindi/vindi-magento/issues/new/choose)
 
 ## Requisitos de um bom Pull Request (PR) para vindi-magento
 
