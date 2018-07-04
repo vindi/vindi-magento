@@ -4,7 +4,7 @@
 
 [**Contribuições**](https://github.com/vindi/vindi-magento/projects) são **bem vindas** e serão totalmente [**creditadas**](https://github.com/vindi/vindi-magento/graphs/contributors).
 
-Nós valorizamos muito as [**contribuições por Pull Requests (PR)**](https://github.com/vindi/vindi-magento/pulls) em [GitHub](https://github.com/vindi/vindi-magento), mas também adoramos [**sugestões de novas features**](https://github.com/vindi/vindi-magento/issues/new/choose) ou caso seja verificado a existência de um bug :beetle:, e queira [**reportar o bug :rotating_light:**](https://github.com/vindi/vindi-magento/issues/new/choose), ou até queira [**parabenizar :tada: o projeto vindi-magento**](https://github.com/vindi/vindi-magento/issues/new/choose)
+Nós valorizamos muito as [**contribuições por Pull Requests (PR)**](https://github.com/vindi/vindi-magento/pulls) em [GitHub](https://github.com/vindi/vindi-magento), mas também adoramos [**sugestões de novas features**](https://github.com/vindi/vindi-magento/issues/new/choose). Por isso, fique à vontade para [**reportar um bug :rotating_light:**](https://github.com/vindi/vindi-magento/issues/new/choose) e também para [**parabenizar :tada: o projeto vindi-magento!**](https://github.com/vindi/vindi-magento/issues/new/choose)
 
 ## Requisitos de um bom Pull Request (PR) para vindi-magento
 
@@ -17,13 +17,11 @@ Nós valorizamos muito as [**contribuições por Pull Requests (PR)**](https://g
 Exemplo de **Motivação** com uma **Solução Proposta**:
 > Motivação
 
-> - O modelo de negócio atual da Vindi, requer que caso o pagamento não seja aprovado na primeira tentativa (compras avulsas ou primeiro ciclo de uma assinatura), para que a fatura e o pedido sejam cancelados.
-> - Porém, no Magento o cliente recebe a informação que o pedido foi registrado com sucesso, e posteriormente recebe a informação de falha no pagamento.
+> Porque o modelo de negócio atual da Vindi, caso o pagamento seja reprovado na primeira tentativa (compras avulsas ou primeiro ciclo de uma assinatura) faça com que o pedido seja cancelado, porém, atualmente no Magento o cliente recebe a informação que o pedido foi registrado com sucesso, e posteriormente recebe a informação de falha no pagamento.
 
 > Solução proposta
 
-> - Adicionar o cancelamento automático de faturas na Vindi após a recusa de uma transação no Magento.
-> - As compras via Boleto ou pendente de revisões do Antifraude não são canceladas automaticamente.
+> Adicionar o cancelamento automático de faturas na Vindi após a recusa de uma transação no Magento fazendo com que as compras via Boleto ou pendente de revisões do Antifraude não sejam canceladas automaticamente.
 
 - **Foco** - Um PR deve possuir um único objetivo bem definido. Evite mais de um viés (bug-fix, feature, refactoring) no mesmo PR.
 
@@ -36,7 +34,7 @@ Obs.: Gostamos muito do [PSR-1](https://www.php-fig.org/psr/psr-1/) e [PSR-2](ht
 ## Revisão da Comunidade
 
 A revisão deve verificar se o PR atende aos requisitos abaixo, na ordem que são apresentados e a decisão final ficaria com a 
-Equipe Vindi quanto a prioridade.
+Equipe Vindi quanto a prioridade:
 
 #### Correto
 
