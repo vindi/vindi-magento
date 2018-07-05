@@ -5,7 +5,7 @@ Este código de conduta delineia nossas expectativas para os participantes dentr
 
 ## Nosso Compromisso
 
-No interesse de promover um ambiente aberto e acolhedor, nós, como colaboradores e mantenedores, comprometemo-nos a tornar a participação em nosso projeto e em nossa comunidade uma experiência livre de assédio para todos, independentemente da idade, tamanho do corpo, deficiência, etnia, identidade e expressão de gênero. nível de experiência, nacionalidade, aparência pessoal, raça, religião, status social e econômico ou identidade e orientação sexual.
+No interesse de promover um ambiente aberto e acolhedor, nós, como colaboradores e mantenedores, comprometemo-nos a tornar a participação em nosso projeto e em nossa comunidade uma experiência livre de assédio para todos, independentemente da idade, tamanho do corpo, deficiência, etnia, identidade e expressão de gênero, nível de experiência, nacionalidade, aparência pessoal, raça, religião, status social e econômico ou identidade e orientação sexual.
 
 ## O que acreditamos e como agimos 
 
