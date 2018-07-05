@@ -43,20 +43,20 @@ Obs.: Gostamos muito do [PSR-1](https://www.php-fig.org/psr/psr-1/) e [PSR-2](ht
    cd vindi-magento
    ```
 
-1. Crie uma branch nova a partir da `master` que vai conter o "tipo/tópico" como nome da branch
+2. Crie uma branch nova a partir da `master` que vai conter o "tipo/tópico" como nome da branch
 - tipos: feature e hotfix
 
    ```bash
    git checkout -b feature/cria_metodo_pagamento
    ```
 
-1. Faça um push da sua branch para seu repositório (fork) 
+3. Faça um push da sua branch para seu repositório (fork) 
 
    ```bash
    git push -u origin feature/cria_metodo_pagamento
    ```
 
-1. [Abra um Pull Request](https://help.github.com/articles/using-pull-requests/) com uma motivação e solução proposta bem claras.
+4. [Abra um Pull Request](https://help.github.com/articles/using-pull-requests/) com uma motivação e solução proposta bem claras.
 
 
 ## Revisão da Comunidade
