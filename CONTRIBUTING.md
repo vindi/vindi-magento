@@ -56,7 +56,7 @@ tipos: feature e hotfix
    git push -u origin feature/cria_metodo_pagamento
    ```
 
-1. [Abra um Pull Request](https://help.github.com/articles/using-pull-requests/) com uma motivação e solução rpoposta bem claras.
+1. [Abra um Pull Request](https://help.github.com/articles/using-pull-requests/) com uma motivação e solução proposta bem claras.
 
 
 ## Revisão da Comunidade
