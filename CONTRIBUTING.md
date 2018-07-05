@@ -44,7 +44,7 @@ Obs.: Gostamos muito do [PSR-1](https://www.php-fig.org/psr/psr-1/) e [PSR-2](ht
    ```
 
 2. Crie uma branch nova a partir da `master` que vai conter o "tipo/tópico" como nome da branch
-- tipos: feature e hotfix
+- tipos: feature e fix
 
    ```bash
    git checkout -b feature/cria_metodo_pagamento
