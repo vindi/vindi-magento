@@ -32,7 +32,7 @@ Obs.: Gostamos muito do [PSR-1](https://www.php-fig.org/psr/psr-1/) e [PSR-2](ht
 
 - **Fragmentação** - Quando um PR for parte de uma tarefa e não entregar valor de forma isolada, será necessário explicitar na motivação quais são os objetivos da tarefa, e na solução proposta, os objetivos que foram concluídos no PR em questão e os que serão concluídos em PRs futuros.
 
-#### Se você nunca criou um Pull Request (PR) na vida, bem vindo :tada: :smile: [Aqui está um ótimo tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github) de como enviar um.
+#### Se você nunca criou um Pull Request (PR) na vida, seja bem vindo :tada: :smile: [Aqui está um ótimo tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github) de como enviar um.
 
 1. Faça um [fork](http://help.github.com/fork-a-repo/) do projeto, clone seu repositório (fork):
 
