@@ -61,8 +61,8 @@ Obs.: Gostamos muito do [PSR-1](https://www.php-fig.org/psr/psr-1/) e [PSR-2](ht
 
 ## Revisão da Comunidade
 
-A revisão deve verificar se o PR atende aos requisitos abaixo, na ordem que são apresentados e a decisão final ficaria com a 
-equipe Vindi quanto a prioridade:
+A revisão deve verificar se o PR atende aos requisitos abaixo, na ordem que são apresentados, e a decisão final ficaria com a 
+equipe Vindi quanto à prioridade:
 
 #### Correto
 
