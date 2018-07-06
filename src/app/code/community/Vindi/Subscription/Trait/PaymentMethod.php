@@ -241,32 +241,23 @@ trait Vindi_Subscription_Trait_PaymentMethod
             $body['installments'] = (int) $installments;
         }
 
-        $currentBill = $this->api()->createBill($body);
-        $billId = $currentBill['id'];
-
-        if ($billId) {
-            if ($currentBill['payment_method_code'] === "bank_slip" || $currentBill['status'] === "paid" || $currentBill['status'] === "review"){
-                $order->setVindiBillId($billId);
+        if ($bill = $this->api()->createBill($body)) {
+            if ($bill['payment_method_code'] === "bank_slip" || $bill['status'] === "paid" || $bill['status'] === "review"){
+                $order->setVindiBillId($bill['id']);
                 $order->save();
-                return $billId;
+                return $bill['id'];
             }
+            $this->api()->deleteBill($bill['id']);
         }
 
         $this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
-
-        $errorCode = empty($currentBill['charges'])?'':$currentBill['charges']['0']['last_transaction']['gateway_response_code'];
-        $errorMessage = empty($currentBill['charges'])?'':$currentBill['charges']['0']['last_transaction']['gateway_message'];
-
-        $message = "Houve um problema na confirmação do pagamento, por favor entre em contato com o banco emissor do cartão. ($errorCode $errorMessage)";
+        $message = "Houve um problema na confirmação do pagamento. Verifique os dados e tente novamente.";
         $payment->setStatus(
             Mage_Sales_Model_Order::STATE_CANCELED,
             Mage_Sales_Model_Order::STATE_CANCELED,
             $message,
             true
         );
-
-        $this->api()->deleteBill($billId);
-      
         Mage::throwException($message);
     }
 
