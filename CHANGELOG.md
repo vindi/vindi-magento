@@ -1,54 +1,55 @@
 # Notas das versões
 
+Tipos de mudanças
+>- **Adicionado** para novos recursos
+>- **Ajustado** para mudanças em recursos existentes
+>- **Depreciado** para recursos que serão removidos em breve
+>- **Removido** para recursos removidos
+>- **Corrigido** para correção de falhas
+>- **Segurança** em caso de vulnerabilidades
+
 ### 1.1.0 - 20/06/2018
-- Adição da feature Transação de Verificação para Cartões de crédito.
+#### Adicionado
+- Adiciona transação de verificação para cartões de crédito
 
 ### 1.0.17 - 11/04/2018
-- NSU e número de parcelas de compras de cartões de crédito no administrador
-- Possibilidade de utilizar o ambiente de sandbox para testes
-- Cartão de débito
-- URL do boleto na confirmação do checkout
-- Captura do campo 'telefone'
+#### Adicionado
+- Adiciona NSU e número de parcelas de compras de cartões de crédito no administrador
+- Adiciona ambiente de sandbox para testes
+- Adiciona cartão de débito
+- Adiciona captura do campo 'telefone'
+- Adiciona parcelamento por Store View
 
-### 1.0.16 - 10/07/2017
-- Alterações para parcelamento de pedidos pelo Painel Administrativo e em múltiplas lojas.
+#### Corrigido
+- Corrige compra de assinaturas com parcelamento no boleto
 
-### 1.0.15 - 27/06/2017
-- Correção na compra de assinaturas com parcelamento no boleto.
-
-### 1.0.14 - 01/06/2017
-- Melhorias no suporte para parcelamento de assinaturas.
-
-### 1.0.13 - 09/12/2016
-- Pequenos ajustes na criação do perfil de pagamento.
-
-### 1.0.12 - 11/10/2016
-- Ajustes no problema de comunicação com a API da Vindi.
-
-### 1.0.11 - 31/08/2016
-- Adicionado parcelamento por Store View.
+#### Ajustado
+- Ajusta URL do boleto na confirmação do checkout
+- Ajusta criação do perfil de pagamento
+- Ajusta no problema de comunicação com a API da Vindi
 
 ### 1.0.10 - 04/04/2016
-- Ajustes na exibição das informações sobre o cartão no pedido.
+#### Ajustado
+- Ajusta exibição das informações sobre o cartão no pedido
 
 ### 1.0.9 - 28/03/2016
-- Ajustes no calculo parcelas mínimas.
+#### Corrigido
+- Corrige cálculo de parcela mínima
 
 ### 1.0.8 - 01/02/2016
-- Ajustes nos valores recebidos através dos webhooks.
+#### Ajustado
+- Ajusta valores recebidos através dos webhooks
 
 ### 1.0.7 - 11/01/2016
-- Adicionado suporte ao checkout nativo.
-
-### 1.0.6 - 24/11/2015
-- Requests para a API terão como padrão o protocolo TSL 1.2.
+#### Adicionado
+- Adicionado suporte ao checkout nativo
+- Adiciona padrão de protocolo TLS 1.2
 
 ### 1.0.5 - 21/10/2015
-- Adicionado suporte a descontos nos produtos Assinatura Vindi.
-- Envio de frete e produtos separadamente.
-- Recorrências respeitam o valor recebido através dos webhooks.
-- Opção de mostrar o link para os boletos nos comentários dos pedidos (backend e frontend).
-- Melhorias de performance nos webhooks.
+#### Adicionado
+- Adiciona suporte a descontos nos produtos da assinatura Vindi
+- Adiciona envio de frete e produtos separadamente
+- Adiciona opção de mostrar o link para os boletos nos comentários dos pedidos
 
 ### 1.0.0 - 06/10/2015
 - Versão Inicial
