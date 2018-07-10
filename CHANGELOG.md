@@ -55,6 +55,13 @@
 - Adiciona suporte a descontos nos produtos da assinatura Vindi
 - Adiciona envio de frete e produtos separadamente
 - Adiciona opção de mostrar o link para os boletos nos comentários dos pedidos
+- Adiciona faturas avulsas
+- Adiciona parcelamento de faturas avulsas
+- Adiciona cache de requisições de clientes para aumento de performance
+- Adiciona integração com nota fiscal da Bling
+
+### Ajustado
+- Altera a geração de códigos das assinaturas
 
 
 ## 1.0.0 - 06/10/2015
