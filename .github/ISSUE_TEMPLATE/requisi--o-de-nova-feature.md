@@ -1,6 +1,6 @@
 ---
 name: Requisição de nova feature
-about: Dê uma sugestão para esse projeto.
+about: Dê sua sugestão para esse projeto
 
 ---
 
