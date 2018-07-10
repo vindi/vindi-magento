@@ -45,7 +45,7 @@
 ## 1.0.7 - 11/01/2016
 
 ### Adicionado
-- Adicionado suporte ao checkout nativo
+- Adiciona suporte ao checkout nativo
 - Adiciona padrão de protocolo TLS 1.2
 
 
