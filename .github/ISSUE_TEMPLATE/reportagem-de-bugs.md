@@ -25,6 +25,7 @@ Se aplicável , adicione prints de tela para ajudar a explicar o problema.
  - Browser [e.g. chrome, safari]
  - Version [e.g. 22]
  - Magento [e.g. 1.9.3.9]
+ - PHP [e.g. 5.6.13]
 
 **Smartphone (favor completar as seguintes  informações):**
  - Dispositivo: [e.g. iPhone6]
@@ -32,6 +33,7 @@ Se aplicável , adicione prints de tela para ajudar a explicar o problema.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
  - Magento [e.g. 1.9.3.9]
+ - PHP [e.g. 5.6.13]
 
 **Contexto adicional**
 Adicione qualquer outro contexto sobre o problema.
