@@ -55,6 +55,14 @@ Por favor, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
 Caso tenha alguma sugestão ou bug para reportar por favor nos comunique através das [issues](https://github.com/vindi/vindi-magento/issues).
 
 ## Changelog
+Tipos de mudanças
+- **Adicionado** para novos recursos
+- **Ajustado** para mudanças em recursos existentes
+- **Depreciado** para recursos que serão removidos em breve
+- **Removido** para recursos removidos
+- **Corrigido** para correção de falhas
+- **Segurança** em caso de vulnerabilidades
+
 Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md).
 
 ## Créditos
