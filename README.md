@@ -63,7 +63,7 @@ Tipos de mudanças
 - **Corrigido** para correção de falhas
 - **Segurança** em caso de vulnerabilidades
 
-Todas as informações sobre cada release pode ser  [CHANGELOG.md](CHANGELOG.md).
+Todas as informações sobre cada release pode ser encontradas em [CHANGELOG.md](CHANGELOG.md).
 
 ## Créditos
 - [Vindi](https://github.com/vindi)
