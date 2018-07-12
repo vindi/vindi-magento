@@ -2,7 +2,7 @@
 
 # Vindi - Magento Recorrente
 
-[![Licença do Software][ico-license]](license.txt)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Descrição
 A integração do módulo da Vindi permite criação e gestão de planos e assinaturas através do Magento de forma transparente.
