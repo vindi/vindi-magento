@@ -2,6 +2,8 @@
 
 # Vindi - Magento Recorrente
 
+[![Licença do Software][ico-license]](license.txt)
+
 ## Descrição
 A integração do módulo da Vindi permite criação e gestão de planos e assinaturas através do Magento de forma transparente.
 
