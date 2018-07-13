@@ -444,7 +444,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function createBill($body)
     {
         if ($response = $this->request('bills', 'POST', $body)) {
-            return $response['bill']['id'];
+            return $response['bill'];
         }
 
         return false;
@@ -470,6 +470,14 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         }
 
         return $this->request("bills/{$billId}/approve", 'POST');
+    }
+
+    /**
+     * @param $billId
+     */
+    public function deleteBill($billId)
+    {
+        $this->request("bills/{$billId}", 'DELETE');
     }
 
     /**
