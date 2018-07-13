@@ -1,8 +1,9 @@
-![alt text align:center](https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png "Vindi") 
+<p align="center"><img src ="https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png" /></p>
+
 
 # Vindi - Magento Recorrente
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Licença do Software][badge-license]](LICENSE)
 
 ## Descrição
 A integração do módulo da Vindi permite criação e gestão de planos e assinaturas através do Magento de forma transparente.
@@ -73,3 +74,7 @@ Todas as informações sobre cada release podem ser encontradas em [CHANGELOG.md
 
 ## Licença
 GNU GPLv3. Por favor, veja o [Arquivo de Licença](LICENSE) para mais informações.
+
+[badge-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
+
+
