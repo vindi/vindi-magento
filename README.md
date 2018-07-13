@@ -4,6 +4,8 @@
 # Vindi - Magento Recorrente
 
 [![Licença do Software][badge-license]](LICENSE)
+[![Última Versão no GitHub][badge-versionGitHub]][link-GitHub-release]
+[![GitHub commits desde a última Versão][badge-versionGitHub-commits]][link-GitHub-release]
 
 # Descrição
 A integração do módulo da Vindi permite criação e gestão de planos e assinaturas através do Magento de forma transparente.
@@ -76,5 +78,8 @@ Todas as informações sobre cada release podem ser encontradas em [CHANGELOG.md
 GNU GPLv3. Por favor, veja o [Arquivo de Licença](LICENSE) para mais informações.
 
 [badge-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
+[badge-versionGitHub]: https://img.shields.io/github/release/vindi/vindi-magento.svg
+[badge-versionGitHub-commits]:  https://img.shields.io/github/commits-since/vindi/vindi-magento/latest.svg
 
 
+[link-GitHub-release]: https://github.com/vindi/vindi-magento/releases
