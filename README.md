@@ -1,11 +1,11 @@
 <p align="center"><img src ="https://vindi-blog.s3.amazonaws.com/wp-content/uploads/2017/10/logo-vindi-1.png" /></p>
 
-
+##
 # Vindi - Magento Recorrente
 
 [![Licença do Software][badge-license]](LICENSE)
 
-## Descrição
+# Descrição
 A integração do módulo da Vindi permite criação e gestão de planos e assinaturas através do Magento de forma transparente.
 
 # Requisitos
