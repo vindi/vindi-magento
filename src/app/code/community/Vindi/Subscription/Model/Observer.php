@@ -24,23 +24,27 @@ class Vindi_Subscription_Model_Observer
             return;
         }
         
-        if ($this->countSubscriptions($quote) <= 1) {
+        if ($this->countSubscriptions($this->getCartItems()) <= 1) {
             return;
         }
 
         $this->validateOrder($observer);
     }
 
+    public function getCartItems
+    {
+        return Mage::getSingleton('checkout/session')->getQuote();
+    }
+
     public function validateOrder ($observer) 
     {
         $data = $observer->getEvent()->getInfo();
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
         $lastVindiPlanId  = null;
 
         foreach ($data as $itemId => $itemInfo) {
-            $item = $quote->getItemById($itemId);
+            $item = $this->getCartItems()->getItemById($itemId);
 
-            if (!$item || !$quote->getItemsCount() || !$this->isSubscription($item->getProduct())) {
+            if (!$item || !$this->getCartItems()->getItemsCount() || !$this->isSubscription($item->getProduct())) {
                 continue;
             }
 
@@ -68,9 +72,7 @@ class Vindi_Subscription_Model_Observer
             return;
         }
 
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
-
-        if (!$quote->getItemsCount() && $quote->getItemsSummaryQty() === 1) {
+        if (!$this->getCartItems()->getItemsCount() && $this->getCartItems()->getItemsSummaryQty() === 1) {
             return;
         }
 
