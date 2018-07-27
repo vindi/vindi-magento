@@ -237,7 +237,7 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
 
         $info->setCcNumber($dcNumber);
 
-        if (! $this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
+        if (! $this->validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
             return $this->error(Mage::helper('payment')->__('Incorrect debit card expiration date.'));
         }
 
@@ -246,17 +246,6 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
         }
 
         return $this;
-    }
-
-    protected function _validateExpDate($expYear, $expMonth)
-    {
-        $date = Mage::app()->getLocale()->date();
-        if (!$expYear || !$expMonth || ($date->compareYear($expYear) == 1)
-            || ($date->compareYear($expYear) == 0 && ($date->compareMonth($expMonth) == 1))
-        ) {
-            return false;
-        }
-        return true;
     }
 
     /**
