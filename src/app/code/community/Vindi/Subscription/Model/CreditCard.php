@@ -164,10 +164,25 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
                 ]
             );
 
-            $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)
-                ->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
+            if ($this->createInvoice($order)) {
+                $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
+            }
         }
-        return $this;
+    }
+
+    protected function createInvoice($order)
+    {
+        if (! $order->getId() || ! $order->canInvoice()) {
+            return false;
+        }
+
+        $invoice = $order->prepareInvoice();
+        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
+        $invoice->register();
+        Mage::getModel('core/resource_transaction')->addObject($invoice)->addObject($invoice->getOrder())->save();
+        $invoice->sendEmail(true);
+        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true,'O pagamento foi confirmado e o pedido está sendo processado.', true);
+        return true;
     }
 
     /**
