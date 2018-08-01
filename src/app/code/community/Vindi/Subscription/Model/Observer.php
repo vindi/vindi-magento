@@ -31,7 +31,7 @@ class Vindi_Subscription_Model_Observer
         $this->validateOrder($observer);
     }
 
-    public function getCartItems
+    public function getCartItems ()
     {
         return Mage::getSingleton('checkout/session')->getQuote();
     }
