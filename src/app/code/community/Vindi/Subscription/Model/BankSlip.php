@@ -99,12 +99,12 @@ class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstra
         $customerId = $this->createCustomer($order, $customer);
 
         if ($this->isSingleOrder($order)) {
-            $result = $this->processSinglePayment($payment, $order, $customerId);
+            $bill = $this->processSinglePayment($payment, $order, $customerId);
         } else {
-            $result = $this->processSubscription($payment, $order, $customerId);
+            $bill = $this->processSubscription($payment, $order, $customerId);
         }
 
-        if (! $result) {
+        if (! $bill) {
             return false;
         }
 
