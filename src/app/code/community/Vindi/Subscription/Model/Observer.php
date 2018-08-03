@@ -24,43 +24,27 @@ class Vindi_Subscription_Model_Observer
             return;
         }
         
-        if ($this->countSubscriptions($this->getCartItems()) <= 1) {
-            return;
-        }
-
-        $this->validateOrder($observer);
-    }
-
-    public function getCartItems ()
-    {
-        return Mage::getSingleton('checkout/session')->getQuote();
+        $this->validateOrder();
     }
 
     public function validateOrder ($observer) 
     {
-        $data = $observer->getEvent()->getInfo();
-        $lastVindiPlanId  = null;
+        $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
 
-        foreach ($data as $itemId => $itemInfo) {
-            $item = $this->getCartItems()->getItemById($itemId);
+        foreach ( $cart as $item )
+        {
+            if ($item->getProduct()->getData('type_id') === 'simple')
+                continue;
 
-            if (!$item || !$this->getCartItems()->getItemsCount() || !$this->isSubscription($item->getProduct())) {
+            if ($lastProduct == null && $item->getProduct()->getData('type_id') === 'subscription') {
+                $lastProduct = $item->getProduct()->getData('type_id');
                 continue;
             }
 
-            $vindiPlan = Mage::getModel('catalog/product')->load($item)->getData('vindi_subscription_plan');
-
-            if ($lastVindiPlanId == null) {
-                $lastVindiPlanId = $vindiPlan;
-                continue; 
-            }
-
-            if ($lastVindiPlanId != $vindiPlan) {
-                $this->addNotice('Você pode fazer apenas uma assinatura por vez.<br />
-                    Conclua a compra da assinatura ou remova-a do carrinho.');
+            if ($lastProduct === 'subscription') {
+                Mage::throwException('Você pode fazer apenas uma assinatura por vez. Conclua a compra da assinatura ou remova-a do carrinho.');
             }
         }
-
     }
 
     /**
@@ -72,11 +56,7 @@ class Vindi_Subscription_Model_Observer
             return;
         }
 
-        if (!$this->getCartItems()->getItemsCount() && $this->getCartItems()->getItemsSummaryQty() === 1) {
-            return;
-        }
-
-        $this->validateOrder($observer);
+        $this->validateOrder();
     }
 
     /**
