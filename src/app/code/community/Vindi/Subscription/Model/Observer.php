@@ -27,12 +27,11 @@ class Vindi_Subscription_Model_Observer
         $this->validateOrder();
     }
 
-    public function validateOrder ($observer) 
+    public function validateOrder () 
     {
         $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
 
-        foreach ( $cart as $item )
-        {
+        foreach ( $cart as $item ) {
             if ($item->getProduct()->getData('type_id') === 'simple')
                 continue;
 
