@@ -290,7 +290,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
 
         $info->setCcNumber($ccNumber);
 
-        if (! $this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
+        if (! $this->validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
             return $this->error(Mage::helper('payment')->__('Incorrect credit card expiration date.'));
         }
 

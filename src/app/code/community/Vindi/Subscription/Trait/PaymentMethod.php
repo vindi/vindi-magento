@@ -350,4 +350,14 @@ trait Vindi_Subscription_Trait_PaymentMethod
 
         return true;
     }
+
+    protected function validateExpDate($expYear, $expMonth)
+    {
+        $date = Mage::app()->getLocale()->date();
+        return !(!$expYear
+            || !$expMonth
+            || ($date->compareYear($expYear) == 1)
+            || ($date->compareYear($expYear) == 0
+            && ($date->compareMonth($expMonth) == 1)));
+    }
 }
