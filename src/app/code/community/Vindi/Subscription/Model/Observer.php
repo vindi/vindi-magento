@@ -23,27 +23,25 @@ class Vindi_Subscription_Model_Observer
         if (! $this->_helper->isModuleEnabled()) {
             return;
         }
+        
+        $this->validateOrder();
+    }
 
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
-        if (! $this->countSubscriptions($quote)) {
-            return;
-        }
+    public function validateOrder () 
+    {
+        $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
 
-        $data = $observer->getEvent()->getInfo();
+        foreach ( $cart as $item ) {
+            if ($item->getProduct()->getData('type_id') === 'simple')
+                continue;
 
-        foreach ($data as $itemId => $itemInfo) {
-            $item = $quote->getItemById($itemId);
-            if (! $item || ! $this->isSubscription($item->getProduct())) {
+            if ($lastProduct == null && $item->getProduct()->getData('type_id') === 'subscription') {
+                $lastProduct = $item->getProduct()->getData('type_id');
                 continue;
             }
 
-            if (! ($qty = isset($itemInfo['qty']) ? (float) $itemInfo['qty'] : false)) {
-                continue;
-            }
-
-            if ($qty > 1) {
-                $this->addNotice('Você pode fazer apenas uma assinatura por vez.<br />
-                             Conclua a compra da assinatura ou remova-a do carrinho.');
+            if ($lastProduct === 'subscription') {
+                Mage::throwException('Você pode fazer apenas uma assinatura por vez. Conclua a compra da assinatura ou remova-a do carrinho.');
             }
         }
     }
@@ -57,39 +55,7 @@ class Vindi_Subscription_Model_Observer
             return;
         }
 
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
-        /** @var Mage_Catalog_Model_Product $product */
-        $product = $observer->getEvent()->getProduct();
-
-        $itemsCount = $quote->getItemsCount();
-        $itemsSummaryQty = $quote->getItemsSummaryQty();
-
-        if (! $itemsCount && ($itemsSummaryQty === 1)) {
-            return;
-        }
-
-        if ($this->isSubscription($product)) {
-            if ($this->countSubscriptions($quote) > 1) {
-                $this->addNotice('Você pode fazer apenas uma assinatura por vez.<br />
-                             Conclua a compra da assinatura ou remova-a do carrinho.');
-            }
-
-            if (($itemsCount === 1) && ($itemsSummaryQty > 1)) {
-                $this->addNotice('Você pode fazer apenas uma assinatura por vez.<br />
-                             Por favor, tente novamente.');
-            }
-
-            $this->addNotice('Você não pode adicionar assinaturas e outros tipos de produtos em um mesmo carrinho.<br />
-                            Conclua a compra dos produtos ou remova-os do carrinho.');
-
-        }
-
-        if ($this->countSubscriptions($quote)) {
-            $this->addNotice('Você não pode adicionar assinaturas e outros tipos de produtos em um mesmo carrinho.<br />
-                                     Conclua a compra da assinatura ou remova-a do carrinho.');
-        }
-
-        return;
+        $this->validateOrder();
     }
 
     /**
