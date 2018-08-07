@@ -32,7 +32,7 @@ modgit add vindi git@github.com:vindi/vindi-magento.git
 1. Vá até o diretório base do Magento
 1. Execute o comando abaixo
 ```bash
-modgit add vindi git@github.com:vindi/vindi-magento.git
+modgit update vindi git@github.com:vindi/vindi-magento.git
 ```
 
 #### - Via .zip
