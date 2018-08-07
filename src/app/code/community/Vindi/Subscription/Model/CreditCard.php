@@ -165,6 +165,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
             );
 
             $this->createInvoice($order);
+            $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
         }
     }
 
@@ -175,8 +176,7 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         $invoice->register();
         Mage::getModel('core/resource_transaction')->addObject($invoice)->addObject($invoice->getOrder())->save();
         $invoice->sendEmail(true);
-        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true,'O pagamento foi confirmado e o pedido está sendo processado.', true);
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
+        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true,'O pagamento foi confirmado e o pedido está sendo processado.', true);   
     }
 
     /**
