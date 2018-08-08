@@ -237,10 +237,6 @@ class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
 
         $info->setCcNumber($dcNumber);
 
-        if (! $this->validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
-            return $this->error(Mage::helper('payment')->__('Incorrect debit card expiration date.'));
-        }
-
         if (! array_key_exists($info->getCcType(), $availableTypes)) {
             return $this->error(Mage::helper('payment')->__('Debit card type is not allowed for this payment method.'));
         }
