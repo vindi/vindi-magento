@@ -276,9 +276,8 @@ trait Vindi_Subscription_Trait_PaymentMethod
             $plan = (!empty(Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan'))) ? 
                     Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan')  : null;
 
-            if (null === $plan)
-                continue;
-            break;
+            if (null !== $plan)
+                break;
         }
 
         $productItems = $this->api()->buildPlanItemsForSubscription($order);
