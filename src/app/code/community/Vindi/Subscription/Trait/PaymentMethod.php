@@ -271,22 +271,28 @@ trait Vindi_Subscription_Trait_PaymentMethod
     protected function createSubscription($payment, $order, $customerId)
     {
         $orderItems = $order->getItemsCollection();
-        $item = $orderItems->getFirstItem();
-        $product = Mage::getModel('catalog/product')->load($item->getProductId());
-        $plan = $product->getData('vindi_subscription_plan');
+        
+        foreach ($orderItems as $item) {
+            $plan = (!empty(Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan'))) ? 
+                    Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan')  : null;
+
+            if (null === $plan)
+                continue;
+            break;
+        }
 
         $productItems = $this->api()->buildPlanItemsForSubscription($order);
-        if(!$productItems){
+        if (!$productItems) {
             return false;
         }
 
-        $body = [
+        $body = array(
             'customer_id'         => $customerId,
             'payment_method_code' => $this->getPaymentMethodCode(),
             'plan_id'             => $plan,
             'code'                => 'mag-' . $order->getIncrementId() . '-' . time(),
             'product_items'       => $productItems,
-        ];
+        );
 
         if ($installments = $payment->getAdditionalInformation('installments')) {
             $body['installments'] = (int) $installments;
@@ -295,9 +301,9 @@ trait Vindi_Subscription_Trait_PaymentMethod
         $paymentProfile = $payment->getPaymentProfile();
 
         if ($paymentProfile) {
-            $body['payment_profile'] = [
+            $body['payment_profile'] = array(
                 'id' => $paymentProfile['payment_profile']['id']
-            ];
+            );
         }
 
         $subscription = $this->api()->createSubscription($body);
