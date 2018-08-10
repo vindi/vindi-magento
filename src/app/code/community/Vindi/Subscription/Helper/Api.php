@@ -541,7 +541,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function buildPlanItemsForSubscription($order)
     {
-        $list = [];
+        $list = array();
         $orderItems = $order->getItemsCollection();
         $orderSubtotal = $order->getQuote()->getSubtotal();
         $orderDiscount = $order->getDiscountAmount() * -1;
@@ -551,10 +551,10 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             $discountPercentage = $orderDiscount * 100 / $orderSubtotal;
             $discountPercentage = number_format(floor($discountPercentage*100)/100, 2);
 
-            $discount = [[
+            $discount = array(array(
                         'discount_type' => 'percentage',
                         'percentage' => $discountPercentage
-                    ]];
+                    ));
         }
 
         foreach ($orderItems as $item) {
@@ -565,29 +565,29 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                     $cycles = 1;
                 }
 
-                $list[] = [
+                $list[] = array(
                     'product_id'     => $this->findOrCreateProduct(array(
                     	'sku' => $item->getSku(),
                     	'name' => $item->getName())),
                     'cycles'         => $cycles,
-                    'pricing_schema' => ['price' => $item->getPrice()],
+                    'pricing_schema' => array('price' => $item->getPrice()),
                     'discounts'      => $discount,
-                ];
+                );
             }
         }
 
         if ($order->getShippingAmount() > 0) {
-            $list[] = [
+            $list[] = array(
                 'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'frete', 'name' => 'Frete')),
-                'pricing_schema' => ['price' => $order->getShippingAmount()],
-            ];
+                'pricing_schema' => array('price' => $order->getShippingAmount()),
+            );
         }
         
         if (isset($order->getQuote()->getTotals()["tax"])) {
-            $list[] = [
+            $list[] = array(
                 'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'taxa', 'name' => 'Taxa')),
-                'pricing_schema' => ['price' => $order->getQuote()->getTotals()['tax']->getData('value')],
-            ];
+                'pricing_schema' => array('price' => $order->getQuote()->getTotals()['tax']->getData('value')),
+            );
         }
 
         return $list;
