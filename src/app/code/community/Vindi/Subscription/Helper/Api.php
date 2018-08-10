@@ -558,17 +558,17 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         }
 
         foreach ($orderItems as $item) {
-            $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            $productVindiId = $this->findOrCreateProduct(array('sku' => $item->getSku(), 'name' => $item->getName()));
             $cycles         = null;
 
             for ($i = 1; $i <= $item->getQtyOrdered(); $i++) {
-                if ($product->getTypeID() !== 'subscription') {
+                if (Mage::getModel('catalog/product')->load($item->getProductId())->getTypeID() !== 'subscription') {
                     $cycles = 1;
                 }
 
                 $list[] = [
-                    'product_id'     => $productVindiId,
+                    'product_id'     => $this->findOrCreateProduct(array(
+                    	'sku' => $item->getSku(),
+                    	'name' => $item->getName())),
                     'cycles'         => $cycles,
                     'pricing_schema' => ['price' => $item->getPrice()],
                     'discounts'      => $discount,
@@ -576,13 +576,19 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             }
         }
 
-        // Create product for shipping
-        $productVindiId = $this->findOrCreateProduct(array( 'sku' => 'frete', 'name' => 'Frete'));
-
-        $list[] = [
-                'product_id'     => $productVindiId,
+        if ($order->getShippingAmount() > 0) {
+            $list[] = [
+                'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'frete', 'name' => 'Frete')),
                 'pricing_schema' => ['price' => $order->getShippingAmount()],
             ];
+        }
+        
+        if (isset($order->getQuote()->getTotals()["tax"])) {
+            $list[] = [
+                'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'taxa', 'name' => 'Taxa')),
+                'pricing_schema' => ['price' => $order->getQuote()->getTotals()['tax']->getData('value')],
+            ];
+        }
 
         return $list;
     }
