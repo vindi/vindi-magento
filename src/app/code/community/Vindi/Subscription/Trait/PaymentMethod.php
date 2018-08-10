@@ -245,7 +245,7 @@ trait Vindi_Subscription_Trait_PaymentMethod
             if ($bill['payment_method_code'] === "bank_slip" || $bill['payment_method_code'] === "debit_card" || $bill['status'] === "paid" || $bill['status'] === "review"){
                 $order->setVindiBillId($bill['id']);
                 $order->save();
-                return $bill['id'];
+                return $bill;
             }
             $this->api()->deleteBill($bill['id']);
         }

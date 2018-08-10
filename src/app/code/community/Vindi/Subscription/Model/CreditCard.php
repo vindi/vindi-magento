@@ -137,37 +137,46 @@ class Vindi_Subscription_Model_CreditCard extends Mage_Payment_Model_Method_Cc
         }
 
         if ($this->isSingleOrder($order)) {
-            $result = $this->processSinglePayment($payment, $order, $customerId);
+            $bill = $this->processSinglePayment($payment, $order, $customerId);
         } else {
-            $result = $this->processSubscription($payment, $order, $customerId);
+            $bill = $this->processSubscription($payment, $order, $customerId);
         }
 
-        if (! $result) {
+        if (! $bill || ! $order->getId() || ! $order->canInvoice()) {
             return false;
         }
 
-        $billData = $this->api()->getBill($result);
-        $installments = $billData['installments'];
-        $response_fields = $billData['charges'][0]['last_transaction']['gateway_response_fields'];
-        $possible = ['nsu', 'proof_of_sale'];
-        $nsu = '';
-        foreach ($possible as $nsu_field) {
-            if ($response_fields[$nsu_field]) {
-                $nsu = $response_fields[$nsu_field];
+        if ($bill['status'] === "paid") {
+            $installments = $bill['installments'];
+            $response_fields = $bill['charges'][0]['last_transaction']['gateway_response_fields'];
+            $possible = ['nsu', 'proof_of_sale'];
+            $nsu = '';
+            foreach ($possible as $nsu_field) {
+                if ($response_fields[$nsu_field]) {
+                    $nsu = $response_fields[$nsu_field];
+                }
             }
+
+            $this->getInfoInstance()->setAdditionalInformation(
+                [
+                    'installments' => $installments,
+                    'nsu' => $nsu
+                ]
+            );
+
+            $this->createInvoice($order);
+            $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
         }
+    }
 
-        $this->getInfoInstance()->setAdditionalInformation(
-            [
-                'installments' => $installments,
-                'nsu' => $nsu
-            ]
-        );
-
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
-            ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
-
-        return $this;
+    protected function createInvoice($order)
+    {
+        $invoice = $order->prepareInvoice();
+        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
+        $invoice->register();
+        Mage::getModel('core/resource_transaction')->addObject($invoice)->addObject($invoice->getOrder())->save();
+        $invoice->sendEmail(true);
+        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true,'O pagamento foi confirmado e o pedido está sendo processado.', true);   
     }
 
     /**
