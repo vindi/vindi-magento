@@ -20,7 +20,7 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 # Instalação
 Atualmente existem duas maneiras de instalar o Módulo Vindi Magento, a mais recomendada é através do [modgit](https://github.com/jreinke/modgit) pois instalando destá maneira é possível gerenciar facilmente o módulo e suas atualizações. A segunda maneira é através de um arquivo .zip onde é preciso inserir todos os arquivos do módulo nos diretórios da aplicação do Magento e todas as atualizações terão que ser realizadas manualmente.
 
-#### - Via [modigt](https://github.com/jreinke/modgit)
+#### - Via [modgit](https://github.com/jreinke/modgit)
 1. Vá até o diretório base do Magento
 1. Adicionar o módulo através do [modgit](https://github.com/jreinke/modgit)
 ```bash
@@ -28,7 +28,7 @@ modgit add vindi git@github.com:vindi/vindi-magento.git
 ```
 
 # Atualização
-#### - Via [modigt](https://github.com/jreinke/modgit)
+#### - Via [modgit](https://github.com/jreinke/modgit)
 1. Vá até o diretório base do Magento
 1. Execute o comando abaixo
 ```bash
@@ -40,7 +40,7 @@ modgit update vindi
 1. Extraia o conteúdo da pasta `src` em sua instalação do Magento.
 
 # Remoção
-#### - Via [modigt](https://github.com/jreinke/modgit)
+#### - Via [modgit](https://github.com/jreinke/modgit)
 1. Vá até o diretório base do Magento
 1. Execute o comando abaixo
 ```bash
