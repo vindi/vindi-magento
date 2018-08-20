@@ -1,5 +1,28 @@
 # Notas das versões
 
+## [1.3.0 - 20/08/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.0)
+
+### Adicionado
+- Adiciona compatibilidade com taxas do Magento
+
+### Ajustado
+- Ajusta retorno do método de criação de assinaturas
+
+
+## [1.2.0 - 10/08/2018](https://github.com/vindi/vindi-magento/releases/tag/1.2.0)
+
+### Adicionado
+- Adiciona exibição de pedidos com status pendente no painel do cliente
+- Adiciona compatibilidade com quantidade de assinaturas
+
+### Ajustado
+- Ajusta parcelas para compras variadas (produtos recorrentes + produtos avulsos)
+
+### Removido
+- Remove verificação da data de expiração do cartão nas renovações via Webhooks
+- Remove consulta adicional na fatura da Vindi após finalização da compra
+
+
 ## [1.1.0 - 20/06/2018](https://github.com/vindi/vindi-magento/releases/tag/1.1.0)
 
 ### Adicionado
