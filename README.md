@@ -18,38 +18,44 @@ A integração do módulo da Vindi permite criação e gestão de planos e assin
 - Conta ativa na [Vindi](https://www.vindi.com.br "Vindi").
 
 # Instalação
-Atualmente existem duas maneiras de instalar o Módulo Vindi Magento, a mais recomendada é através do [modman](https://github.com/colinmollenhour/modman) pois instalando destá maneira é possível gerenciar facilmente o módulo e suas atualizações. A segunda maneira é através de um arquivo .zip onde é preciso inserir todos os arquivos do módulo nos diretórios da aplicação do Magento e todas as atualizações terão que ser realizadas manualmente.
+Atualmente existem duas maneiras de instalar o Módulo Vindi Magento, a mais recomendada é através do [modgit](https://github.com/jreinke/modgit) pois instalando destá maneira é possível gerenciar facilmente o módulo e suas atualizações. A segunda maneira é através de um arquivo .zip onde é preciso inserir todos os arquivos do módulo nos diretórios da aplicação do Magento e todas as atualizações terão que ser realizadas manualmente.
 
-#### - Via [modman](https://github.com/colinmollenhour/modman)
-1. Clonar o módulo através do [modman](https://github.com/colinmollenhour/modman)
+#### - Via [modgit](https://github.com/jreinke/modgit)
+1. Vá até o diretório base do Magento
+1. Adicionar o módulo através do [modgit](https://github.com/jreinke/modgit)
 ```bash
-modman clone https://github.com/vindi/vindi-magento.git
+modgit add vindi git@github.com:vindi/vindi-magento.git
 ```
-2. Habilitar *symlinks* no painel administrador do Magento
-
-*Sistema -> Configuração -> Avançado -> Desenvolvedor -> Configurações de Template -> Permitir Symlinks*
 
 # Atualização
-#### - Via [modman](https://github.com/colinmollenhour/modman)
-1. Vá até o diretório [MAGENTO_PATH_ROOT]/.modman/
+#### - Via [modgit](https://github.com/jreinke/modgit)
+1. Vá até o diretório base do Magento
 1. Execute o comando abaixo
 ```bash
-modman update vindi-magento
+modgit update vindi
 ```
 
 #### - Via .zip
 1. Faça o download do [.zip](https://github.com/vindi/vindi-magento/archive/master.zip).
 1. Extraia o conteúdo da pasta `src` em sua instalação do Magento.
 
+# Remoção
+#### - Via [modgit](https://github.com/jreinke/modgit)
+1. Vá até o diretório base do Magento
+1. Execute o comando abaixo
+```bash
+modgit remove vindi
+```
+
 # Configuração
 1. Configurando sua conta Vindi
-    1. Em *Sistema -> Configuração -> Vindi > Vindi Assinaturas*  informe a chave da API de sua conta Vindi e salve.
-    1. Caso a conexão ocorra com sucesso, você verá um link para configuração dos *Webhooks*, que deve ser inserido no campo URL dentro do [painel da Vindi](https://app.vindi.com.br) em *Configurações -> Dados da empresa -> API & Webhooks*.
+    - Em *Sistema -> Configuração -> Vindi > Vindi Assinaturas*  informe a chave da API de sua conta Vindi e salve.
+    - Caso a conexão ocorra com sucesso, você verá um link para configuração dos *Webhooks*, que deve ser inserido no campo URL dentro do [painel da Vindi](https://app.vindi.com.br) em *Configurações -> Webhooks*.
 1. Habilitando/Configurando os métodos de pagamento
-    1. Em *Sistema -> Configuração -> Sales > Formas de pagamento*, configure os métodos de pagamento **Vindi - Cartão de Crédito** e/ou **Vindi - Boleto Bancário**.
+    - Em *Sistema -> Configuração -> Sales > Formas de pagamento*, configure os métodos de pagamento **Vindi - Cartão de Crédito** ,  **Vindi - Boleto Bancário** e/ou **Vindi - Cartão de Débito**.
 1. Criando produtos recorrentes
-    1. Em *Catálogo > Gerenciar Produtos*, adicione um produto e escolha o *Tipo de Produto* como **Assinatura Vindi**.
-    1. Na aba *Vindi* selecione o *Plano da Vindi* e associe a assinatura a um produto.
+    - Em *Catálogo > Gerenciar Produtos*, adicione um produto e escolha o *Tipo de Produto* como **Assinatura Vindi**.
+    - Na aba *Vindi* selecione o *Plano da Vindi* e associe a assinatura a um produto.
 
 ## Dúvidas
 Caso necessite de informações sobre a plataforma ou API por favor siga através do canal [Atendimento Vindi](http://atendimento.vindi.com.br/hc/pt-br)

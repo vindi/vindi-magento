@@ -3,7 +3,7 @@
 ## [1.3.0 - 20/08/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.0)
 
 ### Adicionado
-- Adiciona compatibilidade com taxas do Magento
+- Adiciona compatibilidade com as taxas do Magento
 
 ### Ajustado
 - Ajusta retorno do método de criação de assinaturas
