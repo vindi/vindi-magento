@@ -541,7 +541,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function buildPlanItemsForSubscription($order)
     {
-        $list = [];
+        $list = array();
         $orderItems = $order->getItemsCollection();
         $orderSubtotal = $order->getQuote()->getSubtotal();
         $orderDiscount = $order->getDiscountAmount() * -1;
@@ -551,38 +551,44 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             $discountPercentage = $orderDiscount * 100 / $orderSubtotal;
             $discountPercentage = number_format(floor($discountPercentage*100)/100, 2);
 
-            $discount = [[
+            $discount = array(array(
                         'discount_type' => 'percentage',
                         'percentage' => $discountPercentage
-                    ]];
+                    ));
         }
 
         foreach ($orderItems as $item) {
-            $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            $productVindiId = $this->findOrCreateProduct(array('sku' => $item->getSku(), 'name' => $item->getName()));
             $cycles         = null;
 
             for ($i = 1; $i <= $item->getQtyOrdered(); $i++) {
-                if ($product->getTypeID() !== 'subscription') {
+                if (Mage::getModel('catalog/product')->load($item->getProductId())->getTypeID() !== 'subscription') {
                     $cycles = 1;
                 }
 
-                $list[] = [
-                    'product_id'     => $productVindiId,
+                $list[] = array(
+                    'product_id'     => $this->findOrCreateProduct(array(
+                    	'sku' => $item->getSku(),
+                    	'name' => $item->getName())),
                     'cycles'         => $cycles,
-                    'pricing_schema' => ['price' => $item->getPrice()],
+                    'pricing_schema' => array('price' => $item->getPrice()),
                     'discounts'      => $discount,
-                ];
+                );
             }
         }
 
-        // Create product for shipping
-        $productVindiId = $this->findOrCreateProduct(array( 'sku' => 'frete', 'name' => 'Frete'));
-
-        $list[] = [
-                'product_id'     => $productVindiId,
-                'pricing_schema' => ['price' => $order->getShippingAmount()],
-            ];
+        if ($order->getShippingAmount() > 0) {
+            $list[] = array(
+                'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'frete', 'name' => 'Frete')),
+                'pricing_schema' => array('price' => $order->getShippingAmount()),
+            );
+        }
+        
+        if (isset($order->getQuote()->getTotals()["tax"])) {
+            $list[] = array(
+                'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'taxa', 'name' => 'Taxa')),
+                'pricing_schema' => array('price' => $order->getQuote()->getTotals()['tax']->getData('value')),
+            );
+        }
 
         return $list;
     }
