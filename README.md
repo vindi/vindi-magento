@@ -24,7 +24,7 @@ Atualmente existem duas maneiras de instalar o Módulo Vindi Magento, a mais rec
 1. Vá até o diretório base do Magento
 1. Adicionar o módulo através do [modgit](https://github.com/jreinke/modgit)
 ```bash
-modgit add vindi git@github.com:vindi/vindi-magento.git
+modgit add vindi https://github.com/vindi/vindi-magento.git
 ```
 
 # Atualização
