@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.3.1 - 23/08/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.1)
+
+### Ajustado
+- Ajusta validação das taxas
+
+
 ## [1.3.0 - 20/08/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.0)
 
 ### Adicionado

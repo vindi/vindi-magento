@@ -583,7 +583,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             );
         }
         
-        if (isset($order->getQuote()->getTotals()["tax"])) {
+        if (array_key_exists('tax', $order->getQuote()->getTotals())) {
             $list[] = array(
                 'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'taxa', 'name' => 'Taxa')),
                 'pricing_schema' => array('price' => $order->getQuote()->getTotals()['tax']->getData('value')),
