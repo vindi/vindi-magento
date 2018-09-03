@@ -1,0 +1,34 @@
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/magento/marketplace-eqp.git"
+    }
+  ],
+  "require": {
+    "magium/magento": ">=0.0.22 <2.0.0",
+    "squizlabs/php_codesniffer": "2.6.2",
+    "magento/marketplace-eqp": "^1.0.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "VindiTest\\": "VindiTest",
+      "Vindi\\": "Vindi"
+    },
+    "files": [
+      "register.php"
+    ]
+  },
+  "scripts": {
+    "test": "phpunit",
+    "style": "./vendor/bin/phpcs  -p --colors --standard=MEQP1 --ignore=*/tests/* --severity=10 --extensions=php,phtml ../../Subscription/",
+    "fix": "./vendor/bin/phpcbf -w --standard=MEQP1 --ignore=*/tests/* --severity=10 ../../Subscription/ --no-patch",
+    "post-install-cmd": "./vendor/bin/phpcs --config-set installed_paths ../../magento/marketplace-eqp",
+    "post-update-cmd": "./vendor/bin/phpcs --config-set installed_paths ../../magento/marketplace-eqp"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
