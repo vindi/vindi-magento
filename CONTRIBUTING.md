@@ -59,6 +59,32 @@ Obs.: Gostamos muito do [PSR-1](https://www.php-fig.org/psr/psr-1/) e [PSR-2](ht
 4. [Abra um Pull Request](https://help.github.com/articles/using-pull-requests/) com uma motivação e solução proposta bem claras.
 
 
+# Qualidade do código
+**Para garantir a qualidade do código, a gente disponibiliza um composer.json com algumas dependencias de testes funcionais e code style MEQP1 do magento.**
+ 
+#### Se você nunca utilizou o composer na vida, seja bem vindo :tada: :smile: [Aqui está o link do composer](https://getcomposer.org/download/).
+
+#### Se você nunca rodou testes funcionais com Selenium na vida, seja bem vindo :tada: :smile: [Aqui está um ótimo tutorial do framework de teste para o magento](https://magiumlib.com/) e você vai precisar do [java](https://www.java.com/pt_BR/download/) também.
+
+ 
+## Rodando os Testes
+
+``` bash
+composer test
+```
+
+## Verificando estilo do código
+
+``` bash
+composer style
+```
+
+## Corrigindo estilo do código
+
+``` bash
+composer fix
+```
+
 ## Revisão da Comunidade
 
 A revisão deve verificar se o PR atende aos requisitos abaixo, na ordem que são apresentados, e a decisão final ficaria com a 
