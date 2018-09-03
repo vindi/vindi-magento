@@ -21,20 +21,6 @@ class SystemTest extends AbstractMagentoTestCase
         self::assertEquals(1, $this->byId('payment_vindi_creditcard_active')->getAttribute('value'));
     }
 
-//    public function testType()
-//    {
-//        $this->getAction(Login::ACTION)->login();
-//        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-//        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
-//        $this->webdriver->byId('vindi_subscription_general_api_key')->click();
-//        $type = $this->getAction(Type::ACTION);
-//        self::assertInstanceOf(Type::class, $type);
-//        $type->execute('lu9P6J4JQWPhVRXj-phvZYP3Cv0r0HNRmaPcDAx-gec');
-//        $this->getAction(ByText::ACTION)->execute('Save Config');
-//
-//        $formValue = $this->webdriver->byId('vindi_subscription_general_api_key')->getAttribute('value');
-//        self::assertEquals('', $formValue);
-//    }
 
     public function testAPiKeyRegistered()
     {
