@@ -1,4 +1,20 @@
 {
+    "name": "vindi/vindi-magento",
+    "description": "Testes do módulo Vindi para magento >1.7.x e <1.9.x",
+    "keywords": [
+        "vindi",
+        "vindi-magento",
+        "vindi-magento-module"
+    ],
+    "homepage": "https://github.com/vindi/vindi-magento",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Vindi",
+            "email": "comunidade@vindi.com.br",
+            "homepage": "https://www.vindi.com.br/"
+        }
+    ],
   "repositories": [
     {
       "type": "vcs",
