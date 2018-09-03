@@ -60,7 +60,7 @@ Obs.: Gostamos muito do [MEQP1](https://github.com/magento/marketplace-eqp):smil
 
 
 # Qualidade do código
-**Para garantir a qualidade do código, a gente disponibiliza um composer.json com algumas dependencias de testes funcionais e code style MEQP1 do magento.**
+**Para garantir a qualidade do código, a gente disponibiliza alguns testes funcionais e code style MEQP1 do magento em Vindi/Subscription/tests.**
  
 #### Se você nunca utilizou o composer na vida, seja bem vindo :tada: :smile: [Aqui está o link do composer](https://getcomposer.org/download/).
 
