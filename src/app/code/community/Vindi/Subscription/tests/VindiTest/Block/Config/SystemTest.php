@@ -8,9 +8,16 @@ use Magium\Magento\Actions\Admin\Login\Login;
 use Magium\Magento\Navigators\Admin\AdminMenu;
 use Magium\Magento\Navigators\Admin\SystemConfiguration;
 
-
+/**
+ * Class SystemTest
+ *
+ * @package VindiTest\Block\Config
+ */
 class SystemTest extends AbstractMagentoTestCase
 {
+    /**
+     * Teste da ativação do módulo da Vindi
+     */
     public function testEnablePaymentMethod()
     {
         $this->getLogger()->notice('Testando a ativação do módulo');
@@ -22,6 +29,9 @@ class SystemTest extends AbstractMagentoTestCase
     }
 
 
+    /**
+     * Teste do registro da API Key da Vindi
+     */
     public function testAPiKeyRegistered()
     {
         $this->getLogger()->notice('Testando o registro da API Key no módulo');
@@ -31,6 +41,9 @@ class SystemTest extends AbstractMagentoTestCase
         $this->assertPageHasText('Conectado com Sucesso!');
     }
 
+    /**
+     * Teste de SSL do front da loja do magento
+     */
     public function testHttpsAssertionFront()
     {
         $this->commandOpen($this->getTheme()->getBaseUrl());
@@ -38,6 +51,9 @@ class SystemTest extends AbstractMagentoTestCase
         $assertion->assert();
     }
 
+    /**
+     * Teste de SSL da administração da loja do magento
+     */
     public function testHttpsAssertionBack()
     {
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -46,3 +62,4 @@ class SystemTest extends AbstractMagentoTestCase
     }
 
 }
+

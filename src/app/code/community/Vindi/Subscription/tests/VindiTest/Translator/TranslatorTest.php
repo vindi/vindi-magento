@@ -6,12 +6,23 @@ use Magium\Magento\AbstractMagentoTestCase;
 use Vindi\Util\CsvFileIterator;
 
 
+/**
+ * Class TranslatorTest
+ * Classe para testes de escopo de tradução
+ *
+ * @package VindiTest\Translator
+ */
 class TranslatorTest extends AbstractMagentoTestCase
 {
 
     private $csv = __DIR__ . '/../../../../../../../locale/pt_BR/Vindi_Subscription.csv';
 
     /**
+     * Teste do arquivo de tradução /locale/pt_BR/Vindi_Subscription.csv
+     * 
+     * @param $actual
+     * @param $expected
+     *
      * @dataProvider provider
      */
     public function testDefaultLocaleSet($actual, $expected)
@@ -22,6 +33,9 @@ class TranslatorTest extends AbstractMagentoTestCase
         self::assertEquals($expected, $translator->translatePlaceholders('{{' . $actual . '}}'));
     }
 
+    /**
+     * Método que lê .csv e retorna argumentos
+     */
     public function provider()
     {
         return new CsvFileIterator($this->csv);
