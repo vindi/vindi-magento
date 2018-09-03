@@ -1,20 +1,20 @@
 {
-    "name": "vindi/vindi-magento",
-    "description": "Testes do módulo Vindi para magento >1.7.x e <1.9.x",
-    "keywords": [
-        "vindi",
-        "vindi-magento",
-        "vindi-magento-module"
-    ],
-    "homepage": "https://github.com/vindi/vindi-magento",
-    "license": "GPL-3.0",
-    "authors": [
-        {
-            "name": "Vindi",
-            "email": "comunidade@vindi.com.br",
-            "homepage": "https://www.vindi.com.br/"
-        }
-    ],
+  "name": "vindi/vindi-magento",
+  "description": "Testes do módulo Vindi para magento >1.7.x e <1.9.x",
+  "keywords": [
+    "vindi",
+    "vindi-magento",
+    "vindi-magento-module"
+  ],
+  "homepage": "https://github.com/vindi/vindi-magento",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Vindi",
+      "email": "comunidade@vindi.com.br",
+      "homepage": "https://www.vindi.com.br/"
+    }
+  ],
   "repositories": [
     {
       "type": "vcs",
@@ -37,14 +37,9 @@
   },
   "scripts": {
     "test": "phpunit",
-    "style": "./vendor/bin/phpcs  -p --colors --standard=MEQP1 --ignore=*/tests/* --severity=10 --extensions=php,phtml ../../Subscription/",
-    "fix": "./vendor/bin/phpcbf -w --standard=MEQP1 --ignore=*/tests/* --severity=10 ../../Subscription/ --no-patch",
-    "post-install-cmd": "./vendor/bin/phpcs --config-set installed_paths ../../magento/marketplace-eqp",
-    "post-update-cmd": "./vendor/bin/phpcs --config-set installed_paths ../../magento/marketplace-eqp"
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0-dev"
-    }
+    "style": "vendor/bin/phpcs  -p --colors --standard=MEQP1 --ignore=*/tests/* --severity=10 --extensions=php,phtml ../../Subscription/",
+    "fix": "vendor/bin/phpcbf -w --standard=MEQP1 --ignore=*/tests/* --severity=10 ../../Subscription/ --no-patch",
+    "post-install-cmd": "vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp",
+    "post-update-cmd": "vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp"
   }
 }
