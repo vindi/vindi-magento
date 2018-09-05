@@ -62,7 +62,7 @@ Obs.: Gostamos muito do [MEQP1](https://github.com/magento/marketplace-eqp):smil
 # Qualidade do código
 **Para garantir a qualidade do código, a gente disponibiliza alguns testes funcionais e code style MEQP1 do magento em Vindi/Subscription/tests.**
  
-#### Se você nunca utilizou o composer na vida, seja bem vindo :tada: :smile: [Aqui está o link do composer](https://getcomposer.org/download/).
+#### Se você nunca utilizou o composer na vida, seja bem vindo :tada: :smile: [Aqui está o link do composer](https://getcomposer.org/download/), depois instale as dependências do composer.json.
 
 #### Se você nunca rodou testes funcionais com Selenium na vida, seja bem vindo :tada: :smile: [Aqui está um ótimo tutorial do framework de teste para o magento](https://magiumlib.com/) e você vai precisar do [java](https://www.java.com/pt_BR/download/) também.
 
