@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.3.2 - 06/09/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.2)
+
+### Corrigido
+- Corrige validação do método de pagamento na geração dos pedidos
+
+
 ## [1.3.1 - 23/08/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.1)
 
 ### Ajustado
