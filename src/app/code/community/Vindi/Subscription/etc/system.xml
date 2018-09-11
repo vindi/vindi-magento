@@ -9,7 +9,7 @@
     <sections>
         <vindi_subscription translate="label" module="vindi_subscription">
             <label>
-                <![CDATA[Vindi Assinaturas]]></label>
+                <![CDATA[<img src="//intranet.vindi.com.br/s/pt_BR/6441/13fdbe304eeea2f7da9576ad2c58ab11249c6de6/16/_/favicon.ico" style="float:left;margin-top:1px;width:16px;height:16px"/>&nbsp;Vindi Assinaturas]]></label>
             <tab>vindi</tab>
             <frontend_type>text</frontend_type>
             <sort_order>10</sort_order>
