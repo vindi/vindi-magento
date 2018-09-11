@@ -1,0 +1,59 @@
+version: '3.3'
+services:
+    hub:
+        image: selenium/hub
+        container_name: hub
+        ports:
+         - "4444:4444"
+    chrome:
+        image: selenium/node-chrome
+        container_name: chrome
+        depends_on:
+         - hub
+        links:
+         - hub:hub
+        volumes:
+          - /dev/shm:/dev/shm
+        environment:
+         - HUB_HOST=hub
+         - HUB_PORT=4444
+         - TZ=America/Sao_Paulo
+         - SCREEN_WIDTH=1600
+         - SCREEN_HEIGHT=900
+        ports:
+         - 5900:5900
+    magento1db:
+        image: rtakauti/mysql-magento1
+        container_name: magento1_db
+        volumes:
+         - ./magento1_db:/var/lib/mysql
+        ports:
+         - "3306"
+        environment:
+         - MYSQL_DATABASE=magento1
+         - MYSQL_ROOT_PASSWORD=123
+    magento1web:
+        image: rtakauti/apache-magento1
+        container_name: magento1_web
+        depends_on:
+         - magento1db
+         - chrome
+        volumes:
+        - ./magento1_html:/var/www/html
+        ports:
+        - "80:80"
+        - "443:443"
+        links:
+         - magento1db:mysql
+         - chrome
+        environment:
+        - VIRTUAL_HOST=magento1.local
+        - APACHE_DOC_ROOT=/var/www/html
+        - PHP_TIMEZONE=America/Sao_Paulo
+        - USER=$USER
+        - COMPOSER_ALLOW_SUPERUSER=1
+
+networks:
+  default:
+    external:
+      name: webproxy
