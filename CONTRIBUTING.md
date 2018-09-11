@@ -66,6 +66,52 @@ Obs.: Gostamos muito do [MEQP1](https://github.com/magento/marketplace-eqp):smil
 
 #### Se você nunca rodou testes funcionais com Selenium na vida, seja bem vindo :tada: :smile: [Aqui está um ótimo tutorial do framework de teste para o magento](https://magiumlib.com/) e você vai precisar do [java](https://www.java.com/pt_BR/download/) também.
 
+## Configuração dos arquivos do framework de testes
+1. Vindi/Subscription/tests/configuration/Magium/TestCaseConfiguration.php
+```php
+    <?php
+    
+    # Trocar o browser caso for utilizar outro
+    $this->capabilities = \Magium\TestCaseConfiguration::CAPABILITIES_CHROME;
+    
+    # Trocar o dominio onde o selenium server estiver rodando
+    $this->webDriverRemote = 'http://example:4444/wd/hub';
+```
+
+2. Vindi/Subscription/tests/configuration/Magium/Magento/Identities/Admin.php
+```php
+    <?php
+    # Trocar o nome_usuario da adminstração do Magento
+    $this->account = 'nome_usuario';
+    
+    # Trocar a senha da adminstração do Magento
+    $this->password = 'senha';
+```
+
+3. Vindi/Subscription/tests/configuration/Magium/Magento/Identities/Customer.php
+```php
+    <?php
+    # Trocar o e-mail do usuário
+    $this->emailAddress = 'example@vindi.com.br';
+    
+    # Trocar a senha do usuário
+    $this->password = 'senha';
+```
+ 
+4. Vindi/Subscription/tests/configuration/Magium/Magento/Themes/Admin/ThemeConfiguration.php
+```php
+    <?php
+    # Trocar a URI da área adminstrativa do Magento
+    $this->baseUrl = 'https://example/admin/';
+```
+ 
+5. Vindi/Subscription/tests/configuration/Magium/Magento/Themes/Magento19/ThemeConfiguration.php
+```php
+    <?php
+    # Trocar a URI da área da loja
+    $this->baseUrl = 'http://example/';
+```
+ 
  
 ## Rodando os Testes
 
