@@ -13,7 +13,7 @@ use Magium\Magento\Navigators\Admin\SystemConfiguration;
  *
  * @package VindiTest\Block\Config
  */
-class SystemTest extends AbstractMagentoTestCase
+class InformationTest extends AbstractMagentoTestCase
 {
     /**
      * Teste da ativação do módulo da Vindi
