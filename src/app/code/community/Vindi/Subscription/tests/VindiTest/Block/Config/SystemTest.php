@@ -35,6 +35,7 @@ class SystemTest extends AbstractMagentoTestCase
     public function testAPiKeyRegistered()
     {
         $this->getLogger()->notice('Testando o registro da API Key no módulo');
+        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $this->getAction(Login::ACTION)->login();
         $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
         $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
