@@ -1,9 +1,0 @@
-src/app/code/community/Vindi/Subscription     app/code/community/Vindi/Subscription
-src/app/etc/modules/*    app/etc/modules/
-src/app/design/frontend/base/default/template/vindi_subscription/*  app/design/frontend/base/default/template/vindi_subscription/
-src/app/design/adminhtml/base/default/template/vindi_subscription/* app/design/adminhtml/base/default/template/vindi_subscription/
-src/app/design/frontend/base/default/layout/*  app/design/frontend/base/default/layout/
-src/app/design/adminhtml/base/default/layout/*  app/design/adminhtml/base/default/layout/
-src/app/locale/pt_BR/*  app/locale/pt_BR/
-src/skin/frontend/base/default/vindi_subscription/*    skin/frontend/base/default/vindi_subscription/
-src/skin/adminhtml/base/default/vindi_subscription/*    skin/adminhtml/base/default/vindi_subscription/
