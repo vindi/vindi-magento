@@ -75,17 +75,17 @@ Para garantir a qualidade do código, a gente disponibiliza alguns testes funcio
     $this->capabilities = \Magium\TestCaseConfiguration::CAPABILITIES_CHROME;
     
     # Trocar o dominio onde o selenium server estiver rodando
-    $this->webDriverRemote = 'http://example:4444/wd/hub';
+    $this->webDriverRemote = 'http://selenium:4444/wd/hub';
 ```
 
 2. Vindi/Subscription/tests/configuration/Magium/Magento/Identities/Admin.php
 ```php
     <?php
-    # Trocar o nome_usuario da adminstração do Magento
-    $this->account = 'nome_usuario';
+    # Trocar o admin da adminstração do Magento
+    $this->account = 'admin';
     
     # Trocar a senha da adminstração do Magento
-    $this->password = 'senha';
+    $this->password = 'password';
 ```
 
 3. Vindi/Subscription/tests/configuration/Magium/Magento/Identities/Customer.php
@@ -94,22 +94,22 @@ Para garantir a qualidade do código, a gente disponibiliza alguns testes funcio
     # Trocar o e-mail do usuário
     $this->emailAddress = 'example@vindi.com.br';
     
-    # Trocar a senha do usuário
-    $this->password = 'senha';
+    # Trocar a password do usuário
+    $this->password = 'password';
 ```
  
 4. Vindi/Subscription/tests/configuration/Magium/Magento/Themes/Admin/ThemeConfiguration.php
 ```php
     <?php
     # Trocar a URI da área adminstrativa do Magento
-    $this->baseUrl = 'https://example/admin/';
+    $this->baseUrl = 'https://example.local/admin/';
 ```
  
 5. Vindi/Subscription/tests/configuration/Magium/Magento/Themes/Magento19/ThemeConfiguration.php
 ```php
     <?php
     # Trocar a URI da área da loja
-    $this->baseUrl = 'http://example/';
+    $this->baseUrl = 'https://example.local/';
 ```
  
  
