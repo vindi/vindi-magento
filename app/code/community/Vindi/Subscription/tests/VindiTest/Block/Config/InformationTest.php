@@ -18,15 +18,15 @@ class InformationTest extends AbstractMagentoTestCase
     /**
      * Teste da ativação do módulo da Vindi
      */
-    public function testEnablePaymentMethod()
-    {
-        $this->getLogger()->notice('Testando a ativação do módulo');
-        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
-        $this->getAction(Login::ACTION)->login();
-        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Payment Methods/Vindi - Cartão de Crédito');
-        self::assertEquals(1, $this->byId('payment_vindi_creditcard_active')->getAttribute('value'));
-    }
+//    public function testEnablePaymentMethod()
+//    {
+//        $this->getLogger()->notice('Testando a ativação do módulo');
+//        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
+//        $this->getAction(Login::ACTION)->login();
+//        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
+//        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Payment Methods/Vindi - Cartão de Crédito');
+//        self::assertEquals(1, $this->byId('payment_vindi_creditcard_active')->getAttribute('value'));
+//    }
 
 
     /**
