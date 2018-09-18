@@ -4,34 +4,34 @@ services:
         image: selenium/hub
         container_name: selenium
         ports:
-         - "4444"
+        - "4444"
     chrome:
         image: selenium/node-chrome
         container_name: chrome
         depends_on:
-         - selenium
+        - selenium
         links:
-         - selenium:hub
+        - selenium:hub
         environment:
-         - HUB_HOST=selenium
-         - HUB_PORT=4444
+        - HUB_HOST=selenium
+        - HUB_PORT=4444
     magento1db:
-        image: rtakauti/mysql-magento1
+        image: vindi/mysql-magento1-ci
         container_name: magento1_db
         ports:
-         - "3306"
+        - "3306"
     magento1web:
-        image: rtakauti/apache-magento1
+        image: vindi/apache-magento1-ci
         container_name: magento1_web
         depends_on:
-         - magento1db
-         - chrome
+        - magento1db
+        - chrome
         ports:
         - "443:443"
         links:
-         - magento1db:mysql
-         - chrome
+        - magento1db:mysql
+        - chrome
 networks:
-  default:
-    external:
-      name: webproxy
+    default:
+        external:
+            name: webproxy
