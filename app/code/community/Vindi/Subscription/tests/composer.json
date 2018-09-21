@@ -22,7 +22,9 @@
     }
   ],
   "require": {
-    "magium/magento": ">=0.0.22 <2.0.0",
+    "magium/magento": ">=0.0.22 <2.0.0"
+  },
+  "require-dev": {
     "squizlabs/php_codesniffer": "2.6.2",
     "magento/marketplace-eqp": "^1.0.5"
   },
@@ -32,7 +34,8 @@
       "Vindi\\": "Vindi"
     },
     "files": [
-      "register.php"
+      "register.php",
+      "Vindi/VindiLoader.php"
     ]
   },
   "scripts": {
