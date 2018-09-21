@@ -1,7 +1,39 @@
-<phpunit bootstrap="vendor/autoload.php">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="true"
+>
     <testsuites>
-        <testsuite name="All Tests">
-            <directory>VindiTest</directory>
+        <testsuite name="Unit Tests">
+            <directory suffix="Test.php">VindiTest/Unit</directory>
         </testsuite>
     </testsuites>
+    <testsuites>
+        <testsuite name="Functional Tests">
+            <directory suffix="Test.php">VindiTest/Functional</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../../Subscription</directory>
+            <exclude>
+                <directory suffix=".php">../tests</directory>
+                <directory suffix=".php">../sql</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="tap" target="build/report.tap"/>
+        <log type="junit" target="build/report.junit.xml"/>
+        <log type="coverage-html" target="build/coverage" charset="UTF-8" yui="true" highlight="true"/>
+        <log type="coverage-text" target="build/coverage.txt"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
 </phpunit>

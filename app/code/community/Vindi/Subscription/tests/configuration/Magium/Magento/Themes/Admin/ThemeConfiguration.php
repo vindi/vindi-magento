@@ -2,4 +2,4 @@
 
 /* @var $this \Magium\Magento\Themes\Admin\ThemeConfiguration */
 
-$this->baseUrl = 'https://example.local/admin/';
+$this->baseUrl = 'https://vindi.local/admin/';
