@@ -33,30 +33,26 @@ class InformationTest extends TestCase
      */
     public function testHasApiKey()
     {
-        fwrite(STDOUT, 'Testando API Key não vazia' . PHP_EOL);
         $this->assertNotEmpty(true, Mage::helper('vindi_subscription')->getKey());
     }
 
     /**
      * @covers ::render
      */
-    public function testId()
+    public function testHasId()
     {
-        fwrite(STDOUT, 'Testando id de $element como vindi_subscription_general_information' . PHP_EOL);
         $this->assertEquals('vindi_subscription_general_information', $this->stub->getId());
     }
 
     public function testHasApiKeyAndId()
     {
-        fwrite(STDOUT, 'Testando retorno não vazio' . PHP_EOL);
         $helper = Mage::helper('vindi_subscription');
         $this->assertFalse(!$helper->getKey() || $this->stub->getId() != 'vindi_subscription_general_information');
 
     }
 
-    public function testRender()
+    public function testRenderCorrectly()
     {
-        fwrite(STDOUT, 'Testando retorno de HTML' . PHP_EOL);
         $api = Mage::helper('vindi_subscription/api');
         $merchant = $api->getMerchant();
         $status = $api->isMerchantStatusTrial() ? 'Trial' : 'Ativo';
@@ -107,16 +103,14 @@ HTML;
         $this->assertEquals($html, trim($vindi->render($this->stub)));
     }
 
-    public function testRenderEmpty()
+    public function testRenderInCaseOfEmpty()
     {
-        fwrite(STDOUT, 'Testando retorno de HTML vazio' . PHP_EOL);
         $vindi = new Vindi_Subscription_Block_Config_Information();
         $this->assertNotEquals('', trim($vindi->render($this->stub)));
     }
 
-    public function testRenderFail()
+    public function testRenderInCaseOfFail()
     {
-        fwrite(STDOUT, 'Testando retorno de HTML com falha' . PHP_EOL);
         $html = <<<HTML
 <tr>
     <td colspan="4" class="label">
@@ -131,5 +125,4 @@ HTML;
         $vindi = new Vindi_Subscription_Block_Config_Information();
         $this->assertNotEquals($html, trim($vindi->render($this->stub)));
     }
-
 }

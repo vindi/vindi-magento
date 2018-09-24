@@ -27,7 +27,6 @@ class TranslatorTest extends AbstractMagentoTestCase
      */
     public function testDefaultLocaleSet($actual, $expected)
     {
-        fwrite(STDOUT, 'Traduz: ' . $expected . PHP_EOL);
         $translator = $this->getTranslator();
         $translator->addTranslationCsvFile($this->csv, 'pt_BR');
         $translator->setLocale('pt_BR');

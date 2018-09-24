@@ -8,7 +8,9 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="true"
+         syntaxCheck="false"
+         verbose="true"
+         tap="true"
 >
     <testsuites>
         <testsuite name="Unit Tests">
@@ -30,10 +32,9 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="tap" target="build/report.tap"/>
-        <log type="junit" target="build/report.junit.xml"/>
-        <log type="coverage-html" target="build/coverage" charset="UTF-8" yui="true" highlight="true"/>
-        <log type="coverage-text" target="build/coverage.txt"/>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-html" target="docs/test/coverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
+        <log type="testdox-html" target="docs/test/index.html"/>
+        <log type="testdox-text" target="php://stdout"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
     </logging>
 </phpunit>

@@ -31,7 +31,6 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
      */
     public function testEnablePaymentMethod()
     {
-        fwrite(STDOUT, 'Testando a ativação do módulo' . PHP_EOL);
         if ($this->noDev) {
             $this->getLogger()->notice('Testando a ativação do módulo');
             $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -48,7 +47,6 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
      */
     public function testAPiKeyRegistered()
     {
-        fwrite(STDOUT, 'Testando o registro da API Key no módulo' . PHP_EOL);
         if ($this->noDev) {
             $this->getLogger()->notice('Testando o registro da API Key no módulo');
             $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -67,7 +65,6 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
      */
     public function testHttpsAssertionFront()
     {
-        fwrite(STDOUT, 'Testando HTTPS da loja' . PHP_EOL);
         $this->commandOpen($this->getTheme()->getBaseUrl());
         $assertion = $this->getAssertion(CurrentUrlIsHttps::ASSERTION);
         $assertion->assert();
@@ -78,11 +75,9 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
      */
     public function testHttpsAssertionBack()
     {
-        fwrite(STDOUT, 'Testando HTTPS do admin da loja' . PHP_EOL);
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $assertion = $this->getAssertion(CurrentUrlIsHttps::ASSERTION);
         $assertion->assert();
     }
-
 }
 
