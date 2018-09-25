@@ -1,6 +1,6 @@
 <?php
 
-namespace VindiTest\Translator;
+namespace VindiTest\Functional\Block\Config;
 
 use Magium\Magento\AbstractMagentoTestCase;
 use Vindi\Util\CsvFileIterator;
@@ -15,11 +15,11 @@ use Vindi\Util\CsvFileIterator;
 class TranslatorTest extends AbstractMagentoTestCase
 {
 
-    private $csv = __DIR__ . '/../../../../../../../locale/pt_BR/Vindi_Subscription.csv';
+    private $csv = __DIR__ . '/../../../../../../../../locale/pt_BR/Vindi_Subscription.csv';
 
     /**
      * Teste do arquivo de tradução /locale/pt_BR/Vindi_Subscription.csv
-     * 
+     *
      * @param $actual
      * @param $expected
      *

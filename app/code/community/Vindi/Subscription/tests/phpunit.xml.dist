@@ -1,7 +1,40 @@
-<phpunit bootstrap="vendor/autoload.php">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         verbose="true"
+         tap="true"
+>
     <testsuites>
-        <testsuite name="All Tests">
-            <directory>VindiTest</directory>
+        <testsuite name="Unit Tests">
+            <directory suffix="Test.php">VindiTest/Unit</directory>
         </testsuite>
     </testsuites>
+    <testsuites>
+        <testsuite name="Functional Tests">
+            <directory suffix="Test.php">VindiTest/Functional</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../../Subscription</directory>
+            <exclude>
+                <directory suffix=".php">../tests</directory>
+                <directory suffix=".php">../sql</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-html" target="docs/test/coverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
+        <log type="testdox-html" target="docs/test/index.html"/>
+        <log type="testdox-text" target="php://stdout"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging>
 </phpunit>
