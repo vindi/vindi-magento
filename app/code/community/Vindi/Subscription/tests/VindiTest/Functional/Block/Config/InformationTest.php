@@ -24,15 +24,14 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
      */
     public function testAPiKeyRegistered()
     {
-
+        putenv('API_KEY=lu9P6J4JQWPhVRXj-phvZYP3Cv0r0HNRmaPcDAx-gec');
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $this->getAction(Login::ACTION)->login();
         $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
         $this->getAction(SettingModifier::ACTION)->set(
             'Vindi Assinaturas/Configuração::label=Chave da API',
-            getenv('API_KEY'),
-            true
+            getenv('API_KEY')
         );
         $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
         $this->assertPageHasText('Conectado com Sucesso!');
