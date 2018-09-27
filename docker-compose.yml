@@ -6,7 +6,7 @@ services:
         ports:
         - "4444"
     chrome:
-        image: selenium/node-chrome
+        image: selenium/node-chrome-debug
         container_name: chrome
         depends_on:
         - selenium
@@ -22,7 +22,7 @@ services:
         - "3306"
     magento1web:
         image: vindi/apache-magento1-ci
-        container_name: magento1_web
+        container_name: vindi.local
         depends_on:
         - magento1db
         - chrome
