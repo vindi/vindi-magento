@@ -32,7 +32,7 @@ services:
         - magento1db:mysql
         - chrome
         environment:
-        - API_KEY=${API_KEY}
+        - API_KEY
 networks:
     default:
         external:
