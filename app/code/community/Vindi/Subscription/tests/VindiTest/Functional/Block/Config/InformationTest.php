@@ -17,29 +17,17 @@ use Magium\Magento\Navigators\Admin\SystemConfiguration;
 class InformationFunctionalTest extends AbstractMagentoTestCase
 {
 
-    private $noDev;
-
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->noDev = file_exists(__DIR__ . '/../../../../vendor/squizlabs/php_codesniffer');
-    }
-
     /**
      * Teste da ativação do módulo da Vindi
      */
     public function testEnablePaymentMethod()
     {
-        if ($this->noDev) {
-            $this->getLogger()->notice('Testando a ativação do módulo');
-            $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
-            $this->getAction(Login::ACTION)->login();
-            $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-            $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Payment Methods/Vindi - Cartão de Crédito');
-            $this->assertEquals(1, $this->byId('payment_vindi_creditcard_active')->getAttribute('value'));
-        }
-        $this->assertTrue(true);
+        $this->getLogger()->notice('Testando a ativação do módulo');
+        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
+        $this->getAction(Login::ACTION)->login();
+        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
+        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Payment Methods/Vindi - Cartão de Crédito');
+        $this->assertEquals(1, $this->byId('payment_vindi_creditcard_active')->getAttribute('value'));
     }
 
     /**
@@ -47,17 +35,14 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
      */
     public function testAPiKeyRegistered()
     {
-        if ($this->noDev) {
-            $this->getLogger()->notice('Testando o registro da API Key no módulo');
-            $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
-            $this->getAction(Login::ACTION)->login();
-            $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-            $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
-            $this->assertPageHasText('Conectado com Sucesso!');
-            $this->assertEquals(\Mage::helper('vindi_subscription')->getKey(),
-                $this->byId('vindi_subscription_general_api_key')->getAttribute('value'));
-        }
-        $this->assertTrue(true);
+        $this->getLogger()->notice('Testando o registro da API Key no módulo');
+        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
+        $this->getAction(Login::ACTION)->login();
+        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
+        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
+        $this->assertPageHasText('Conectado com Sucesso!');
+        $this->assertEquals(\Mage::helper('vindi_subscription')->getKey(),
+            $this->byId('vindi_subscription_general_api_key')->getAttribute('value'));
     }
 
     /**
