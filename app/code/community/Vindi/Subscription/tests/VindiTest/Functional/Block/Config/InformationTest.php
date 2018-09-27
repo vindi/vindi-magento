@@ -24,7 +24,6 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
      */
     public function testAPiKeyRegistered()
     {
-        putenv('API_KEY=lu9P6J4JQWPhVRXj-phvZYP3Cv0r0HNRmaPcDAx-gec');
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $this->getAction(Login::ACTION)->login();
