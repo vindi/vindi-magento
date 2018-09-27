@@ -22,7 +22,8 @@
     }
   ],
   "require": {
-    "magium/magento": ">=0.0.22 <2.0.0"
+    "magium/magento": ">=0.0.22 <2.0.0",
+    "phpunit/phpunit": "^6.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.6.2",
@@ -39,7 +40,7 @@
     ]
   },
   "scripts": {
-    "test": "vendor/bin/phpunit --verbose",
+    "test": "vendor/bin/phpunit --verbose --testdox",
     "style": "vendor/bin/phpcs  -p --colors --standard=MEQP1 --ignore=*/tests/* --severity=10 --extensions=php,phtml ../../Subscription/",
     "fix": "vendor/bin/phpcbf -w --standard=MEQP1 --ignore=*/tests/* --severity=10 ../../Subscription/ --no-patch",
     "post-install-cmd": "vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp",
