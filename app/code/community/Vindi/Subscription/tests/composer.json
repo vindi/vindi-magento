@@ -22,7 +22,8 @@
     }
   ],
   "require": {
-    "magium/magento": ">=0.0.22 <2.0.0"
+    "magium/magento": ">=0.0.22 <2.0.0",
+    "phpunit/phpunit": "^6.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.6.2",
