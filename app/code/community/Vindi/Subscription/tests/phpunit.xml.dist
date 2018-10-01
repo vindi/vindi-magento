@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -13,13 +13,18 @@
          tap="true"
 >
     <testsuites>
-        <testsuite name="Unit Tests">
-            <directory suffix="Test.php">VindiTest/Unit</directory>
+        <testsuite name="Init">
+            <file>VindiTest/Functional/Block/Config/InitializeTest.php</file>
         </testsuite>
     </testsuites>
     <testsuites>
-        <testsuite name="Functional Tests">
+        <testsuite name="Functional">
             <directory suffix="Test.php">VindiTest/Functional</directory>
+        </testsuite>
+    </testsuites>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">VindiTest/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>

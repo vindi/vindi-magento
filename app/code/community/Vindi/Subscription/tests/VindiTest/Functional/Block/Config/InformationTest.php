@@ -2,14 +2,12 @@
 
 namespace VindiTest\Functional\Block\Config;
 
-use Magium\Actions\SetFormValue;
+use Mage;
 use Magium\Assertions\Browser\CurrentUrlIsHttps;
 use Magium\Magento\AbstractMagentoTestCase;
 use Magium\Magento\Actions\Admin\Login\Login;
 use Magium\Magento\Navigators\Admin\AdminMenu;
 use Magium\Magento\Navigators\Admin\SystemConfiguration;
-use \Mage;
-use Magium\Magento\Actions\Admin\Configuration\SettingModifier;
 
 /**
  * Class SystemTest
@@ -18,28 +16,10 @@ use Magium\Magento\Actions\Admin\Configuration\SettingModifier;
  */
 class InformationFunctionalTest extends AbstractMagentoTestCase
 {
-
     /**
      * Teste do registro da API Key da Vindi
      */
-    public function testAddAPiKeyRegistered()
-    {
-        $this->getLogger()->notice('Testando a ativação do módulo');
-        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
-        $this->getAction(Login::ACTION)->login();
-        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-        $this->getAction(SettingModifier::ACTION)->set(
-            'Vindi Assinaturas/Configuração::label=Chave da API',
-            getenv('API_KEY'),
-            true
-        );
-    }
-
-
-    /**
-     * Teste do registro da API Key da Vindi
-     */
-    public function testAPiKeyRegistered()
+    public function testApiKeyRegistered()
     {
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -51,7 +31,6 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
         $this->assertEquals(Mage::helper('vindi_subscription')->getKey(),
             $this->byId('vindi_subscription_general_api_key')->getAttribute('value'));
     }
-
 
     /**
      * Teste da ativação do módulo da Vindi
