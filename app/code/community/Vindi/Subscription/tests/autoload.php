@@ -2,5 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-(new Dotenv\Dotenv(__DIR__))->load();
+if (file_exists('vendor/vlucas/phpdotenv/src/Dotenv.php')) {
+    (new Dotenv\Dotenv(__DIR__))->load();
+}
 
