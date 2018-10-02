@@ -19,7 +19,7 @@ class InitializeFunctionalTest extends AbstractMagentoTestCase
     /**
      * Teste do registro da API Key da Vindi
      */
-    public function testAddApiKeyRegistered()
+    public function testAddApiKeyRegister()
     {
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
