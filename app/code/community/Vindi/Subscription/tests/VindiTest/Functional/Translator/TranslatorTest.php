@@ -3,7 +3,7 @@
 namespace VindiTest\Functional\Block\Config;
 
 use Magium\Magento\AbstractMagentoTestCase;
-use Vindi\Util\CsvFileIterator;
+use Magium\Magento\Util\CsvFileIterator;
 
 
 /**

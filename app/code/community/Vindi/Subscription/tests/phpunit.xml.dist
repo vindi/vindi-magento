@@ -14,7 +14,7 @@
 >
     <testsuites>
         <testsuite name="Init">
-            <file>VindiTest/Functional/Block/Config/InitializeTest.php</file>
+            <directory suffix="Test.php">VindiTest/Initialize</directory>
         </testsuite>
     </testsuites>
     <testsuites>

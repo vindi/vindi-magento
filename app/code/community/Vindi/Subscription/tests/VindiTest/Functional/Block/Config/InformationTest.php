@@ -33,11 +33,11 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
     }
 
     /**
-     * Teste da ativação do módulo da Vindi
+     * Teste da ativação de cartão de crédito da Vindi
      */
-    public function testEnablePaymentMethod()
+    public function testEnabledCreditCard()
     {
-        $this->getLogger()->notice('Testando a ativação do módulo');
+        $this->getLogger()->notice('Testando a ativação de cartão de crédito');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $this->getAction(Login::ACTION)->login();
         $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');

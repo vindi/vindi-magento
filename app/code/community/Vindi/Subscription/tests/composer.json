@@ -22,8 +22,8 @@
     }
   ],
   "require": {
-    "magium/magento": ">=0.0.22 <2.0.0",
-    "phpunit/phpunit": "^6.0"
+    "magium/magium": "~1.1",
+    "zendframework/zend-uri": "^2.5"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.6.2",
@@ -32,12 +32,13 @@
   },
   "autoload": {
     "psr-4": {
-      "VindiTest\\": "VindiTest",
-      "Vindi\\": "Vindi"
+      "Magium\\" : "lib/",
+      "Tests\\Magium\\Magento\\" : "tests/Magento",
+      "VindiTest\\": "VindiTest"
     },
     "files": [
       "register.php",
-      "Vindi/VindiLoader.php"
+      "lib/Magento/MageLoader.php"
     ]
   },
   "scripts": {
