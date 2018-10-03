@@ -31,11 +31,11 @@ class Vindi_Subscription_Model_Observer
     {
         $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
 
-        foreach ( $cart as $item ) {
+        foreach ($cart as $item) {
             if ($item->getProduct()->getData('type_id') === 'simple')
                 continue;
 
-            if ($lastProduct == null && $item->getProduct()->getData('type_id') === 'subscription') {
+            if (!isset($lastProduct) && $item->getProduct()->getData('type_id') === 'subscription') {
                 $lastProduct = $item->getProduct()->getData('type_id');
                 continue;
             }
