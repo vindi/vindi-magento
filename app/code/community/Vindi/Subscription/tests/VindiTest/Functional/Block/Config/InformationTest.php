@@ -2,7 +2,7 @@
 
 namespace VindiTest\Functional\Block\Config;
 
-
+use Mage;
 use Magium\Assertions\Browser\CurrentUrlIsHttps;
 use Magium\Magento\AbstractMagentoTestCase;
 use Magium\Magento\Actions\Admin\Login\Login;
@@ -16,33 +16,33 @@ use Magium\Magento\Navigators\Admin\SystemConfiguration;
  */
 class InformationFunctionalTest extends AbstractMagentoTestCase
 {
-
     /**
-     * Teste da ativação do módulo da Vindi
+     * Teste do registro da API Key da Vindi
      */
-    public function testEnablePaymentMethod()
+    public function testCheckApiKeyAndMerchantSuccess()
     {
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $this->getAction(Login::ACTION)->login();
         $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Payment Methods/Vindi - Cartão de Crédito');
-        $this->assertEquals(1, $this->byId('payment_vindi_creditcard_active')->getAttribute('value'));
+        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
+        $this->assertPageHasText('Conectado com Sucesso!');
+        $this->assertPageHasText(Mage::helper('vindi_subscription/api')->getMerchant()['name']);
+        $this->assertEquals(Mage::helper('vindi_subscription')->getKey(),
+            $this->byId('vindi_subscription_general_api_key')->getAttribute('value'));
     }
 
     /**
-     * Teste do registro da API Key da Vindi
+     * Teste da ativação de cartão de crédito da Vindi
      */
-    public function testAPiKeyRegistered()
+    public function testCheckCreditCardIsEnabled()
     {
-        $this->getLogger()->notice('Testando o registro da API Key no módulo');
+        $this->getLogger()->notice('Testando a ativação de cartão de crédito');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $this->getAction(Login::ACTION)->login();
         $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
-        $this->assertPageHasText('Conectado com Sucesso!');
-        $this->assertEquals(\Mage::helper('vindi_subscription')->getKey(),
-            $this->byId('vindi_subscription_general_api_key')->getAttribute('value'));
+        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Payment Methods/Vindi - Cartão de Crédito');
+        $this->assertEquals(1, $this->byId('payment_vindi_creditcard_active')->getAttribute('value'));
     }
 
     /**

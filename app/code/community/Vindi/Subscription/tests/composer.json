@@ -22,25 +22,32 @@
     }
   ],
   "require": {
+    "magium/magium": "~1.1",
     "magium/magento": ">=0.0.22 <2.0.0",
-    "phpunit/phpunit": "^6.0"
+    "zendframework/zend-uri": "^2.5"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.6.2",
-    "magento/marketplace-eqp": "^1.0.5"
+    "magento/marketplace-eqp": "^1.0.5",
+    "vlucas/phpdotenv": "^2.5"
   },
   "autoload": {
     "psr-4": {
-      "VindiTest\\": "VindiTest",
-      "Vindi\\": "Vindi"
+      "Vindi\\" : "Vindi/",
+      "VindiTest\\": "VindiTest"
     },
     "files": [
       "register.php",
-      "Vindi/VindiLoader.php"
+      "Vindi/MageLoader.php"
     ]
   },
   "scripts": {
-    "test": "vendor/bin/phpunit --verbose --testdox",
+    "test": [
+      "vendor/bin/phpunit --testdox --testsuite Init",
+      "vendor/bin/phpunit --testdox --testsuite Functional_Block_Config",
+      "vendor/bin/phpunit --testdox --testsuite Functional_Block_Form",
+      "vendor/bin/phpunit --testdox --testsuite Unit"
+    ],
     "style": "vendor/bin/phpcs  -p --colors --standard=MEQP1 --ignore=*/tests/* --severity=10 --extensions=php,phtml ../../Subscription/",
     "fix": "vendor/bin/phpcbf -w --standard=MEQP1 --ignore=*/tests/* --severity=10 ../../Subscription/ --no-patch",
     "post-install-cmd": "vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp",

@@ -23,6 +23,8 @@ services:
     magento1web:
         image: vindi/apache-magento1-ci
         container_name: vindi.local
+        env_file:
+          - .env
         depends_on:
         - magento1db
         - chrome

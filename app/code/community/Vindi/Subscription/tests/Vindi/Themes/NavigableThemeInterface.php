@@ -1,0 +1,16 @@
+<?php
+
+namespace Vindi\Themes;
+
+
+use Magium\Themes\BaseThemeInterface;
+
+interface NavigableThemeInterface extends BaseThemeInterface {
+
+    public function getNavigationBaseXPathSelector();
+
+    public function getNavigationChildXPathSelector($text);
+
+    public function getUseClicksToNavigate();
+
+}

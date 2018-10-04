@@ -1,7 +1,7 @@
 <?php
 
 
-class VindiLoader
+class MageLoader
 {
 
     /**
@@ -60,5 +60,4 @@ class VindiLoader
         self::init();
     }
 }
-
-VindiLoader::bootstrap();
+MageLoader::bootstrap();
