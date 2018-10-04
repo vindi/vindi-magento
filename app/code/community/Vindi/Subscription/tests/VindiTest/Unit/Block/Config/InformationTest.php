@@ -20,12 +20,14 @@ class InformationTest extends TestCase
 {
 
     private $stub;
+    private $vindi;
 
     public function setUp()
     {
         parent::setUp();
         $this->stub = $this->createMock(Varien_Data_Form_Element_Abstract::class);
         $this->stub->method('getId')->willReturn('vindi_subscription_general_information');
+        $this->vindi = new Vindi_Subscription_Block_Config_Information();
     }
 
     /**
@@ -51,7 +53,7 @@ class InformationTest extends TestCase
 
     }
 
-    public function testRenderCorrectly()
+    public function testRenderInCaseOfSuccess()
     {
         $api = Mage::helper('vindi_subscription/api');
         $merchant = $api->getMerchant();
@@ -99,14 +101,13 @@ class InformationTest extends TestCase
     </td>
 </tr>
 HTML;
-        $vindi = new Vindi_Subscription_Block_Config_Information();
-        $this->assertEquals($html, trim($vindi->render($this->stub)));
+
+        $this->assertEquals($html, trim($this->vindi->render($this->stub)));
     }
 
     public function testRenderInCaseOfEmpty()
     {
-        $vindi = new Vindi_Subscription_Block_Config_Information();
-        $this->assertNotEquals('', trim($vindi->render($this->stub)));
+        $this->assertNotEquals('', trim($this->vindi->render($this->stub)));
     }
 
     public function testRenderInCaseOfFail()
@@ -122,7 +123,6 @@ HTML;
         Conexão
     </td><td class=" value error-msg">Falha na Conexão!<br />Verifique sua conta e tente novamente!</td></tr>
 HTML;
-        $vindi = new Vindi_Subscription_Block_Config_Information();
-        $this->assertNotEquals($html, trim($vindi->render($this->stub)));
+        $this->assertNotEquals($html, trim($this->vindi->render($this->stub)));
     }
 }

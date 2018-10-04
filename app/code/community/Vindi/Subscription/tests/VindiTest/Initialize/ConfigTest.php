@@ -19,7 +19,7 @@ class ConfigTest extends AbstractMagentoTestCase
     /**
      * Teste do registro da API Key da Vindi
      */
-    public function testAddApiKeyRegister()
+    public function testRegisterAddApiKey()
     {
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -35,7 +35,7 @@ class ConfigTest extends AbstractMagentoTestCase
     /**
      * Teste de mudança de ambiente
      */
-    public function testChangeEnvironment()
+    public function testSetSandboxEnvironment()
     {
         $this->getLogger()->notice('Testando a mudança de ambiente de produção');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -51,7 +51,7 @@ class ConfigTest extends AbstractMagentoTestCase
     /**
      * Teste de ativação de cartão de crédito da Vindi
      */
-    public function testEnableCreditCard()
+    public function testEnableCreditCardPaymentMethod()
     {
         $this->getLogger()->notice('Testando a ativação do cartão de crédito');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -60,6 +60,40 @@ class ConfigTest extends AbstractMagentoTestCase
         $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
         $this->getAction(SettingModifier::ACTION)->set(
             'Payment Methods/Vindi - Cartão de Crédito::label=Ativo',
+            '1',
+            true
+        );
+    }
+
+    /**
+     * Teste de ativação de boleto bancário da Vindi
+     */
+    public function testEnableBankPaySlipPaymentMethod()
+    {
+        $this->getLogger()->notice('Testando a configuração máxima de parcelamento');
+        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
+        $this->getAction(Login::ACTION)->login();
+        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
+        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
+        $this->getAction(SettingModifier::ACTION)->set(
+            'Payment Methods/Vindi - Boleto Bancário::label=Ativo',
+            '1',
+            true
+        );
+    }
+
+    /**
+     * Teste de ativação de cartão de débito da Vindi
+     */
+    public function testEnableDebitCardPaymentMethod()
+    {
+        $this->getLogger()->notice('Testando a configuração máxima de parcelamento');
+        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
+        $this->getAction(Login::ACTION)->login();
+        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
+        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
+        $this->getAction(SettingModifier::ACTION)->set(
+            'Payment Methods/Vindi - Cartão de Débito::label=Ativo',
             '1',
             true
         );
@@ -85,7 +119,7 @@ class ConfigTest extends AbstractMagentoTestCase
     /**
      * Teste de configuração de número máximo de parcelamento da Vindi
      */
-    public function testSetMaximumNumberOfInstallments()
+    public function testSetMaximumNumberOfInstallmentsOf12()
     {
         $this->getLogger()->notice('Testando a configuração máxima de parcelamento');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -95,41 +129,6 @@ class ConfigTest extends AbstractMagentoTestCase
         $this->getAction(SettingModifier::ACTION)->set(
             'Payment Methods/Vindi - Cartão de Crédito::label=Número máximo de parcelas',
             '12',
-            true
-        );
-    }
-
-    /**
-     * Teste de ativação de boleto bancário da Vindi
-     */
-    public function testEnableBankPaySlip()
-    {
-        $this->getLogger()->notice('Testando a configuração máxima de parcelamento');
-        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
-        $this->getAction(Login::ACTION)->login();
-        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
-        $this->getAction(SettingModifier::ACTION)->set(
-            'Payment Methods/Vindi - Boleto Bancário::label=Ativo',
-            '1',
-            true
-        );
-    }
-
-
-    /**
-     * Teste de ativação de cartão de débito da Vindi
-     */
-    public function testEnableDebitCard()
-    {
-        $this->getLogger()->notice('Testando a configuração máxima de parcelamento');
-        $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
-        $this->getAction(Login::ACTION)->login();
-        $this->getNavigator(AdminMenu::NAVIGATOR)->navigateTo('System/Configuration');
-        $this->getNavigator(SystemConfiguration::NAVIGATOR)->navigateTo('Vindi Assinaturas/Configuração');
-        $this->getAction(SettingModifier::ACTION)->set(
-            'Payment Methods/Vindi - Cartão de Débito::label=Ativo',
-            '1',
             true
         );
     }

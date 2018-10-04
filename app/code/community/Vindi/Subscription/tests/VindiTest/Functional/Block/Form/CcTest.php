@@ -12,7 +12,6 @@ class CcTest extends AbstractMagentoTestCase
     public function testBasicCheckout()
     {
         $this->commandOpen('https://vindi.local/vindi-product.html');
-        $this->webdriver->manage()->timeouts()->implicitlyWait(5);
         $this->byXpath('//button[@title="Add to Cart"]')->click();
         $this->byXpath('//button[@title="Proceed to Checkout"]')->click();
         $this->setPaymentMethod('VindiCreditCard');
