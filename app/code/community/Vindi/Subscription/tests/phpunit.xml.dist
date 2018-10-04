@@ -18,8 +18,13 @@
         </testsuite>
     </testsuites>
     <testsuites>
-        <testsuite name="Functional">
-            <directory suffix="Test.php">VindiTest/Functional</directory>
+        <testsuite name="Functional_Block_Config">
+            <directory suffix="Test.php">VindiTest/Functional/Block/Config</directory>
+        </testsuite>
+    </testsuites>
+    <testsuites>
+        <testsuite name="Functional_Block_Form">
+            <directory suffix="Test.php">VindiTest/Functional/Block/Form</directory>
         </testsuite>
     </testsuites>
     <testsuites>

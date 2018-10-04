@@ -44,8 +44,8 @@
   "scripts": {
     "test": [
       "vendor/bin/phpunit --testdox --testsuite Init",
-      "vendor/bin/phpunit --testdox --testsuite Functional/Block/Config",
-      "vendor/bin/phpunit --testdox --testsuite Functional/Block/Form",
+      "vendor/bin/phpunit --testdox --testsuite Functional_Block_Config",
+      "vendor/bin/phpunit --testdox --testsuite Functional_Block_Form",
       "vendor/bin/phpunit --testdox --testsuite Unit"
     ],
     "style": "vendor/bin/phpcs  -p --colors --standard=MEQP1 --ignore=*/tests/* --severity=10 --extensions=php,phtml ../../Subscription/",
