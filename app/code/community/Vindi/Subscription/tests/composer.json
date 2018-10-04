@@ -32,13 +32,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Magium\\" : "lib/",
-      "Tests\\Magium\\Magento\\" : "tests/Magento",
+      "Vindi\\" : "Vindi/",
       "VindiTest\\": "VindiTest"
     },
     "files": [
       "register.php",
-      "lib/Magento/MageLoader.php"
+      "Vindi/MageLoader.php"
     ]
   },
   "scripts": {
