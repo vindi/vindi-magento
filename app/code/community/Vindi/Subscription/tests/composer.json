@@ -23,6 +23,7 @@
   ],
   "require": {
     "magium/magium": "~1.1",
+    "magium/magento": ">=0.0.22 <2.0.0",
     "zendframework/zend-uri": "^2.5"
   },
   "require-dev": {
