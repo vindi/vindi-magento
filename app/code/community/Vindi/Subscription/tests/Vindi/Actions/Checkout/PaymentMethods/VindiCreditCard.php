@@ -7,6 +7,7 @@ use Vindi\AbstractMagentoTestCase;
 use Vindi\Actions\Checkout\PaymentInformation;
 use Vindi\Identities\Customer;
 use Magium\WebDriver\WebDriver;
+use Vindi\Assertions\Checkout\PaymentMethods\VindiCreditCard as Assert;
 
 class VindiCreditCard implements PaymentMethodInterface
 {
@@ -24,7 +25,7 @@ class VindiCreditCard implements PaymentMethodInterface
         AbstractMagentoTestCase     $testCase,
         PaymentInformation          $paymentInformation,
         Customer                    $customer,
-        \Vindi\Assertions\Checkout\PaymentMethods\VindiCreditCard $assertion
+        Assert $assertion
     ) {
         $this->webDriver    = $webDriver;
         $this->testCase     = $testCase;
@@ -39,11 +40,6 @@ class VindiCreditCard implements PaymentMethodInterface
         return 'p_method_vindi_creditcard';
     }
 
-    /**
-     * Fills in the payment form, selecting it, if necessary
-     *
-     * @param $requirePayment
-     */
 
     public function pay($requirePayment)
     {

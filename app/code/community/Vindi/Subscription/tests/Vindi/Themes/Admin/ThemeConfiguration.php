@@ -29,7 +29,7 @@ class ThemeConfiguration extends AbstractConfigurableElement implements  Navigab
     public $systemConfigTabsXpath                = '//ul[@id="system_config_tabs"]/descendant::a[concat(" ",normalize-space(.)," ") = " {{%s}} "]';
     public $systemConfigSectionToggleXpath             = '//form[@id="config_edit_form"]/descendant::div[contains(concat(" ",normalize-space(@class)," ")," section-config ")]/descendant::a[.="{{%s}}"]';
     public $systemConfigSectionDisplayCheckXpath            = '//legend[.="{{%s}}"]/ancestor::fieldset';
-    public $systemConfigToggleEnableXpath            = '//legend[.="{{%s}}"]/../descendant::td[concat(" ",normalize-space(.)," ") = " {{Enabled}} "]/../td/descendant::select/option[@value="%d"]';
+    public $systemConfigToggleEnableXpath            = '//legend[.="{{%s}}"]/../descendant::td[concat(" ",normalize-space(.)," ") = " {{Ativo}} "]/../td/descendant::select/option[@value="%d"]';
 
     public $xTreeRootXpath                          = '//ul[contains(concat(" ",normalize-space(@class)," ")," x-tree-root-ct ")]/div/li[contains(concat(" ",normalize-space(@class)," ")," x-tree-node ")]/div/a';
     public $xTreeNamedRootXpath                          = '//ul[contains(concat(" ",normalize-space(@class)," ")," x-tree-root-ct ")]/div/li[contains(concat(" ",normalize-space(@class)," ")," x-tree-node ")]/div/a[contains(concat("---",normalize-space(.)), "---{{%s}} (")]';

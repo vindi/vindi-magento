@@ -14,20 +14,17 @@
 >
     <testsuites>
         <testsuite name="Init">
-            <directory suffix="Test.php">VindiTest/Initialize</directory>
+            <file>VindiTest/Initialize/ConfigTest.php</file>
         </testsuite>
-    </testsuites>
-    <testsuites>
+        <testsuite name="Enable">
+            <file>VindiTest/Initialize/EnablerTest.php</file>
+        </testsuite>
         <testsuite name="Functional_Block_Config">
-            <directory suffix="Test.php">VindiTest/Functional/Block/Config</directory>
+            <file>VindiTest/Functional/Block/Config/InformationTest.php</file>
         </testsuite>
-    </testsuites>
-    <testsuites>
         <testsuite name="Functional_Block_Form">
-            <directory suffix="Test.php">VindiTest/Functional/Block/Form</directory>
+            <file>VindiTest/Functional/Block/Form/CcTest.php</file>
         </testsuite>
-    </testsuites>
-    <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">VindiTest/Unit</directory>
         </testsuite>
