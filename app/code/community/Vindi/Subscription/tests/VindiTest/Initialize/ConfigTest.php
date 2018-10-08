@@ -19,7 +19,7 @@ class ConfigTest extends AbstractMagentoTestCase
     /**
      * Teste do registro da API Key da Vindi
      */
-    public function testRegistrarApiKey()
+    public function testRegistrarApiKeyEConfiguracao()
     {
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());

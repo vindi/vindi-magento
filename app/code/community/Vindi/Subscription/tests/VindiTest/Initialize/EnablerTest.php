@@ -9,7 +9,7 @@ use Vindi\Actions\Admin\Login\Login;
 class EnablerTest extends AbstractMagentoTestCase
 {
 
-    public function testHabilitaCartoesEBoletoBancario()
+    public function testHabilitarCartoesDeCreditoEDebitoEBoletoBancario()
     {
         $adminThemeConfiguration = $this->getTheme('Admin\ThemeConfiguration');
         /* @var $adminThemeConfiguration \Vindi\Themes\Admin\ThemeConfiguration */

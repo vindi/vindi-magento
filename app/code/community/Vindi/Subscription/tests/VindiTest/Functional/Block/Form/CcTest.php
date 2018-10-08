@@ -9,7 +9,7 @@ use Vindi\Extractors\Checkout\OrderId;
 class CcTest extends AbstractMagentoTestCase
 {
 
-    public function testBasicCheckout()
+    public function testCompraDeProdutoDefaultComCartaoDeCredito()
     {
         $this->commandOpen('https://vindi.local/vindi-product.html');
         $this->byXpath('//button[@title="Add to Cart"]')->click();
@@ -29,7 +29,7 @@ class CcTest extends AbstractMagentoTestCase
     }
 
 
-    public function testCheckoutWithSpecifiedEmailAddress()
+    public function testCompraDeProdutoDefaultComCartaoDeCreditoComEmailEspecifico()
     {
         $customer = $this->getIdentity();
         /* @var $customer \Vindi\Identities\Customer */
