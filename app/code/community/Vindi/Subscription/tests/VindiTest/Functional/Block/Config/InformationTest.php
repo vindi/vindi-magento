@@ -19,7 +19,7 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
     /**
      * Teste do registro da API Key da Vindi
      */
-    public function testCheckApiKeyAndMerchantSuccess()
+    public function testChecaApiKeyEMerchantRegistradoComSucesso()
     {
         $this->getLogger()->notice('Testando a ativação do módulo');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -35,7 +35,7 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
     /**
      * Teste da ativação de cartão de crédito da Vindi
      */
-    public function testCheckCreditCardIsEnabled()
+    public function testChecaCartaoDeCreditoHabilitado()
     {
         $this->getLogger()->notice('Testando a ativação de cartão de crédito');
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
@@ -48,7 +48,7 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
     /**
      * Teste de SSL do front da loja do magento
      */
-    public function testHttpsAssertionFront()
+    public function testChecaSslNoFront()
     {
         $this->commandOpen($this->getTheme()->getBaseUrl());
         $assertion = $this->getAssertion(CurrentUrlIsHttps::ASSERTION);
@@ -58,7 +58,7 @@ class InformationFunctionalTest extends AbstractMagentoTestCase
     /**
      * Teste de SSL da administração da loja do magento
      */
-    public function testHttpsAssertionBack()
+    public function testChecaSslNoBack()
     {
         $this->commandOpen($this->getTheme('Admin\ThemeConfiguration')->getBaseUrl());
         $assertion = $this->getAssertion(CurrentUrlIsHttps::ASSERTION);

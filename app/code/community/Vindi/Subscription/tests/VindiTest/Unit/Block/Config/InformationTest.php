@@ -33,7 +33,7 @@ class InformationTest extends TestCase
     /**
      * @covers ::render
      */
-    public function testHasApiKey()
+    public function testApiKeyEstaDisponivel()
     {
         $this->assertNotEmpty(true, Mage::helper('vindi_subscription')->getKey());
     }
@@ -41,19 +41,19 @@ class InformationTest extends TestCase
     /**
      * @covers ::render
      */
-    public function testHasId()
+    public function testIdEstaDisponivel()
     {
         $this->assertEquals('vindi_subscription_general_information', $this->stub->getId());
     }
 
-    public function testHasApiKeyAndId()
+    public function testApiKeyAndIdEstamDisponiveis()
     {
         $helper = Mage::helper('vindi_subscription');
         $this->assertFalse(!$helper->getKey() || $this->stub->getId() != 'vindi_subscription_general_information');
 
     }
 
-    public function testRenderInCaseOfSuccess()
+    public function testMostrarEmCasoDeSucesso()
     {
         $api = Mage::helper('vindi_subscription/api');
         $merchant = $api->getMerchant();
@@ -105,12 +105,12 @@ HTML;
         $this->assertEquals($html, trim($this->vindi->render($this->stub)));
     }
 
-    public function testRenderInCaseOfEmpty()
+    public function testMostrarEmCasoDeVazio()
     {
         $this->assertNotEquals('', trim($this->vindi->render($this->stub)));
     }
 
-    public function testRenderInCaseOfFail()
+    public function testMostrarEmCasoDeFalha()
     {
         $html = <<<HTML
 <tr>

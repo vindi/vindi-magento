@@ -44,6 +44,7 @@
   "scripts": {
     "test": [
       "vendor/bin/phpunit --testdox --testsuite Init",
+      "vendor/bin/phpunit --testdox --testsuite Enable",
       "vendor/bin/phpunit --testdox --testsuite Functional_Block_Config",
       "vendor/bin/phpunit --testdox --testsuite Functional_Block_Form",
       "vendor/bin/phpunit --testdox --testsuite Unit"
