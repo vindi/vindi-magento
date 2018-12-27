@@ -100,7 +100,6 @@ class Vindi_Subscription_Model_Observer
         Mage::getSingleton('core/session')->addNotice($message);
         Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
         Mage::app()->getResponse()->sendResponse();
-        exit;
     }
 
     /**

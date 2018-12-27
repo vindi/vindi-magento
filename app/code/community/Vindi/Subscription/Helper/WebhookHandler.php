@@ -13,10 +13,9 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         switch ($level) {
             case 4:
                 http_response_code(422);
-                exit($message);
+                return false;
                 break;
             case 5:
-                echo $message;
                 return false;
                 break;
             default:
@@ -55,7 +54,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
             case 'test':
                 $this->log('Evento de teste do webhook.');
-                exit('1');
+                return false;
             case 'bill_created':
                 return $this->billCreated($data);
             case 'bill_paid':
@@ -64,7 +63,6 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                 return $this->chargeRejected($data);
             default:
                 $this->log(sprintf('Evento do webhook ignorado pelo plugin: "%s".', $type), 5);
-                exit('0');
         }
     }
 
