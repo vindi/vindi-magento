@@ -1,5 +1,14 @@
 # Notas das versões
 
+## [1.3.3 - 27/12/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.3)
+
+### Corrigido
+- Corrige validação no pagamento dos pedidos com AntiFraude habilitado
+
+### Ajustado
+- Ajusta validação de produtos no carrinho
+
+
 ## [1.3.2 - 06/09/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.2)
 
 ### Corrigido
