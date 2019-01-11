@@ -1,5 +1,10 @@
 # Notas das versões
 
+## [1.3.4 - 27/12/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.4)
+
+### Ajustado
+- Ajusta a função getDebitCardRedirectUrl para pegar o redirect_url em vez de authorization_url
+
 ## [1.3.3 - 27/12/2018](https://github.com/vindi/vindi-magento/releases/tag/1.3.3)
 
 ### Corrigido
