@@ -773,7 +773,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             'id' => $bill['bill']['payment_profile']['id']
         ]);
 
-        return $charged['charge']['last_transaction']['gateway_response_fields']['authorization_url'];
+        return $charged['charge']['last_transaction']['gateway_response_fields']['redirect_url'];
 
     }
 }
