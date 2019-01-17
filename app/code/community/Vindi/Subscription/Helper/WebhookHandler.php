@@ -132,6 +132,9 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         $order = $this->createOrder($lastPeriodOrder, $vindiData);
 
+        // remove inactive products
+        $this->updateProductsList($order, $vindiData);
+
         if (! $order) {
             $this->log('Impossível gerar novo pedido!', 4);
 
@@ -142,6 +145,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         $order->setVindiSubscriptionId($subscriptionId);
         $order->setVindiSubscriptionPeriod($period);
+        $order->setBaseGrandTotal($vindiData['bill']['amount']);
         $order->setGrandTotal($vindiData['bill']['amount']);
         $order->save();
 
@@ -345,6 +349,21 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('*')
             ->addFieldToFilter('vindi_bill_id', $billId)
             ->getFirstItem();
+    }
+
+    private function updateProductsList($order, $vindiData)
+    {
+        $itens = $order->getAllItems();
+        foreach ($itens as $item) {
+            // $item->getSku();
+            // $vindiData['products'][0]['product']['code'];
+            if ($item->getSku() == 'pav') {
+                $item->delete();
+                $order->setTotalItemCount(count($items) - 1);
+                $order->setSubtotal($order->getSubtotal() - $item->getPrice());
+                $order->save();
+            }
+        }
     }
 
     /**
