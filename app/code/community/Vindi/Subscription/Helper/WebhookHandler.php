@@ -114,17 +114,18 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
         $vindiData = [
                     'bill'     => [
                                     'id'    => $data['bill']['id'],
-                                    'amout' => $data['bill']['amount']
+                                    'amount' => $data['bill']['amount']
                                 ],
                     'products' => [],
                     'shipping' => [],
+                    'taxes'    => [],
                 ];
-        foreach ($data['bill']['bill_items'] as $billItem)
-        {
-            if($billItem['product']['code'] == 'frete')
-            {
+        foreach ($data['bill']['bill_items'] as $billItem) {
+            if ($billItem['product']['code'] == 'frete') {
                 $vindiData['shipping'] = $billItem;
-            }else{
+            } elseif ($billItem['product']['code'] == 'taxa') {
+                $vindiData['taxes'][] = $billItem;
+            } else {
                 $vindiData['products'][] = $billItem;
             }
         }
@@ -141,6 +142,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         $order->setVindiSubscriptionId($subscriptionId);
         $order->setVindiSubscriptionPeriod($period);
+        $order->setGrandTotal($vindiData['bill']['amount']);
         $order->save();
 
         if(Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment'))
@@ -406,7 +408,6 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                 }
             }
             $address->save();
-
         }
 
         $quote->save();
@@ -440,6 +441,13 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         $quote->setTotalsCollectedFlag(false)
             ->collectTotals()
+            ->save();
+
+        if (isset(reset($vindiData['taxes'])['pricing_schema']['price']) && !empty(reset($vindiData['taxes'])['pricing_schema']['price'])) {
+                $quote->getShippingAddress()->setTaxAmount(reset($vindiData['taxes'])['pricing_schema']['price']);
+        }
+
+        $quote->collectTotals()
             ->save();
 
         $session = Mage::getSingleton('core/session');
