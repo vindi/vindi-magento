@@ -353,11 +353,14 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
     private function updateProductsList($order, $vindiData)
     {
+        $codes = [];
+        foreach ($vindiData['products'] as $product) {
+            $codes[] = $product['product']['code'];
+        }
+
         $itens = $order->getAllItems();
         foreach ($itens as $item) {
-            // $item->getSku();
-            // $vindiData['products'][0]['product']['code'];
-            if ($item->getSku() == 'pav') {
+            if (!in_array($item->getSku(), $codes)) {
                 $item->delete();
                 $order->setTotalItemCount(count($items) - 1);
                 $order->setSubtotal($order->getSubtotal() - $item->getPrice());
