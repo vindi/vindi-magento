@@ -114,16 +114,15 @@ class Vindi_Subscription_Helper_Bill
      */
     public function billPaid($data)
     {
-        if (! ($order = $this->getOrder($data))) {
-            $this->logger->log(sprintf('Ainda não existe um pedido para ciclo %s da assinatura: %d.',
-                $data['bill']['period']['cycle'],
-                $data['bill']['subscription']['id']),
-                4
-            );
+        $orderHandler = Mage::helper('vindi_subscription/order');
+
+        if (! ($order = $orderHandler->getOrder($data))) {
+            $this->logger->log(sprintf(
+                'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
+                $data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
 
             return false;
         }
-
-        return $this->createInvoice($order);
+        return $orderHandler->createInvoice($order);
     }
 }
