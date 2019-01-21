@@ -5,10 +5,12 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
     
     protected $logger;
     protected $billHandler;
+    protected $chargeHandler;
     
     public function __construct() {
         $this->logger = Mage::helper('vindi_subscription/logger');
         $this->billHandler =Mage::helper('vindi_subscription/bill');
+        $this->chargeHandler =Mage::helper('vindi_subscription/charge');
     }
     
     /**
@@ -42,62 +44,14 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                 $this->logger->log('Evento de teste do webhook.');
                 return false;
             case 'bill_created':
-                return $billHandler->billCreated($data);
+                return $this->$billHandler->billCreated($data);
             case 'bill_paid':
-                return $billHandler->billPaid($data);
+                return $this->$billHandler->billPaid($data);
             case 'charge_rejected':
-                return $this->chargeRejected($data);
+                return $this->$chargeHandler->chargeRejected($data);
             default:
                 $this->logger->log(sprintf('Evento do webhook ignorado pelo plugin: "%s".', $type), 5);
         }
-    }
-
-    /**
-    /**
-    /**
-     * @param array $data
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function chargeRejected($data)
-    {
-        $charge = $data['charge'];
-
-        if (! ($order = $this->getOrderFromBill($charge['bill']['id']))) {
-            $this->logger->log('Pedido não encontrado.', 4);
-
-            return false;
-        }
-
-        $gatewayMessage = $charge['last_transaction']['gateway_message'];
-        $isLastAttempt = is_null($charge['next_attempt']);
-
-        if ($isLastAttempt) {
-            $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true, sprintf(
-                'Todas as tentativas de pagamento foram rejeitadas. Motivo: "%s".',
-                $gatewayMessage
-            ), true);
-            $this->logger->log(sprintf(
-                'Todas as tentativas de pagamento do pedido %s foram rejeitadas. Motivo: "%s".',
-                $order->getId(),
-                $gatewayMessage
-            ));
-        } else {
-            $order->addStatusHistoryComment(sprintf(
-                'Tentativa de Pagamento rejeitada. Motivo: "%s". Uma nova tentativa será feita.',
-                $gatewayMessage
-            ));
-            $this->logger->log(sprintf(
-                'Tentativa de pagamento do pedido %s foi rejeitada. Motivo: "%s". Uma nova tentativa será feita.',
-                $order->getId(),
-                $gatewayMessage
-            ));
-        }
-
-        $order->save();
-
-        return true;
     }
 
     /**
