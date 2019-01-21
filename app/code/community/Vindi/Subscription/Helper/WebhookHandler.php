@@ -44,11 +44,11 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                 $this->logger->log('Evento de teste do webhook.');
                 return false;
             case 'bill_created':
-                return $this->$billHandler->billCreated($data);
+                return $this->billHandler->billCreated($data);
             case 'bill_paid':
-                return $this->$billHandler->billPaid($data);
+                return $this->billHandler->billPaid($data);
             case 'charge_rejected':
-                return $this->$chargeHandler->chargeRejected($data);
+                return $this->chargeHandler->chargeRejected($data);
             default:
                 $this->logger->log(sprintf('Evento do webhook ignorado pelo plugin: "%s".', $type), 5);
         }
