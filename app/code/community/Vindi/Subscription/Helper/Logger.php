@@ -1,6 +1,6 @@
 <?php
 
-class Logger
+class Vindi_Subscription_Helper_Logger
 {
     /**
      * @param string   $message

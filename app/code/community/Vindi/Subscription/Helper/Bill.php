@@ -1,6 +1,6 @@
 <?php
 
-class Bill
+class Vindi_Subscription_Helper_Bill
 {
     /**
      * Handle 'bill_created' event.

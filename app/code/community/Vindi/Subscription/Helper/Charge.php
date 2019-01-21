@@ -1,6 +1,6 @@
 <?php
 
-class Charge
+class Vindi_Subscription_Helper_Charge
 {
     /**
      * @param array $data
