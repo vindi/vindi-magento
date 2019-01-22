@@ -30,7 +30,7 @@ class Vindi_Subscription_Helper_Order
         $order->addStatusHistoryComment(sprintf(
             'Tentativa de Pagamento rejeitada. Motivo: "%s". Uma nova tentativa será feita.',
                 $gatewayMessage));
-        
+
         $order->save();
     }
 
@@ -88,7 +88,7 @@ class Vindi_Subscription_Helper_Order
      */
     public function createInvoice($order)
     {
-        if ($orderId = $order->getId() && $order->canInvoice()) {
+        if (($orderId = $order->getId()) && $order->canInvoice()) {
             $this->logger->log('Gerando fatura para o pedido: ' . $orderId);
             $this->updateToSuccess($order);
             $this->logger->log('Fatura gerada com sucesso.');
