@@ -2,6 +2,16 @@
 
 class Vindi_Subscription_Helper_Validator
 {
+    protected $logger;
+    protected $billHandler;
+    protected $orderHandler;
+
+    public function __construct() {
+        $this->logger       = Mage::helper('vindi_subscription/logger');
+        $this->billHandler  = Mage::helper('vindi_subscription/bill');
+        $this->orderHandler = Mage::helper('vindi_subscription/order');
+    }
+
     /**
      * Valida estrutura da cobrança
      *

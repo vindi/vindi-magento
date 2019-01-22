@@ -2,6 +2,14 @@
 
 class Vindi_Subscription_Helper_Bill
 {
+    protected $logger;
+    protected $orderHandler;
+
+    public function __construct() {
+        $this->logger       = Mage::helper('vindi_subscription/logger');
+        $this->orderHandler = Mage::helper('vindi_subscription/order');
+    }
+
     /**
      * Handle 'bill_created' event.
      * The bill can be related to a subscription or a single payment.
