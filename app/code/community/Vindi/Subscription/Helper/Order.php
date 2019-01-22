@@ -118,7 +118,7 @@ class Vindi_Subscription_Helper_Order
      *
      * @return Mage_Sales_Model_Order
      */
-    private function getSubscriptionOrder($subscriptionId, $subscriptionPeriod)
+    public function getSubscriptionOrder($subscriptionId, $subscriptionPeriod)
     {
         return Mage::getModel('sales/order')->getCollection()
             ->addAttributeToSelect('*')
@@ -140,7 +140,7 @@ class Vindi_Subscription_Helper_Order
             ->getFirstItem();
     }
 
-    private function updateProductsList($order, $vindiData)
+    public function updateProductsList($order, $vindiData)
     {
         $codes = [];
         foreach ($vindiData['products'] as $product) {
@@ -158,7 +158,7 @@ class Vindi_Subscription_Helper_Order
         }
     }
 
-    private function renewalOrder($order, $vindiData, $charges)
+    public function renewalOrder($order, $vindiData, $charges)
     {
         $order->setVindiSubscriptionId($vindiData['bill']['subscription']);
         $order->setVindiSubscriptionPeriod($vindiData['bill']['cycle']);
@@ -185,6 +185,104 @@ class Vindi_Subscription_Helper_Order
         return true;
     }
 
+    private function loadShipping($quote, $vindiData, $shippingMethod)
+    {
+        // get shipping method
+        $activedShippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')
+        ->getActivedShippingMethodsValues();
+
+        // verify if current shipping method is active
+        if (! in_array($shippingMethod, $activedShippingMethods)) {
+            $oldShippingMethod = $shippingMethod;
+            $shippingMethod = Mage::getStoreConfig(
+                'vindi_subscription/general/default_shipping_method');
+            $this->logger->log(sprintf(
+                "Erro ao utilizar o método de envio %s alterado para o método padrão %s.",
+                $oldShippingMethod, $shippingMethod));
+            unset($oldShippingMethod);
+        }
+
+        // quote shipping method
+        $quote->getShippingAddress()
+              ->setShippingMethod($shippingMethod)
+              ->setCollectShippingRates(true)
+              ->collectShippingRates()
+              ->collectTotals();
+
+        if (isset($vindiData['shipping']['pricing_schema']['price'])
+            && !empty($vindiData['shipping']['pricing_schema']['price'])) {
+
+            // set shipping price
+            $billShippingPrice = $vindiData['shipping']['pricing_schema']['price'];
+
+            $quote->setPrice($billShippingPrice)
+                  ->setCost($billShippingPrice);
+
+            $address = $quote->getShippingAddress();
+            $address->setShippingAmount($billShippingPrice);
+            $address->setBaseShippingAmount($billShippingPrice);
+
+            $rates = $address->collectShippingRates()
+                            ->getGroupedAllShippingRates();
+
+            foreach ($rates as $carrier) {
+                foreach ($carrier as $rate) {
+                    $rate->setPrice($billShippingPrice);
+                    $rate->save();
+                }
+            }
+            $address->save();
+        }
+        $quote->save();
+    }
+
+    private function loadTaxes($quote, $vindiData)
+    {
+        if (isset(reset($vindiData['taxes'])['pricing_schema']['price'])
+            && ! empty(reset($vindiData['taxes'])['pricing_schema']['price'])) {
+            $quote->getShippingAddress()->setTaxAmount(
+                reset($vindiData['taxes'])['pricing_schema']['price']);
+        }
+
+        $quote->collectTotals()
+              ->save();
+    }
+
+    private function loadProducts($quote, $vindiData)
+    {
+        foreach ($vindiData['products'] as $item) {
+            $magentoProduct = Mage::getModel('catalog/product')
+            ->loadByAttribute('vindi_product_id', $item['product']['id']);
+            
+            if (! $magentoProduct)
+            {
+                $this->logger->log(sprintf('O produto com ID Vindi #%s não existe no Magento.',
+                    $item['product']['id']), 5);
+            }
+            elseif (number_format($magentoProduct->getPrice(), 2)
+                !== number_format($item['pricing_schema']['price'], 2)) {
+
+                $this->logger->log(sprintf("Divergencia de valores na fatura #%s:  " . 
+                    "produto %s: ID Magento #%s , ID Vindi #%s: " . 
+                    "Valor Magento R$ %s , Valor Vindi R$ %s",
+                    $vindiData['bill']['id'],
+                    $magentoProduct->getName(),
+                    $magentoProduct->getId(),
+                    $item['product']['id'],
+                    $magentoProduct->getPrice(),
+                    $item['pricing_schema']['price']));
+
+                $quote->getItemByProduct($magentoProduct)
+                      ->setOriginalCustomPrice($item['pricing_schema']['price'])
+                      ->setCustomPrice($item['pricing_schema']['price'])
+                      ->save();
+            }
+        }
+        $quote->setTotalsCollectedFlag(false)
+              ->collectTotals()
+              ->save();
+    }
+
     /**
      * Create a new order from an old one using reorder functionality.
      *
@@ -192,7 +290,7 @@ class Vindi_Subscription_Helper_Order
      *
      * @return Mage_Sales_Model_Order;
      */
-    private function createOrder($oldOrder, $vindiData)
+    public function createOrder($oldOrder, $vindiData)
     {
         $oldOrder->setReordered(true);
 
@@ -203,114 +301,35 @@ class Vindi_Subscription_Helper_Order
 
         $quote = $order->getQuote();
 
-        // get shipping method
-        $shippingMethod = $oldOrder->getShippingMethod();
-        $activedShippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')->getActivedShippingMethodsValues();
+        // Add Shipping values
+        $this->loadShipping($quote, $vindiData, $oldOrder->getShippingMethod());
 
-        // verify if current shipping method is active
-        if(!in_array($shippingMethod, $activedShippingMethods)){
-            $oldShippingMethod = $shippingMethod;
-            $shippingMethod = Mage::getStoreConfig('vindi_subscription/general/default_shipping_method');
-            $this->logger->log(sprintf("Erro ao utilizar o método de envio %s alterado para o método padrão %s.",
-                        $oldShippingMethod,
-                        $shippingMethod
-                    ));
-            unset($oldShippingMethod);
-        }
+        // Add Product values
+        $this->loadProducts($quote, $vindiData);
 
-        // quote shipping method
-        $quote->getShippingAddress()
-            ->setShippingMethod($shippingMethod)
-            ->setCollectShippingRates(true)
-            ->collectShippingRates()
-            ->collectTotals();
-
-        if(isset($vindiData['shipping']['pricing_schema']['price']) && !empty($vindiData['shipping']['pricing_schema']['price']))
-        {
-            // set shipping price
-            $billShippingPrice = $vindiData['shipping']['pricing_schema']['price'];
-
-            $quote->setPrice($billShippingPrice)
-                ->setCost($billShippingPrice);
-
-            $address = $quote->getShippingAddress();
-            $address->setShippingAmount($billShippingPrice);
-            $address->setBaseShippingAmount($billShippingPrice);
-
-            $rates = $address->collectShippingRates()
-                            ->getGroupedAllShippingRates();
-            foreach ($rates as $carrier) {
-                foreach ($carrier as $rate) {
-                    $rate->setPrice($billShippingPrice);
-                    $rate->save();
-                }
-            }
-            $address->save();
-        }
-
-        $quote->save();
-
-        foreach ($vindiData['products'] as $item) {
-            $magentoProduct = Mage::getModel('catalog/product')->loadByAttribute('vindi_product_id', $item['product']['id']);
-            if(!$magentoProduct)
-            {
-                $this->logger->log(sprintf('O produto com ID Vindi #%s não existe no Magento.', $item['product']['id']), 5);
-            }
-            else {
-                if(number_format($magentoProduct->getPrice(), 2) !== number_format($item['pricing_schema']['price'], 2)){
-                    $this->logger->log(sprintf("Divergencia de valores na fatura #%s: produto %s: ID Magento #%s , ID Vindi #%s: Valor Magento R$ %s , Valor Vindi R$ %s",
-                                $vindiData['bill']['id'],
-                                $magentoProduct->getName(),
-                                $magentoProduct->getId(),
-                                $item['product']['id'],
-                                $magentoProduct->getPrice(),
-                                $item['pricing_schema']['price'])
-                            );
-
-                    $quote->getItemByProduct($magentoProduct)
-                        // ->setPrice($item['pricing_schema']['price'])
-                        // ->setCost($item['pricing_schema']['price'])
-                        ->setOriginalCustomPrice($item['pricing_schema']['price'])
-                        ->setCustomPrice($item['pricing_schema']['price'])
-                        ->save();
-
-                }
-            }
-        }
-
-        $quote->setTotalsCollectedFlag(false)
-            ->collectTotals()
-            ->save();
-
-        if (isset(reset($vindiData['taxes'])['pricing_schema']['price']) && !empty(reset($vindiData['taxes'])['pricing_schema']['price'])) {
-                $quote->getShippingAddress()->setTaxAmount(reset($vindiData['taxes'])['pricing_schema']['price']);
-        }
-
-        $quote->collectTotals()
-            ->save();
+        // Add Tax values
+        $this->loadTaxes($quote, $vindiData);
 
         $session = Mage::getSingleton('core/session');
         $session->setData('vindi_is_reorder', true);
 
         try {
             $order = $order->createOrder();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->logger->log("Erro ao criar pedido!");
 
-            if($e->getMessage()){
+            if ($e->getMessage()) {
                 $this->logger->log($e->getMessage(), 5);
             }
             else {
                 $messages = $order->getSession()->getMessages(true);
-                foreach($messages->getItems() as $message)
-                {
+                foreach ($messages->getItems() as $message) {
                    $this->logger->log($message->getText(), 5);
                 }
             }
-
             return false;
         }
-
         return $order;
     }
 }

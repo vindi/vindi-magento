@@ -36,10 +36,10 @@ class Vindi_Subscription_Helper_Bill
         return $this->orderHandler->renewalOrder($order, $vindiData);
     }
 
-    public function getLastPeriod($bill)
+    public function getLastPeriod($data)
     {
-        $currentPeriod = $bill['period']['cycle'];
-        $subscriptionId = $bill['subscription']['id'];
+        $currentPeriod = $data['bill']['period']['cycle'];
+        $subscriptionId = $data['bill']['subscription']['id'];
         return $this->orderHandler->getSubscriptionOrder($subscriptionId, $currentPeriod - 1);
     }
 
