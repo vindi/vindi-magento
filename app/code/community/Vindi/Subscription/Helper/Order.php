@@ -3,11 +3,9 @@
 class Vindi_Subscription_Helper_Order
 {
     protected $logger;
-    protected $billHandler;
 
     public function __construct() {
         $this->logger       = Mage::helper('vindi_subscription/logger');
-        $this->billHandler  = Mage::helper('vindi_subscription/bill');
     }
 
     /**
