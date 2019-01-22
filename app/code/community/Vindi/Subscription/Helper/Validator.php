@@ -61,7 +61,7 @@ class Vindi_Subscription_Helper_Validator
             return false;
         }
 
-        $order = $this->orderHandler->getOrder($data)
+        $order = $this->orderHandler->getOrder($data);
 
         if ($order) {
             $this->logger->log(sprintf('Já existe o pedido %s para o evento "bill_created".',
