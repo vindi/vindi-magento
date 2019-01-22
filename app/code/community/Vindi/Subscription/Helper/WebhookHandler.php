@@ -44,7 +44,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                 $this->logger->log('Evento de teste do webhook.');
                 return false;
             case 'bill_created':
-                return $this->billHandler->processBillCreated($data);
+                return $this->validBillCreatedWebhook($data);
             case 'bill_paid':
                 return $this->billHandler->processBillPaid($data);
             case 'charge_rejected':
@@ -111,6 +111,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
                 $this->logger->log('Pedido anterior não encontrado. Ignorando evento.', 4);
                 $valid = false;
             }
+            $this->billHandler->processBillCreated($data);
         }
         return $valid;
     }

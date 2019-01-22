@@ -12,23 +12,20 @@ class Vindi_Subscription_Helper_Bill
      */
     public function processBillCreated($data)
     {
-        $handler = Mage::helper('vindi_subscription/webhookhandler');
-        if ($handler->validBillCreatedWebhook($data)) {
-            $bill = $data['bill'];
-            $vindiData = $this->loadBillData($data);
-            $lastOrder = $this->getLastPeriod($data);
+        $bill = $data['bill'];
+        $vindiData = $this->loadBillData($data);
+        $lastOrder = $this->getLastPeriod($data);
 
-            $order = $this->orderHandler->createOrder($lastOrder, $vindiData);
+        $order = $this->orderHandler->createOrder($lastOrder, $vindiData);
 
-            // remove inactive updateProductsList
-            $this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
+        // remove inactive products
+        $this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
 
-            if (!$order) {
-                $this->logger->log('Impossível gerar novo pedido!', 4);
-                return false;
-            }
-            return $this->orderHandler->renewalOrder($order, $vindiData);
+        if (!$order) {
+            $this->logger->log('Impossível gerar novo pedido!', 4);
+            return false;
         }
+        return $this->orderHandler->renewalOrder($order, $vindiData);
     }
 
     public function getLastPeriod($bill)
@@ -76,14 +73,12 @@ class Vindi_Subscription_Helper_Bill
      */
     public function processBillPaid($data)
     {
-        $orderHandler = Mage::helper('vindi_subscription/order');
-
-        if (! ($order = $orderHandler->getOrder($data))) {
+        if (! ($order = $this->orderHandler->getOrder($data))) {
             $this->logger->log(sprintf(
                 'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
                 $data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
             return false;
         }
-        return $orderHandler->createInvoice($order);
+        return $this->orderHandler->createInvoice($order);
     }
 }

@@ -2,11 +2,6 @@
 
 class Vindi_Subscription_Helper_Order
 {
-    protected $logger;
-
-    public function __construct() {
-        $this->logger = Mage::helper('vindi_subscription/logger');
-    }
     /**
      * @param Mage_Sales_Model_Order $order, String $gatewayMessage
      *
