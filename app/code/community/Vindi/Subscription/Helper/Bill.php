@@ -12,8 +12,9 @@ class Vindi_Subscription_Helper_Bill
      */
     public function processBillCreated($data)
     {
-        if ($this->validBillCreatedWebhook($data)) {
-            $bill = $data['bill']
+        $handler = Mage::helper('vindi_subscription/webhookhandler');
+        if ($handler->validBillCreatedWebhook($data)) {
+            $bill = $data['bill'];
             $vindiData = $this->loadBillData($data);
             $lastOrder = $this->getLastPeriod($data);
 

@@ -2,6 +2,11 @@
 
 class Vindi_Subscription_Helper_Order
 {
+    protected $logger;
+
+    public function __construct() {
+        $this->logger = Mage::helper('vindi_subscription/logger');
+    }
     /**
      * @param Mage_Sales_Model_Order $order, String $gatewayMessage
      *
@@ -47,19 +52,20 @@ class Vindi_Subscription_Helper_Order
      *
      * @return Mage_Sales_Model_Order|bool
      */
-    private function getOrder($data)
+    public function getOrder($data)
     {
         if (!isset($data['bill'])) {
             return false;
         }
 
-        if (isset($orderCode = $data['bill']['subscription']['id'])
-            && ($orderCode = filter_var($orderCode, FILTER_SANITIZE_NUMBER_INT))) {
+        if (isset($data['bill']['subscription']['id'])
+            && ($orderCode = filter_var($data['bill']['subscription']['id'],
+                FILTER_SANITIZE_NUMBER_INT))) {
             $order = $this->getSubscriptionOrder($orderCode, $data['bill']['period']['cycle']);
             $orderType = 'assinatura';
         }
         else {
-            $orderCode = $data['bill']['id']
+            $orderCode = $data['bill']['id'];
             $order = $this->getSingleOrder($orderCode);
             $orderType = 'fatura';
         }
