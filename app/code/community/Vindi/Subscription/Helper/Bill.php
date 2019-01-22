@@ -38,11 +38,11 @@ class Vindi_Subscription_Helper_Bill
     public function loadBillData($data)
     {
         $vindiData = [
-            'bill'       => [
-                'id'     => $data['bill']['id'],
-                'amount' => $data['bill']['amount'],
+            'bill'     => [
+                'id'           => $data['bill']['id'],
+                'amount'       => $data['bill']['amount'],
                 'subscription' => $data['bill']['subscription']['id'],
-                'cycle'  => $data['bill']['period']['cycle']
+                'cycle'        => $data['bill']['period']['cycle']
             ],
             'products' => [],
             'shipping' => [],
