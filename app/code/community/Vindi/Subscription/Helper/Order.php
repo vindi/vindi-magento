@@ -30,6 +30,8 @@ class Vindi_Subscription_Helper_Order
         $order->addStatusHistoryComment(sprintf(
             'Tentativa de Pagamento rejeitada. Motivo: "%s". Uma nova tentativa será feita.',
                 $gatewayMessage));
+        
+        $order->save();
     }
 
     /**
@@ -37,7 +39,7 @@ class Vindi_Subscription_Helper_Order
      *
      * @return bool|Mage_Sales_Model_Order
      */
-    private function getOrderFromVindi($billId)
+    public function getOrderFromVindi($billId)
     {
         /** @var Vindi_Subscription_Helper_API $api */
         $api = Mage::helper('vindi_subscription/api');
