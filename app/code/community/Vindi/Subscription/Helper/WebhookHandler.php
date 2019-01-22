@@ -38,7 +38,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
         switch ($type) {
             // the webhook is being called before Order is actually placed.
-            // I'm sorry for this, not going to use queues for now, so the solution is to use sleep().
+            // Sorry for this, not going to use queues for now, so the solution is to use sleep().
 
             case 'test':
                 $this->logger->log('Evento de teste do webhook.');
@@ -98,11 +98,13 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
             $valid = false;
         }
         elseif (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
-            $this->logger->log(sprintf('Ignorando o evento "bill_created" para o primeiro ciclo.'), 5);
+            $this->logger->log(sprintf(
+                'Ignorando o evento "bill_created" para o primeiro ciclo.'), 5);
             $valid = false;
         }
         elseif (($order = $this->orderHandler->getOrder($data))) {
-            $this->logger->log(sprintf('Já existe o pedido %s para o evento "bill_created".', $order->getId()), 5);
+            $this->logger->log(sprintf('Já existe o pedido %s para o evento "bill_created".',
+                $order->getId()), 5);
             $valid = false;
         }
         elseif (isset($bill['subscription']['id']) && ($bill['period']['cycle'])) {
