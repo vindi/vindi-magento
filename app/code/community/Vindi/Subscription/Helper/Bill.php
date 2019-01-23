@@ -2,91 +2,105 @@
 
 class Vindi_Subscription_Helper_Bill
 {
-    protected $logger;
-    protected $orderHandler;
+	protected $logger;
+	protected $orderHandler;
 
-    public function __construct() {
-        $this->logger       = Mage::helper('vindi_subscription/logger');
-        $this->orderHandler = Mage::helper('vindi_subscription/order');
-    }
+	public function __construct() {
+		$this->logger       = Mage::helper('vindi_subscription/logger');
+		$this->orderHandler = Mage::helper('vindi_subscription/order');
+	}
 
-    /**
-     * Handle 'bill_created' event.
-     * The bill can be related to a subscription or a single payment.
-     *
-     * @param array $data
-     *
-     * @return bool
-     */
-    public function processBillCreated($data)
-    {
-        $bill = $data['bill'];
-        $vindiData = $this->loadBillData($data);
-        $lastOrder = $this->getLastPeriod($data);
+	/**
+	 * Trata Webhook 'bill_created'
+	 * A fatura pode estar relacionada a uma assinatura ou uma compra avulsa
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function processBillCreated($data)
+	{
+		$bill = $data['bill'];
+		$vindiData = $this->loadBillData($data);
+		$lastOrder = $this->getLastPeriod($data);
 
-        $order = $this->orderHandler->createOrder($lastOrder, $vindiData);
+		$order = $this->orderHandler->createOrder($lastOrder, $vindiData);
 
-        // remove inactive products
-        $this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
+		// remove inactive products
+		$this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
 
-        if (!$order) {
-            $this->logger->log('Impossível gerar novo pedido!', 4);
-            return false;
-        }
-        return $this->orderHandler->renewalOrder($order, $vindiData);
-    }
+		if (!$order) {
+			$this->logger->log('Impossível gerar novo pedido!', 4);
+			return false;
+		}
+		return $this->orderHandler->renewalOrder($order, $vindiData);
+	}
 
-    public function getLastPeriod($data)
-    {
-        $currentPeriod = $data['bill']['period']['cycle'];
-        $subscriptionId = $data['bill']['subscription']['id'];
-        return $this->orderHandler->getSubscriptionOrder($subscriptionId, $currentPeriod - 1);
-    }
+	/**
+	 * Retorna o último pedido referente a assinatura
+	 *
+	 * @param array $data
+	 *
+	 * @return bool|Mage_Sales_Model_Order
+	 */
+	public function getLastPeriod($data)
+	{
+		$currentPeriod = $data['bill']['period']['cycle'];
+		$subscriptionId = $data['bill']['subscription']['id'];
+		return $this->orderHandler->getSubscriptionOrder($subscriptionId, $currentPeriod - 1);
+	}
 
-    public function loadBillData($data)
-    {
-        $vindiData = [
-            'bill'     => [
-                'id'           => $data['bill']['id'],
-                'amount'       => $data['bill']['amount'],
-                'subscription' => $data['bill']['subscription']['id'],
-                'cycle'        => $data['bill']['period']['cycle']
-            ],
-            'products' => [],
-            'shipping' => [],
-            'taxes'    => [],
-        ];
+	/**
+	 * Carrega os dados do Webhook de fatura criada
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */       
+	public function loadBillData($data)
+	{
+		$vindiData = [
+			'bill'     => [
+				'id'           => $data['bill']['id'],
+				'amount'       => $data['bill']['amount'],
+				'subscription' => $data['bill']['subscription']['id'],
+				'cycle'        => $data['bill']['period']['cycle']
+			],
+			'products' => [],
+			'shipping' => [],
+			'taxes'    => [],
+		];
 
-        foreach ($data['bill']['bill_items'] as $billItem) {
-            if ($billItem['product']['code'] == 'frete') {
-                $vindiData['shipping'] = $billItem;
-            }
-            elseif ($billItem['product']['code'] == 'taxa') {
-                $vindiData['taxes'][] = $billItem;
-            }
-            else {
-                $vindiData['products'][] = $billItem;
-            }
-        }
-        return $vindiData;
-    }
+		foreach ($data['bill']['bill_items'] as $billItem) {
+			if ($billItem['product']['code'] == 'frete') {
+				$vindiData['shipping'] = $billItem;
+			}
+			elseif ($billItem['product']['code'] == 'taxa') {
+				$vindiData['taxes'][] = $billItem;
+			}
+			else {
+				$vindiData['products'][] = $billItem;
+			}
+		}
+		return $vindiData;
+	}
 
-    /**
-     * Handle 'bill_paid' event.
-     * The bill can be related to a subscription or a single payment.
-     *
-     * @param array $data
-     *
-     * @return bool
-     */
-    public function processBillPaid($data)
-    {
-        if (! ($order = $this->orderHandler->getOrder($data))) {
-            $this->logger->log(sprintf(
-                'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
-                $data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
-            return false;
-        }
-        return $this->orderHandler->createInvoice($order);
-    }
+	/**
+	 * Trata o Webhook 'bill_paid'
+	 * A fatura pode estar relacionada a uma assinatura ou uma compra avulsa
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function processBillPaid($data)
+	{
+		if (! ($order = $this->orderHandler->getOrder($data))) {
+			$this->logger->log(sprintf(
+				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
+				$data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
+			return false;
+		}
+		return $this->orderHandler->createInvoice($order);
+	}
 }
