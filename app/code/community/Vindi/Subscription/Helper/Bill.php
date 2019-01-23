@@ -55,7 +55,7 @@ class Vindi_Subscription_Helper_Bill
 	 *
 	 * @param array $data
 	 *
-	 * @return bool
+	 * @return array
 	 */       
 	public function loadBillData($data)
 	{
@@ -95,7 +95,8 @@ class Vindi_Subscription_Helper_Bill
 	 */
 	public function processBillPaid($data)
 	{
-		if (! ($order = $this->orderHandler->getOrder($data))) {
+		$order = $this->orderHandler->getOrder($data);
+		if (! $order) {
 			$this->logger->log(sprintf(
 				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
 				$data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);

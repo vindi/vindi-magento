@@ -50,8 +50,9 @@ class Vindi_Subscription_Helper_Order
 	{
 		/** @var Vindi_Subscription_Helper_API $api */
 		$api = Mage::helper('vindi_subscription/api');
+		$bill = $api->getBill($billId);
 
-		if (! ($bill = $api->getBill($billId))) {
+		if (! $bill) {
 			return false;
 		}
 		return $this->getOrder(compact('bill'));
@@ -70,11 +71,10 @@ class Vindi_Subscription_Helper_Order
 			return false;
 		}
 
-		if (isset($data['bill']['subscription']['id'])
-			&& ($orderCode = filter_var($data['bill']['subscription']['id'],
-				FILTER_SANITIZE_NUMBER_INT))) {
-				$order = $this->getSubscriptionOrder($orderCode, $data['bill']['period']['cycle']);
-				$orderType = 'assinatura';
+		$orderCode = filter_var($data['bill']['subscription']['id'], FILTER_SANITIZE_NUMBER_INT);
+		if (isset($data['bill']['subscription']['id']) && $orderCode) {
+			$order = $this->getSubscriptionOrder($orderCode, $data['bill']['period']['cycle']);
+			$orderType = 'assinatura';
 		}
 		else {
 			$orderCode = $data['bill']['id'];
@@ -100,13 +100,14 @@ class Vindi_Subscription_Helper_Order
 	 */
 	public function createInvoice($order)
 	{
-		if (($orderId = $order->getId()) && $order->canInvoice()) {
+		$orderId = $order->getId();
+		if ($orderId && $order->canInvoice()) {
 			$this->logger->log('Gerando fatura para o pedido: ' . $orderId);
 			$this->updateToSuccess($order);
 			$this->logger->log('Fatura gerada com sucesso.');
 			return true;
 		}
-		elseif ($orderId = $order->getId()) { 
+		elseif ($orderId) { 
 			$this->logger->log('Impossível gerar fatura para o pedido ' . $orderId, 4);
 		}
 		return false;
@@ -126,8 +127,8 @@ class Vindi_Subscription_Helper_Order
 
 		Mage::getModel('core/resource_transaction')
 			->addObject($invoice)
-			->addObject($invoice
-			->getOrder())->save();
+			->addObject($invoice->getOrder())
+			->save();
 		$invoice->sendEmail(true);
 		$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true,
 			'O pagamento foi confirmado e o pedido está sendo processado.', true);
@@ -143,7 +144,8 @@ class Vindi_Subscription_Helper_Order
 	 */
 	public function getSubscriptionOrder($subscriptionId, $subscriptionPeriod)
 	{
-		return Mage::getModel('sales/order')->getCollection()
+		return Mage::getModel('sales/order')
+		    ->getCollection()
 			->addAttributeToSelect('*')
 			->addFieldToFilter('vindi_subscription_id', $subscriptionId)
 			->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
@@ -159,7 +161,8 @@ class Vindi_Subscription_Helper_Order
 	 */
 	private function getSingleOrder($billId)
 	{
-		return Mage::getModel('sales/order')->getCollection()
+		return Mage::getModel('sales/order')
+		    ->getCollection()
 			->addAttributeToSelect('*')
 			->addFieldToFilter('vindi_bill_id', $billId)
 			->getFirstItem();
@@ -203,17 +206,13 @@ class Vindi_Subscription_Helper_Order
 		$order->setGrandTotal($vindiData['bill']['amount']);
 		$order->save();
 
-		if(Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment'))
-		{
-			foreach ($charges as $charge)
-			{
-				if ($charge['payment_method']['type'] == 'PaymentMethod::BankSlip')
-				{
+		if (Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment')) {
+			foreach ($charges as $charge) {
+				if ($charge['payment_method']['type'] == 'PaymentMethod::BankSlip') {
 					$order->addStatusHistoryComment(sprintf(
 						'<a target="_blank" href="%s">Clique aqui</a> para visualizar o boleto.',
 						$charge['print_url']
-					))
-					->setIsVisibleOnFront(true);
+					))->setIsVisibleOnFront(true);
 					$order->save();
 				}
 			}
@@ -306,8 +305,7 @@ class Vindi_Subscription_Helper_Order
 			$magentoProduct = Mage::getModel('catalog/product')
 				->loadByAttribute('vindi_product_id', $item['product']['id']);
 
-			if (! $magentoProduct)
-			{
+			if (! $magentoProduct) {
 				$this->logger->log(sprintf('O produto com ID Vindi #%s não existe no Magento.',
 					$item['product']['id']), 5);
 			}

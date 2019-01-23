@@ -22,8 +22,9 @@ class Vindi_Subscription_Helper_Validator
 	public function validateChargeWebhook($data)
 	{
 		$charge = $data['charge'];
-
-		if (! ($order = $this->orderHandler->getOrderFromVindi($charge['bill']['id']))) {
+		$order = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
+		
+		if (! $order) {
 			$this->logger->log('Pedido não encontrado.', 4);
 			return false;
 		}
