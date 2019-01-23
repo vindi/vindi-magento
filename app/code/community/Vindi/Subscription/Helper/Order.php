@@ -229,11 +229,11 @@ class Vindi_Subscription_Helper_Order
 	 */
 	private function loadShipping($quote, $vindiData, $shippingMethod)
 	{
-		// get shipping method
+		// Carrega todos os métodos de entrega
 		$activedShippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')
 			->getActivedShippingMethodsValues();
 
-		// verify if current shipping method is active
+		// Verifica se o método recebido está ativo
 		if (! in_array($shippingMethod, $activedShippingMethods)) {
 			$oldShippingMethod = $shippingMethod;
 			$shippingMethod = Mage::getStoreConfig(
@@ -244,7 +244,7 @@ class Vindi_Subscription_Helper_Order
 			unset($oldShippingMethod);
 		}
 
-		// quote shipping method
+		// Carrega os valores padrões do método de entrega
 		$quote->getShippingAddress()
 			->setShippingMethod($shippingMethod)
 			->setCollectShippingRates(true)
@@ -254,7 +254,7 @@ class Vindi_Subscription_Helper_Order
 		if (isset($vindiData['shipping']['pricing_schema']['price'])
 			&& !empty($vindiData['shipping']['pricing_schema']['price'])) {
 
-			// set shipping price
+			// Seta o novo valor do frete
 			$billShippingPrice = $vindiData['shipping']['pricing_schema']['price'];
 
 			$quote->setPrice($billShippingPrice)

@@ -39,8 +39,8 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 		}
 
 		switch ($type) {
-			// the webhook is being called before Order is actually placed.
-			// Sorry for this, not going to use queues for now, so the solution is to use sleep().
+			// O Webhook pode ser recebido antes que o pedido seja criado.
+			// Para contornar é possível utilizar o sleep() ou criar filas.
 
 		case 'test':
 			$this->logger->log('Evento de teste do webhook.');

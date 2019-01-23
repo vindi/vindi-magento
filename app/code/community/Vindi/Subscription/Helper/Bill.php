@@ -26,7 +26,7 @@ class Vindi_Subscription_Helper_Bill
 
 		$order = $this->orderHandler->createOrder($lastOrder, $vindiData);
 
-		// remove inactive products
+		// Remove os produtos inativos
 		$this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
 
 		if (!$order) {
