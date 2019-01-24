@@ -47,7 +47,8 @@ class Vindi_Subscription_Helper_Bill
 	{
 		$currentPeriod = $data['bill']['period']['cycle'];
 		$subscriptionId = $data['bill']['subscription']['id'];
-		return $this->orderHandler->getSubscriptionOrder($subscriptionId, $currentPeriod - 1);
+		return $this->orderHandler->getOrderFromMagento('subscription',
+			$subscriptionId, $currentPeriod - 1);
 	}
 
 	/**
@@ -74,13 +75,13 @@ class Vindi_Subscription_Helper_Bill
 		foreach ($data['bill']['bill_items'] as $billItem) {
 			if ($billItem['product']['code'] == 'frete') {
 				$vindiData['shipping'] = $billItem;
+				continue;
 			}
-			elseif ($billItem['product']['code'] == 'taxa') {
+			if ($billItem['product']['code'] == 'taxa') {
 				$vindiData['taxes'][] = $billItem;
+				continue;
 			}
-			else {
-				$vindiData['products'][] = $billItem;
-			}
+			$vindiData['products'][] = $billItem;
 		}
 		return $vindiData;
 	}

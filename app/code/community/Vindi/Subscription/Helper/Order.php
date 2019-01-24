@@ -73,13 +73,14 @@ class Vindi_Subscription_Helper_Order
 
 		$orderCode = filter_var($data['bill']['subscription']['id'], FILTER_SANITIZE_NUMBER_INT);
 		if (isset($data['bill']['subscription']['id']) && $orderCode) {
-			$order = $this->getSubscriptionOrder($orderCode, $data['bill']['period']['cycle']);
 			$orderType = 'assinatura';
+			$order = $this->getOrderFromMagento($orderType,
+				$orderCode, $data['bill']['period']['cycle']);
 		}
 		else {
 			$orderCode = $data['bill']['id'];
-			$order = $this->getSingleOrder($orderCode);
 			$orderType = 'fatura';
+			$order = $this->getOrderFromMagento($orderType, $orderCode);
 		}
 
 		if (!$order || !$order->getId()) {
@@ -136,35 +137,26 @@ class Vindi_Subscription_Helper_Order
 	}
 
 	/**
-	 * Busca um pedido referente a uma assinatura Vindi
-	 *
-	 * @param int $subscriptionId, int $subscriptionPeriod
-	 *
-	 * @return Mage_Sales_Model_Order
-	 */
-	public function getSubscriptionOrder($subscriptionId, $subscriptionPeriod)
-	{
-		return Mage::getModel('sales/order')
-		    ->getCollection()
-			->addAttributeToSelect('*')
-			->addFieldToFilter('vindi_subscription_id', $subscriptionId)
-			->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
-			->getFirstItem();
-	}
-
-	/**
-	 * Busca um pedido referente a uma fatura Vindi
+	 * Busca um pedido referente a uma fatura ou assinatura Vindi
 	 *
 	 * @param int $billId
 	 *
 	 * @return Mage_Sales_Model_Order
 	 */
-	private function getSingleOrder($billId)
+	private function getOrderFromMagento($type, $vindiId, $subscriptionPeriod = null)
 	{
+		if ($type == 'fatura') {
+			return Mage::getModel('sales/order')
+			    ->getCollection()
+				->addAttributeToSelect('*')
+				->addFieldToFilter('vindi_bill_id', $vindiId)
+				->getFirstItem();
+		}
 		return Mage::getModel('sales/order')
 		    ->getCollection()
 			->addAttributeToSelect('*')
-			->addFieldToFilter('vindi_bill_id', $billId)
+			->addFieldToFilter('vindi_subscription_id', $vindiId)
+			->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
 			->getFirstItem();
 	}
 
@@ -184,7 +176,7 @@ class Vindi_Subscription_Helper_Order
 		foreach ($itens as $item) {
 			if (!in_array($item->getSku(), $codes)) {
 				$item->delete();
-				$order->setTotalItemCount(count($items) - 1);
+				$order->setTotalItemCount(count($itens) - 1);
 				$order->setSubtotal($order->getSubtotal() - $item->getPrice());
 				$order->save();
 			}
@@ -229,11 +221,11 @@ class Vindi_Subscription_Helper_Order
 	private function loadShipping($quote, $vindiData, $shippingMethod)
 	{
 		// Carrega todos os métodos de entrega
-		$activedShippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')
+		$shippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')
 			->getActivedShippingMethodsValues();
 
 		// Verifica se o método recebido está ativo
-		if (! in_array($shippingMethod, $activedShippingMethods)) {
+		if (! in_array($shippingMethod, $shippingMethods)) {
 			$oldShippingMethod = $shippingMethod;
 			$shippingMethod = Mage::getStoreConfig(
 				'vindi_subscription/general/default_shipping_method');
@@ -371,12 +363,12 @@ class Vindi_Subscription_Helper_Order
 
 			if ($e->getMessage()) {
 				$this->logger->log($e->getMessage(), 5);
+				return false;
 			}
-			else {
-				$messages = $order->getSession()->getMessages(true);
-				foreach ($messages->getItems() as $message) {
-					$this->logger->log($message->getText(), 5);
-				}
+
+			$messages = $order->getSession()->getMessages(true);
+			foreach ($messages->getItems() as $message) {
+				$this->logger->log($message->getText(), 5);
 			}
 			return false;
 		}
