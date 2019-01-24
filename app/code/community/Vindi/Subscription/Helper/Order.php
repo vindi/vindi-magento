@@ -67,7 +67,7 @@ class Vindi_Subscription_Helper_Order
 	 */
 	public function getOrder($data)
 	{
-		if (!isset($data['bill'])) {
+		if (! isset($data['bill'])) {
 			return false;
 		}
 
@@ -78,12 +78,12 @@ class Vindi_Subscription_Helper_Order
 				$orderCode, $data['bill']['period']['cycle']);
 		}
 		else {
-			$orderCode = $data['bill']['id'];
+			$orderCode = filter_var($data['bill']['id'], FILTER_SANITIZE_NUMBER_INT);
 			$orderType = 'fatura';
 			$order = $this->getOrderFromMagento($orderType, $orderCode);
 		}
 
-		if (!$order || !$order->getId()) {
+		if (! $order || ! $order->getId()) {
 			$this->logger->log(sprintf('Nenhum pedido encontrado para a "%s": %d.', $orderType,
 				$orderCode));
 			return false;
@@ -174,7 +174,7 @@ class Vindi_Subscription_Helper_Order
 
 		$itens = $order->getAllItems();
 		foreach ($itens as $item) {
-			if (!in_array($item->getSku(), $codes)) {
+			if (! in_array($item->getSku(), $codes)) {
 				$item->delete();
 				$order->setTotalItemCount(count($itens) - 1);
 				$order->setSubtotal($order->getSubtotal() - $item->getPrice());
@@ -243,7 +243,7 @@ class Vindi_Subscription_Helper_Order
 			->collectTotals();
 
 		if (isset($vindiData['shipping']['pricing_schema']['price'])
-			&& !empty($vindiData['shipping']['pricing_schema']['price'])) {
+			&& ! empty($vindiData['shipping']['pricing_schema']['price'])) {
 
 			// Seta o novo valor do frete
 			$billShippingPrice = $vindiData['shipping']['pricing_schema']['price'];

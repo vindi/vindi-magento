@@ -26,13 +26,14 @@ class Vindi_Subscription_Helper_Bill
 
 		$order = $this->orderHandler->createOrder($lastOrder, $vindiData);
 
-		// Remove os produtos inativos
-		$this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
-
-		if (!$order) {
+		if (! $order) {
 			$this->logger->log('Impossível gerar novo pedido!', 4);
 			return false;
 		}
+
+		// Remove os produtos inativos
+		$this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
+
 		return $this->orderHandler->renewalOrder($order, $vindiData);
 	}
 
