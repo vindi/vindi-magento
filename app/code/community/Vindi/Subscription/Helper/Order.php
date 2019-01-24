@@ -123,7 +123,6 @@ class Vindi_Subscription_Helper_Order
 	{
 		$invoice = $order->prepareInvoice();
 		$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
-		$invoice->setBaseGrandTotal($invoice->getGrandTotal());
 		$invoice->register();
 
 		Mage::getModel('core/resource_transaction')
@@ -160,29 +159,6 @@ class Vindi_Subscription_Helper_Order
 			->getFirstItem();
 	}
 
-	/**
-	 * Sincroniza os itens da fatura Vindi com os itens do pedido Magento
-	 *
-	 * @param Mage_Sales_Model_Order $order, array $vindiData
-	 */
-	public function updateProductsList($order, $vindiData)
-	{
-		$codes = [];
-		foreach ($vindiData['products'] as $product) {
-			$codes[] = $product['product']['code'];
-		}
-
-		$itens = $order->getAllItems();
-		foreach ($itens as $item) {
-			if (!in_array($item->getSku(), $codes)) {
-				$item->delete();
-				$order->setTotalItemCount(count($itens) - 1);
-				$order->setSubtotal($order->getSubtotal() - $item->getPrice());
-				$order->save();
-			}
-		}
-	}
-
 	/*
 	 * Atualiza o pedido inserindo as informações refentes a renovação de assinatura Vindi
 	 * 
@@ -194,8 +170,6 @@ class Vindi_Subscription_Helper_Order
 	{
 		$order->setVindiSubscriptionId($vindiData['bill']['subscription']);
 		$order->setVindiSubscriptionPeriod($vindiData['bill']['cycle']);
-		$order->setBaseGrandTotal($vindiData['bill']['amount']);
-		$order->setGrandTotal($vindiData['bill']['amount']);
 		$order->save();
 
 		if (Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment')) {
@@ -270,23 +244,6 @@ class Vindi_Subscription_Helper_Order
 	}
 
 	/*
-	 * Carrega os dados e valores referentes as Taxas do pedido
-	 *
-	 * @param Mage_Sales_Model_Quote $quote, array $vindiData
-	 */
-	private function loadTaxes($quote, $vindiData)
-	{
-		if (isset(reset($vindiData['taxes'])['pricing_schema']['price'])
-			&& ! empty(reset($vindiData['taxes'])['pricing_schema']['price'])) {
-			$quote->getShippingAddress()->setTaxAmount(
-				reset($vindiData['taxes'])['pricing_schema']['price']);
-		}
-
-		$quote->collectTotals()
-			->save();
-	}
-
-	/*
 	 * Carrega os dados e valores referentes aos Produtos do pedido
 	 *
 	 * @param Mage_Sales_Model_Quote $quote, array $vindiData
@@ -348,9 +305,6 @@ class Vindi_Subscription_Helper_Order
 
 		// Add Product values
 		$this->loadProducts($quote, $vindiData);
-
-		// Add Tax values
-		$this->loadTaxes($quote, $vindiData);
 
 		$session = Mage::getSingleton('core/session');
 		$session->setData('vindi_is_reorder', true);
