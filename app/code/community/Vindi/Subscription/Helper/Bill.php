@@ -30,10 +30,6 @@ class Vindi_Subscription_Helper_Bill
 			$this->logger->log('Impossível gerar novo pedido!', 4);
 			return false;
 		}
-
-		// Remove os produtos inativos
-		$this->orderHandler->updateProductsList($order, $vindiData, $bill['charges']);
-
 		return $this->orderHandler->renewalOrder($order, $vindiData);
 	}
 
@@ -64,22 +60,17 @@ class Vindi_Subscription_Helper_Bill
 		$vindiData = [
 			'bill'     => [
 				'id'           => $data['bill']['id'],
-				'amount'       => $data['bill']['amount'],
+				'amount'       => $data['bill']['amout'],
 				'subscription' => $data['bill']['subscription']['id'],
 				'cycle'        => $data['bill']['period']['cycle']
 			],
 			'products' => [],
 			'shipping' => [],
-			'taxes'    => [],
 		];
 
 		foreach ($data['bill']['bill_items'] as $billItem) {
 			if ($billItem['product']['code'] == 'frete') {
 				$vindiData['shipping'] = $billItem;
-				continue;
-			}
-			if ($billItem['product']['code'] == 'taxa') {
-				$vindiData['taxes'][] = $billItem;
 				continue;
 			}
 			$vindiData['products'][] = $billItem;
