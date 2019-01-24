@@ -122,7 +122,6 @@ class Vindi_Subscription_Helper_Order
 	{
 		$invoice = $order->prepareInvoice();
 		$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
-		$invoice->setBaseGrandTotal($invoice->getGrandTotal());
 		$invoice->register();
 
 		Mage::getModel('core/resource_transaction')
