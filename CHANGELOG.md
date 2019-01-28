@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.4.0 - 29/01/2019](https://github.com/vindi/vindi-magento/releases/tag/1.4.0)
+
+### Corrigido
+- Corrige sincronização de produtos na assinatura Vindi
+- Corrige preço do pedido que não refletia o preço da fatura
+
 ## [1.3.4 - 11/01/2019](https://github.com/vindi/vindi-magento/releases/tag/1.3.4)
 
 ### Ajustado
