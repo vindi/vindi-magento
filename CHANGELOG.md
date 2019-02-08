@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.4.1 - 11/02/2019](https://github.com/vindi/vindi-magento/releases/tag/1.4.1)
+
+### Corrigido
+- Corrige mensagem no checkout para exibição do boleto bancário
+
+
 ## [1.4.0 - 29/01/2019](https://github.com/vindi/vindi-magento/releases/tag/1.4.0)
 
 ### Corrigido
