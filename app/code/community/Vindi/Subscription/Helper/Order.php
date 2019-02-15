@@ -143,7 +143,7 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @return Mage_Sales_Model_Order
 	 */
-	private function getOrderFromMagento($type, $vindiId, $subscriptionPeriod = null)
+	public function getOrderFromMagento($type, $vindiId, $subscriptionPeriod = null)
 	{
 		if ($type == 'fatura') {
 			return Mage::getModel('sales/order')
@@ -152,12 +152,18 @@ class Vindi_Subscription_Helper_Order
 				->addFieldToFilter('vindi_bill_id', $vindiId)
 				->getFirstItem();
 		}
-		return Mage::getModel('sales/order')
-		    ->getCollection()
-			->addAttributeToSelect('*')
-			->addFieldToFilter('vindi_subscription_id', $vindiId)
-			->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
-			->getFirstItem();
+    $orders = Mage::getModel('sales/order')
+    		->getCollection()
+    	->addAttributeToSelect('*')
+    	->addFieldToFilter('vindi_subscription_id', $vindiId);
+    
+    $lastPeriod = $orders->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
+    		->getFirstItem();
+
+    if ($lastPeriod->getData()) {
+    		return $lastPeriod;
+    }
+    return $orders->getFirstItem();;
 	}
 
 	/**
