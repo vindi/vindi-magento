@@ -152,18 +152,18 @@ class Vindi_Subscription_Helper_Order
 				->addFieldToFilter('vindi_bill_id', $vindiId)
 				->getFirstItem();
 		}
-    $orders = Mage::getModel('sales/order')
+	    $orders = Mage::getModel('sales/order')
     		->getCollection()
-    	->addAttributeToSelect('*')
-    	->addFieldToFilter('vindi_subscription_id', $vindiId);
-    
-    $lastPeriod = $orders->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
+	    	->addAttributeToSelect('*')
+	    	->addFieldToFilter('vindi_subscription_id', $vindiId);
+	    
+	    $lastPeriod = $orders->addFieldToFilter('vindi_subscription_period', $subscriptionPeriod)
     		->getFirstItem();
 
-    if ($lastPeriod->getData()) {
+	    if ($lastPeriod->getData()) {
     		return $lastPeriod;
-    }
-    return $orders->getFirstItem();;
+	    }
+	    return $orders->getFirstItem();;
 	}
 
 	/**
