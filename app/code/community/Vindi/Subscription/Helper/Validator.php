@@ -81,10 +81,7 @@ class Vindi_Subscription_Helper_Validator
 			return false;
 		}
 
-		if (isset($bill['subscription']['id'])
-			&& $bill['period']['cycle']
-			&& ($lastPeriodOrder = $this->billHandler->getLastPeriod($data))
-			&& $lastPeriodOrder->getId()) {
+		if (isset($bill['subscription']['id']) && $bill['period']['cycle']) {
 			$this->billHandler->processBillCreated($data);
 			return true;
 		}

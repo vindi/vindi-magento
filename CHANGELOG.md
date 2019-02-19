@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.4.2 - 19/02/2019](https://github.com/vindi/vindi-magento/releases/tag/1.4.2)
+
+### Corrigido
+- Corrige comportamento da renovação de assinaturas para o Webhook de Fatura Criada
+
+
 ## [1.4.1 - 11/02/2019](https://github.com/vindi/vindi-magento/releases/tag/1.4.1)
 
 ### Corrigido
