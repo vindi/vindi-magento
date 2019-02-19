@@ -9,7 +9,7 @@
     <sections>
         <vindi_subscription translate="label" module="vindi_subscription">
             <label>
-                <![CDATA[Vindi Assinaturas]]></label>
+                <![CDATA[Vindi - Configurações]]></label>
             <tab>vindi</tab>
             <frontend_type>text</frontend_type>
             <sort_order>10</sort_order>
