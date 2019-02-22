@@ -152,17 +152,4 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 
         return $this;
     }
-
-    /**
-     * @param string $errorMsg
-     *
-     * @return bool
-     * @throws \Mage_Core_Exception
-     */
-    private function error($errorMsg)
-    {
-        Mage::throwException($errorMsg);
-
-        return false;
-    }
 }
