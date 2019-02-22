@@ -93,4 +93,14 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    protected function getPaymentMethodCode()
+    {
+        // TODO fix it to proper method code
+        return $this->vindiMethodCode;
+    }
+}
 }

@@ -8,6 +8,11 @@ class Vindi_Subscription_Model_BankSlip extends Vindi_Subscription_Model_Payment
     protected $_code = 'vindi_bankslip';
 
     /**
+     * @var string
+     */
+    protected $vindiMethodCode = 'bank_slip';
+
+    /**
      * @var bool
      */
     protected $_canSaveCc = false;
@@ -76,14 +81,5 @@ class Vindi_Subscription_Model_BankSlip extends Vindi_Subscription_Model_Payment
 
         return Mage::getStoreConfig('payment/vindi_bankslip/active')
         && $api->acceptBankSlip();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPaymentMethodCode()
-    {
-        // TODO fix it to proper method code
-        return 'bank_slip';
     }
 }

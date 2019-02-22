@@ -10,6 +10,11 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
     /**
      * @var string
      */
+    protected $vindiMethodCode = 'credit_card';
+
+    /**
+     * @var string
+     */
     protected $save_method = 'use_saved_cc';
 
     /**
@@ -230,14 +235,5 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
         Mage::throwException($errorMsg);
 
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPaymentMethodCode()
-    {
-        // TODO fix it to proper method code
-        return 'credit_card';
     }
 }

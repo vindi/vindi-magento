@@ -14,6 +14,11 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
     /**
      * @var string
      */
+    protected $vindiMethodCode = 'debit_card';
+
+    /**
+     * @var string
+     */
     protected $save_method = 'use_saved_dc';
 
     /**
@@ -172,14 +177,5 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
         Mage::throwException($errorMsg);
 
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPaymentMethodCode()
-    {
-        // TODO fix it to proper method code
-        return 'debit_card';
     }
 }
