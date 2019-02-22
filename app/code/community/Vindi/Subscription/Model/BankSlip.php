@@ -1,9 +1,7 @@
 <?php
 
-class Vindi_Subscription_Model_BankSlip extends Mage_Payment_Model_Method_Abstract
+class Vindi_Subscription_Model_BankSlip extends Vindi_Subscription_Model_PaymentMethod
 {
-    use Vindi_Subscription_Trait_PaymentMethod;
-
     /**
      * @var string
      */

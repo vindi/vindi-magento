@@ -1,8 +1,7 @@
 <?php
 
-trait Vindi_Subscription_Trait_PaymentMethod
+trait Vindi_Subscription_Trait_PaymentProcessor
 {
-
     /**
      * @param string $paymentAction
      * @param object $stateObject
@@ -356,7 +355,6 @@ trait Vindi_Subscription_Trait_PaymentMethod
                 return false;
             }
         }
-
         return true;
     }
 }

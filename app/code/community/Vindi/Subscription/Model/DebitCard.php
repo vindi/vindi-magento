@@ -1,9 +1,7 @@
 <?php
 
-class Vindi_Subscription_Model_DebitCard extends Mage_Payment_Model_Method_Cc
+class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_PaymentMethod
 {
-    use Vindi_Subscription_Trait_PaymentMethod;
-
     public static $METHOD = "DebitCard";
     /**
      * @var string
