@@ -9,6 +9,11 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
     protected $_code = 'vindi_debitcard';
 
     /**
+     * @var string
+     */
+    protected $save_method = 'use_saved_dc';
+
+    /**
      * @var bool
      */
     protected $_isGateway = true;
@@ -72,45 +77,6 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
      * @var string
      */
     protected $_infoBlockType = 'vindi_subscription/info_dc';
-
-    /**
-     * Assign data to info model instance
-     *
-     * @param   mixed $data
-     *
-     * @return  Mage_Payment_Model_Method_Abstract
-     */
-    public function assignData($data)
-    {
-        if (! ($data instanceof Varien_Object)) {
-            $data = new Varien_Object($data);
-        }
-        $info = $this->getInfoInstance();
-        $quote = $info->getQuote();
-
-        if ($data->getDcChoice() === 'saved') {
-            $info->setAdditionalInformation('PaymentMethod', $this->_code)
-                ->setAdditionalInformation('use_saved_dc', true);
-
-            return $this;
-        }
-
-        $info->setCcType($data->getDcType())
-            ->setCcTypeName($data->getDcTypeName())
-            ->setCcOwner($data->getDcOwner())
-            ->setCcLast4(substr($data->getDcNumber(), -4))
-            ->setCcNumber($data->getDcNumber())
-            ->setCcCid($data->getDcCid())
-            ->setCcExpMonth($data->getDcExpMonth())
-            ->setCcExpYear($data->getDcExpYear())
-            ->setCcSsIssue($data->getDcSsIssue())
-            ->setCcSsStartMonth($data->getDcSsStartMonth())
-            ->setCcSsStartYear($data->getDcSsStartYear())
-            ->setAdditionalInformation('PaymentMethod', $this->_code)
-            ->setAdditionalInformation('use_saved_dc', false);
-
-        return $this;
-    }
 
     /**
      * @param string $paymentAction

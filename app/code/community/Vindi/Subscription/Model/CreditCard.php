@@ -8,6 +8,11 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
     protected $_code = 'vindi_creditcard';
 
     /**
+     * @var string
+     */
+    protected $save_method = 'use_saved_cc';
+
+    /**
      * @var bool
      */
     protected $_isGateway = true;
@@ -71,46 +76,6 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
      * @var string
      */
     protected $_infoBlockType = 'vindi_subscription/info_cc';
-
-    /**
-     * Assign data to info model instance
-     *
-     * @param   mixed $data
-     *
-     * @return  Mage_Payment_Model_Method_Abstract
-     */
-    public function assignData($data)
-    {
-        if (! ($data instanceof Varien_Object)) {
-            $data = new Varien_Object($data);
-        }
-        $info = $this->getInfoInstance();
-        $quote = $info->getQuote();
-
-        $info->setAdditionalInformation('installments', $data->getCcInstallments());
-
-        if ($data->getCcChoice() === 'saved') {
-            $info->setAdditionalInformation('PaymentMethod', $this->_code)
-                ->setAdditionalInformation('use_saved_cc', true);
-
-            return $this;
-        }
-
-        $info->setCcType($data->getCcType())
-            ->setCcOwner($data->getCcOwner())
-            ->setCcLast4(substr($data->getCcNumber(), -4))
-            ->setCcNumber($data->getCcNumber())
-            ->setCcCid($data->getCcCid())
-            ->setCcExpMonth($data->getCcExpMonth())
-            ->setCcExpYear($data->getCcExpYear())
-            ->setCcSsIssue($data->getCcSsIssue())
-            ->setCcSsStartMonth($data->getCcSsStartMonth())
-            ->setCcSsStartYear($data->getCcSsStartYear())
-            ->setAdditionalInformation('PaymentMethod', $this->_code)
-            ->setAdditionalInformation('use_saved_cc', false);
-
-        return $this;
-    }
 
     /**
      * @param string $paymentAction
