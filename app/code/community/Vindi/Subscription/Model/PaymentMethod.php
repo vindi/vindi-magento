@@ -102,5 +102,17 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
         // TODO fix it to proper method code
         return $this->vindiMethodCode;
     }
-}
+
+    /**
+     * Check whether payment method can be used
+     *
+     * @param Mage_Sales_Model_Quote|null $quote
+     *
+     * @return bool
+     */
+    public function isAvailable($quote = null)
+    {
+        return Mage::getStoreConfig('payment/' . $this->_code . '/active')
+        && Mage::helper('vindi_subscription')->getKey();
+    }
 }

@@ -66,20 +66,4 @@ class Vindi_Subscription_Model_BankSlip extends Vindi_Subscription_Model_Payment
 
         return $this;
     }
-
-    /**
-     * Check whether payment method can be used
-     *
-     * @param Mage_Sales_Model_Quote|null $quote
-     *
-     * @return bool
-     */
-    public function isAvailable($quote = null)
-    {
-        /** @var Vindi_Subscription_Helper_API $api */
-        $api = Mage::helper('vindi_subscription/api');
-
-        return Mage::getStoreConfig('payment/vindi_bankslip/active')
-        && $api->acceptBankSlip();
-    }
 }

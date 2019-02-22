@@ -162,19 +162,6 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
     }
 
     /**
-     * Check whether payment method can be used
-     *
-     * @param Mage_Sales_Model_Quote|null $quote
-     *
-     * @return bool
-     */
-    public function isAvailable($quote = null)
-    {
-        return Mage::getStoreConfig('payment/vindi_creditcard/active')
-        && Mage::helper('vindi_subscription')->getKey();
-    }
-
-    /**
      * Validate payment method information object
      *
      * @return  Mage_Payment_Model_Method_Abstract
