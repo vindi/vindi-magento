@@ -2,6 +2,9 @@
 
 class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_PaymentMethod
 {
+    /**
+     * @var string
+     */
     public static $METHOD = "DebitCard";
     /**
      * @var string
@@ -12,56 +15,6 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
      * @var string
      */
     protected $save_method = 'use_saved_dc';
-
-    /**
-     * @var bool
-     */
-    protected $_isGateway = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canAuthorize = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canCapture = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canCapturePartial = false;
-
-    /**
-     * @var bool
-     */
-    protected $_canRefund = false;
-
-    /**
-     * @var bool
-     */
-    protected $_canVoid = false;
-
-    /**
-     * @var bool
-     */
-    protected $_canUseInternal = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canUseCheckout = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canUseForMultishipping = false;
-
-    /**
-     * @var bool
-     */
-    protected $_isInitializeNeeded = true;
 
     /**
      * @var bool

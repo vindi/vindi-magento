@@ -15,56 +15,6 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
     /**
      * @var bool
      */
-    protected $_isGateway = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canAuthorize = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canCapture = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canCapturePartial = false;
-
-    /**
-     * @var bool
-     */
-    protected $_canRefund = false;
-
-    /**
-     * @var bool
-     */
-    protected $_canVoid = false;
-
-    /**
-     * @var bool
-     */
-    protected $_canUseInternal = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canUseCheckout = true;
-
-    /**
-     * @var bool
-     */
-    protected $_canUseForMultishipping = false;
-
-    /**
-     * @var bool
-     */
-    protected $_isInitializeNeeded = true;
-
-    /**
-     * @var bool
-     */
     protected $_canSaveCc = false;
 
     /**

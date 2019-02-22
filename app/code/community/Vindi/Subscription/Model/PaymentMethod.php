@@ -3,6 +3,56 @@
 class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
 {
     use Vindi_Subscription_Trait_PaymentProcessor;
+
+    /**
+     * @var bool
+     */
+    protected $_isGateway = true;
+
+    /**
+     * @var bool
+     */
+    protected $_canAuthorize = true;
+
+    /**
+     * @var bool
+     */
+    protected $_canCapture = true;
+
+    /**
+     * @var bool
+     */
+    protected $_canCapturePartial = false;
+
+    /**
+     * @var bool
+     */
+    protected $_canRefund = false;
+
+    /**
+     * @var bool
+     */
+    protected $_canVoid = false;
+
+    /**
+     * @var bool
+     */
+    protected $_canUseInternal = true;
+
+    /**
+     * @var bool
+     */
+    protected $_canUseCheckout = true;
+
+    /**
+     * @var bool
+     */
+    protected $_canUseForMultishipping = false;
+
+    /**
+     * @var bool
+     */
+    protected $_isInitializeNeeded = true;
     
     /**
      * Assign data to info model instance
