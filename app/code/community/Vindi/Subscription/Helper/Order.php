@@ -2,12 +2,6 @@
 
 class Vindi_Subscription_Helper_Order
 {
-	protected $logger;
-
-	public function __construct() {
-		$this->logger = Mage::helper('vindi_subscription/logger');
-	}
-
 	/**
 	 * Altera o status de um pedido para Cancelado
 	 *
@@ -84,7 +78,7 @@ class Vindi_Subscription_Helper_Order
 		}
 
 		if (! $order || ! $order->getId()) {
-			$this->logger->log(sprintf('Nenhum pedido encontrado para a "%s": %d.', $orderType,
+			$this->logWebhook(sprintf('Nenhum pedido encontrado para a "%s": %d.', $orderType,
 				$orderCode));
 			return false;
 		}
@@ -103,13 +97,13 @@ class Vindi_Subscription_Helper_Order
 	{
 		$orderId = $order->getId();
 		if ($orderId && $order->canInvoice()) {
-			$this->logger->log('Gerando fatura para o pedido: ' . $orderId);
+			$this->logWebhook('Gerando fatura para o pedido: ' . $orderId);
 			$this->updateToSuccess($order);
-			$this->logger->log('Fatura gerada com sucesso.');
+			$this->logWebhook('Fatura gerada com sucesso.');
 			return true;
 		}
 		elseif ($orderId) { 
-			$this->logger->log('Impossível gerar fatura para o pedido ' . $orderId, 4);
+			$this->logWebhook('Impossível gerar fatura para o pedido ' . $orderId, 4);
 		}
 		return false;
 	}
@@ -215,7 +209,7 @@ class Vindi_Subscription_Helper_Order
 				}
 			}
 		}
-		$this->logger->log(sprintf('Novo pedido gerado: %s.', $order->getId()));
+		$this->logWebhook(sprintf('Novo pedido gerado: %s.', $order->getId()));
 		return true;
 	}
 
@@ -235,7 +229,7 @@ class Vindi_Subscription_Helper_Order
 			$oldShippingMethod = $shippingMethod;
 			$shippingMethod = Mage::getStoreConfig(
 				'vindi_subscription/general/default_shipping_method');
-			$this->logger->log(sprintf(
+			$this->logWebhook(sprintf(
 				"Erro ao utilizar o método de envio %s alterado para o método padrão %s.",
 				$oldShippingMethod, $shippingMethod));
 			unset($oldShippingMethod);
@@ -304,13 +298,13 @@ class Vindi_Subscription_Helper_Order
 				->loadByAttribute('vindi_product_id', $item['product']['id']);
 
 			if (! $magentoProduct) {
-				$this->logger->log(sprintf('O produto com ID Vindi #%s não existe no Magento.',
+				$this->logWebhook(sprintf('O produto com ID Vindi #%s não existe no Magento.',
 					$item['product']['id']), 5);
 			}
 			elseif (number_format($magentoProduct->getPrice(), 2)
 				!== number_format($item['pricing_schema']['price'], 2)) {
 
-				$this->logger->log(sprintf("Divergencia de valores na fatura #%s:  " . 
+				$this->logWebhook(sprintf("Divergencia de valores na fatura #%s:  " . 
 					"produto %s: ID Magento #%s , ID Vindi #%s: " . 
 					"Valor Magento R$ %s , Valor Vindi R$ %s",
 					$vindiData['bill']['id'],
@@ -365,16 +359,16 @@ class Vindi_Subscription_Helper_Order
 			$order = $order->createOrder();
 		}
 		catch (Exception $e) {
-			$this->logger->log("Erro ao criar pedido!");
+			$this->logWebhook("Erro ao criar pedido!");
 
 			if ($e->getMessage()) {
-				$this->logger->log($e->getMessage(), 5);
+				$this->logWebhook($e->getMessage(), 5);
 				return false;
 			}
 
 			$messages = $order->getSession()->getMessages(true);
 			foreach ($messages->getItems() as $message) {
-				$this->logger->log($message->getText(), 5);
+				$this->logWebhook($message->getText(), 5);
 			}
 			return false;
 		}
