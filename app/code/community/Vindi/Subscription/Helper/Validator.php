@@ -2,6 +2,8 @@
 
 class Vindi_Subscription_Helper_Validator
 {
+	use use Vindi_Subscription_Trait_LogMessenger; 
+
 	protected $billHandler;
 	protected $orderHandler;
 

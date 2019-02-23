@@ -2,6 +2,8 @@
 
 class Vindi_Subscription_Helper_Order
 {
+	use use Vindi_Subscription_Trait_LogMessenger; 
+	
 	/**
 	 * Altera o status de um pedido para Cancelado
 	 *
