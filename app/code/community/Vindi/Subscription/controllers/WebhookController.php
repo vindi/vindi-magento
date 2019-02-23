@@ -15,14 +15,14 @@ class Vindi_Subscription_WebhookController extends Mage_Core_Controller_Front_Ac
 		if (! $this->validateRequest()) {
 			$ip = Mage::helper('core/http')->getRemoteAddr();
 
-			$logger->logWebhook(sprintf('Invalid webhook attempt from IP %s', $ip), Zend_Log::WARN);
+			$this->logWebhook(sprintf('Invalid webhook attempt from IP %s', $ip), Zend_Log::WARN);
 			$this->norouteAction();
 
 			return false;
 		}
 
 		$body = file_get_contents('php://input');
-		$logger->logWebhook(sprintf("Novo evento dos webhooks!\n%s", $body));
+		$this->logWebhook(sprintf("Novo evento dos webhooks!\n%s", $body));
 
 		return $handler->handle($body);
 	}

@@ -15,7 +15,7 @@ trait Vindi_Subscription_Trait_LogMessenger
     }
 
     /**
-     * Grava o histórico de Webhooks recebidos e retorna um Status Code HTTP
+     * Grava o histórico de Webhooks recebidos retornando um Status Code HTTP
      *
      * @param string   $message, int|null $level
      *
