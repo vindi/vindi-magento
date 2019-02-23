@@ -2,11 +2,11 @@
 
 class Vindi_Subscription_Helper_Bill
 {
-	protected $logger;
+	use use Vindi_Subscription_Trait_LogMessenger; 
+
 	protected $orderHandler;
 
 	public function __construct() {
-		$this->logger       = Mage::helper('vindi_subscription/logger');
 		$this->orderHandler = Mage::helper('vindi_subscription/order');
 	}
 
@@ -27,7 +27,7 @@ class Vindi_Subscription_Helper_Bill
 		$order = $this->orderHandler->createOrder($lastOrder, $vindiData);
 
 		if (! $order) {
-			$this->logger->log('Impossível gerar novo pedido!', 4);
+			$this->logWebhook('Impossível gerar novo pedido!', 4);
 			return false;
 		}
 
@@ -99,7 +99,7 @@ class Vindi_Subscription_Helper_Bill
 	{
 		$order = $this->orderHandler->getOrder($data);
 		if (! $order) {
-			$this->logger->log(sprintf(
+			$this->logWebhook(sprintf(
 				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
 				$data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
 			return false;
