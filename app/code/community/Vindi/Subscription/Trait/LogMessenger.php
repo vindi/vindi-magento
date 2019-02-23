@@ -3,9 +3,9 @@
 trait Vindi_Subscription_Trait_LogMessenger
 {
     /**
-     * Grava o histórico de Webhooks recebidos
+     * Grava os logs no arquivo definido $local
      *
-     * @param string   $message, int|null $level
+     * @param string   $message, $local , int|null $level
      */
     public function log($message, $local = 'vindi_exception.log', $level = null)
     {
@@ -14,8 +14,17 @@ trait Vindi_Subscription_Trait_LogMessenger
         $this->manageWebhook($level);
     }
 
-    private function manageWebhook($level)
+    /**
+     * Grava o histórico de Webhooks recebidos e retorna um Status Code HTTP
+     *
+     * @param string   $message, int|null $level
+     *
+     * @return  bool
+     */
+    public function logWebhook($message, $level)
     {
+	$this->log($message, 'vindi_webhooks.log', $level);
+
         switch ($level) {
         case 4:
             http_response_code(422);
