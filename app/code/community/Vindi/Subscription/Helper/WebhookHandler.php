@@ -8,8 +8,6 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 	protected $orderHandler;
 	protected $validator;
 
-	private $local = 'vindi_webhooks.log';
-
 	public function __construct() {
 		$this->billHandler  = Mage::helper('vindi_subscription/bill');
 		$this->orderHandler = Mage::helper('vindi_subscription/order');
@@ -35,7 +33,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 			$type = $jsonBody['event']['type'];
 			$data = $jsonBody['event']['data'];
 		} catch (Exception $e) {
-			$this->log('Falha ao interpretar JSON do webhook: ' . $e->getMessage(), $local, 5);
+			$this->logWebhook('Falha ao interpretar JSON do webhook: ' . $e->getMessage(), 5);
 			return false;
 		}
 
@@ -44,7 +42,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 			// Para contornar é possível utilizar o sleep() ou criar filas.
 
 		case 'test':
-			$this->log('Evento de teste do webhook.', $local);
+			$this->logWebhook('Evento de teste do webhook.');
 			return false;
 		case 'bill_created':
 			return $this->validator->validateBillCreatedWebhook($data);
@@ -53,7 +51,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 		case 'charge_rejected':
 			return $this->validator->validateChargeWebhook($data);
 		default:
-			$this->log('Evento do webhook ignorado pelo plugin: ' . $type, $local);
+			$this->logWebhook('Evento do webhook ignorado pelo plugin: ' . $type);
 			return true;
 		}
 	}
