@@ -2,12 +2,13 @@
 
 class Vindi_Subscription_Helper_Validator
 {
-	protected $logger;
+	use Vindi_Subscription_Trait_LogMessenger; 
+
 	protected $billHandler;
 	protected $orderHandler;
 
-	public function __construct() {
-		$this->logger       = Mage::helper('vindi_subscription/logger');
+	public function __construct() 
+	{
 		$this->billHandler  = Mage::helper('vindi_subscription/bill');
 		$this->orderHandler = Mage::helper('vindi_subscription/order');
 	}
@@ -25,7 +26,7 @@ class Vindi_Subscription_Helper_Validator
 		$order = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
 		
 		if (! $order) {
-			$this->logger->log('Pedido não encontrado.', 4);
+			$this->logWebhook('Pedido não encontrado.', 4);
 			return false;
 		}
 
@@ -33,14 +34,14 @@ class Vindi_Subscription_Helper_Validator
 
 		if (is_null($charge['next_attempt'])) {
 			$this->orderHandler->updateToRejected($order, $gatewayMessage);
-			$this->logger->log(sprintf(
+			$this->logWebhook(sprintf(
 				'Todas as tentativas de pagamento do pedido %s foram rejeitadas. Motivo: "%s".',
 				$order->getId(), $gatewayMessage));
 			return true;
 		}
 
 		$this->orderHandler->addRetryStatusMessage($order, $gatewayMessage);
-		$this->logger->log(sprintf(
+		$this->logWebhook(sprintf(
 			'Tentativa de pagamento do pedido %s foi rejeitada. Motivo: "%s".' .
 			' Uma nova tentativa será feita.', $order->getId(), $gatewayMessage));
 		return true;
@@ -58,17 +59,17 @@ class Vindi_Subscription_Helper_Validator
 		$bill = $data['bill'];
 
 		if (! $bill) {
-			$this->logger->log('Erro ao interpretar webhook "bill_created".', 5);
+			$this->logWebhook('Erro ao interpretar webhook "bill_created".', 5);
 			return false;
 		}
 
 		if (! isset($bill['subscription']) || is_null($bill['subscription'])) {
-			$this->logger->log(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 5);
+			$this->logWebhook(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 5);
 			return false;
 		}
 
 		if (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
-			$this->logger->log(sprintf(
+			$this->logWebhook(sprintf(
 				'Ignorando o evento "bill_created" para o primeiro ciclo.'), 5);
 			return false;
 		}
@@ -76,7 +77,7 @@ class Vindi_Subscription_Helper_Validator
 		$order = $this->orderHandler->getOrder($data);
 
 		if ($order) {
-			$this->logger->log(sprintf('Já existe o pedido %s para o evento "bill_created".',
+			$this->logWebhook(sprintf('Já existe o pedido %s para o evento "bill_created".',
 				$order->getId()), 5);
 			return false;
 		}
@@ -85,7 +86,7 @@ class Vindi_Subscription_Helper_Validator
 			$this->billHandler->processBillCreated($data);
 			return true;
 		}
-		$this->logger->log('Pedido anterior não encontrado. Ignorando evento.', 4);
+		$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
 		return false;
 	}
 }
