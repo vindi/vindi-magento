@@ -2,7 +2,7 @@
 
 class Vindi_Subscription_Helper_Bill
 {
-	use use Vindi_Subscription_Trait_LogMessenger; 
+	use Vindi_Subscription_Trait_LogMessenger; 
 
 	protected $orderHandler;
 

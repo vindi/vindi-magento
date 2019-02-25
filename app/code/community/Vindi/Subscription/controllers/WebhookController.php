@@ -2,7 +2,7 @@
 
 class Vindi_Subscription_WebhookController extends Mage_Core_Controller_Front_Action
 {
-	use use Vindi_Subscription_Trait_LogMessenger; 
+	use Vindi_Subscription_Trait_LogMessenger; 
 
 	/**
 	 * Seta a rota dos  Webhooks
