@@ -87,6 +87,35 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
         }
     }
 
+    /**
+     * @param mixed $info|$data
+     *
+     * @return Mage_Payment_Model_Method_Abstract|null
+     */
+    public function loadAttributes($info, $data)
+    {
+        if ('saved' === $data->getCcChoice()) {
+            $info->setAdditionalInformation('PaymentMethod', $this->_code)
+                ->setAdditionalInformation($this->save_method, true);
+
+            return $this;
+        }
+
+        $info->setCcType($data->getCcType())
+            ->setCcTypeName($data->getCcTypeName())
+            ->setCcOwner($data->getCcOwner())
+            ->setCcLast4(substr($data->getCcNumber(), -4))
+            ->setCcNumber($data->getCcNumber())
+            ->setCcCid($data->getCcCid())
+            ->setCcExpMonth($data->getCcExpMonth())
+            ->setCcExpYear($data->getCcExpYear())
+            ->setCcSsIssue($data->getCcSsIssue())
+            ->setCcSsStartMonth($data->getCcSsStartMonth())
+            ->setCcSsStartYear($data->getCcSsStartYear())
+            ->setAdditionalInformation('PaymentMethod', $this->_code)
+            ->setAdditionalInformation($this->save_method, false);
+    }
+
     protected function createInvoice($order)
     {
         $invoice = $order->prepareInvoice();

@@ -2,154 +2,183 @@
 
 class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_PaymentMethod
 {
-    /**
-     * @var string
-     */
-    public static $METHOD = "DebitCard";
-    /**
-     * @var string
-     */
-    protected $_code = 'vindi_debitcard';
+	/**
+	 * @var string
+	 */
+	public static $METHOD = "DebitCard";
+	/**
+	 * @var string
+	 */
+	protected $_code = 'vindi_debitcard';
 
-    /**
-     * @var string
-     */
-    protected $vindiMethodCode = 'debit_card';
+	/**
+	 * @var string
+	 */
+	protected $vindiMethodCode = 'debit_card';
 
-    /**
-     * @var string
-     */
-    protected $save_method = 'use_saved_dc';
+	/**
+	 * @var string
+	 */
+	protected $save_method = 'use_saved_dc';
 
-    /**
-     * @var bool
-     */
-    protected $_canSaveDc = false;
+	/**
+	 * @var bool
+	 */
+	protected $_canSaveDc = false;
 
-    /**
-     * @var string
-     */
-    protected $_formBlockType = 'vindi_subscription/form_dc';
+	/**
+	 * @var string
+	 */
+	protected $_formBlockType = 'vindi_subscription/form_dc';
 
-    /**
-     * @var string
-     */
-    protected $_infoBlockType = 'vindi_subscription/info_dc';
+	/**
+	 * @var string
+	 */
+	protected $_infoBlockType = 'vindi_subscription/info_dc';
 
-    /**
-     * @param string $paymentAction
-     * @param object $stateObject
-     *
-     * @return bool|Mage_Payment_Model_Method_Abstract
-     */
-    protected function processNewOrder($paymentAction, $stateObject)
-    {
-        $payment = $this->getInfoInstance();
-        $order = $payment->getOrder();
+	/**
+	 * @param string $paymentAction
+	 * @param object $stateObject
+	 *
+	 * @return bool|Mage_Payment_Model_Method_Abstract
+	 */
+	protected function processNewOrder($paymentAction, $stateObject)
+	{
+		$payment = $this->getInfoInstance();
+		$order = $payment->getOrder();
 
-        $customer = Mage::getModel('customer/customer');
+		$customer = Mage::getModel('customer/customer');
 
-        $customerId      = $this->createCustomer($order, $customer);
-        $customerVindiId = $customer->getVindiUserCode();
+		$customerId      = $this->createCustomer($order, $customer);
+		$customerVindiId = $customer->getVindiUserCode();
 
-        if (! $payment->getAdditionalInformation('use_saved_dc')) {
-            $this->createPaymentProfile($customerId);
-        } else {
-            $this->assignDataFromPreviousPaymentProfile($customerVindiId);
-        }
+		if (! $payment->getAdditionalInformation('use_saved_dc')) {
+			$this->createPaymentProfile($customerId);
+		} else {
+			$this->assignDataFromPreviousPaymentProfile($customerVindiId);
+		}
 
-        if ($this->isSingleOrder($order)) {
-            $bill = $this->processSinglePayment($payment, $order, $customerId);
-        } else {
-            $bill = $this->processSubscription($payment, $order, $customerId);
-        }
+		if ($this->isSingleOrder($order)) {
+			$bill = $this->processSinglePayment($payment, $order, $customerId);
+		} else {
+			$bill = $this->processSubscription($payment, $order, $customerId);
+		}
 
-        if (! $bill) {
-            return false;
-        }
+		if (! $bill) {
+			return false;
+		}
 
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
-            ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+		$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
+			->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param int $customerId
-     *
-     * @return array|bool
-     */
-    protected function createPaymentProfile($customerId)
-    {
-        $payment = $this->getInfoInstance();
+	/**
+	 * @param mixed $info|$data
+	 *
+	 * @return Mage_Payment_Model_Method_Abstract|null
+	 */
+	public function loadAttributes($info, $data)
+	{
+		if ('saved' === $data->getDcChoice()) {
+			$info->setAdditionalInformation('PaymentMethod', $this->_code)
+				->setAdditionalInformation($this->save_method, true);
 
-        $debitCardData = [
-            'holder_name'          => $payment->getCcOwner(),
-            'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
-                . '/' . $payment->getCcExpYear(),
-            'card_number'          => $payment->getCcNumber(),
-            'card_cvv'             => $payment->getCcCid() ?: '000',
-            'customer_id'          => $customerId,
-            'payment_company_code' => $payment->getCcType(),
-            'payment_method_code'  =>  $this->getPaymentMethodCode()
-        ];
+			return $this;
+		}
 
-        $paymentProfileId = $this->api()->createCustomerPaymentProfile($debitCardData);
-        $payment->setPaymentProfile($paymentProfileId);
+		$info->setCcType($data->getDcType())
+			->setCcTypeName($data->getDcTypeName())
+			->setCcOwner($data->getDcOwner())
+			->setCcLast4(substr($data->getDcNumber(), -4))
+			->setCcNumber($data->getDcNumber())
+			->setCcCid($data->getDcCid())
+			->setCcExpMonth($data->getDcExpMonth())
+			->setCcExpYear($data->getDcExpYear())
+			->setCcSsIssue($data->getDcSsIssue())
+			->setCcSsStartMonth($data->getDcSsStartMonth())
+			->setCcSsStartYear($data->getDcSsStartYear())
+			->setAdditionalInformation('PaymentMethod', $this->_code)
+			->setAdditionalInformation($this->save_method, false);
+	}
 
-        if ($paymentProfileId === false) {
-            Mage::throwException('Erro ao informar os dados de cartão de crédito. Verifique os dados e tente novamente!');
+	/**
+	 * @param int $customerId
+	 *
+	 * @return array|bool
+	 */
+	protected function createPaymentProfile($customerId)
+	{
+		$payment = $this->getInfoInstance();
 
-            return false;
-        }
+		$debitCardData = [
+			'holder_name'          => $payment->getCcOwner(),
+			'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
+				. '/' . $payment->getCcExpYear(),
+			'card_number'          => $payment->getCcNumber(),
+			'card_cvv'             => $payment->getCcCid() ?: '000',
+			'customer_id'          => $customerId,
+			'payment_company_code' => $payment->getCcType(),
+			'payment_method_code'  =>  $this->getPaymentMethodCode()
+		];
 
-        return $paymentProfileId;
-    }
+		$paymentProfileId = $this->api()->createCustomerPaymentProfile($debitCardData);
+		$payment->setPaymentProfile($paymentProfileId);
 
-    /**
-     * @param int $customerVindiId
-     */
-    protected function assignDataFromPreviousPaymentProfile($customerVindiId)
-    {
-        $api     = Mage::helper('vindi_subscription/api');
-        $savedDc = $api->getCustomerPaymentProfile($customerVindiId);
-        $info    = $this->getInfoInstance();
+		if ($paymentProfileId === false) {
+			Mage::throwException('Erro ao informar os dados de cartão de crédito. Verifique os dados e tente novamente!');
 
-        $info->setCcType($savedDc['payment_company']['name'])
-             ->setCcOwner($savedDc['holder_name'])
-             ->setCcLast4($savedDc['card_number_last_four'])
-             ->setCcNumber($savedDc['card_number_last_four'])
-             ->setAdditionalInformation('use_saved_dc', true);
-    }
+			return false;
+		}
 
-    /**
-     * Validate payment method information object
-     *
-     * @return  Mage_Payment_Model_Method_Abstract
-     */
-    public function validate()
-    {
-        $info = $this->getInfoInstance();
+		return $paymentProfileId;
+	}
 
-        $quote = $info->getQuote();
+	/**
+	 * @param int $customerVindiId
+	 */
+	protected function assignDataFromPreviousPaymentProfile($customerVindiId)
+	{
+		$api     = Mage::helper('vindi_subscription/api');
+		$savedDc = $api->getCustomerPaymentProfile($customerVindiId);
+		$info    = $this->getInfoInstance();
 
-        if ($info->getAdditionalInformation('use_saved_dc')) {
-            return $this;
-        }
+		$info->setCcType($savedDc['payment_company']['name'])
+			 ->setCcOwner($savedDc['holder_name'])
+			 ->setCcLast4($savedDc['card_number_last_four'])
+			 ->setCcNumber($savedDc['card_number_last_four'])
+			 ->setAdditionalInformation('use_saved_dc', true);
+	}
 
-        $availableTypes = $this->api()->getDebitCardTypes();
+	/**
+	 * Validate payment method information object
+	 *
+	 * @return  Mage_Payment_Model_Method_Abstract
+	 */
+	public function validate()
+	{
+		$info = $this->getInfoInstance();
 
-        $dcNumber = $info->getCcNumber();
+		$quote = $info->getQuote();
 
-        // remove debit card non-numbers
-        $dcNumber = preg_replace('/\D/', '', $dcNumber);
+		if ($info->getAdditionalInformation('use_saved_dc')) {
+			return $this;
+		}
 
-        $info->setCcNumber($dcNumber);
+		$availableTypes = $this->api()->getDebitCardTypes();
 
-        if (! array_key_exists($info->getCcType(), $availableTypes)) {
-            return $this->error(Mage::helper('payment')->__('Debit card type is not allowed for this payment method.'));
-        }
+		$dcNumber = $info->getCcNumber();
 
-        return $this;
-    }
+		// remove debit card non-numbers
+		$dcNumber = preg_replace('/\D/', '', $dcNumber);
+
+		$info->setCcNumber($dcNumber);
+
+		if (! array_key_exists($info->getCcType(), $availableTypes)) {
+			return $this->error(Mage::helper('payment')->__('Debit card type is not allowed for this payment method.'));
+		}
+
+		return $this;
+	}
 }
