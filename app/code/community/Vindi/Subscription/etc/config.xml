@@ -50,6 +50,7 @@
         <traits>
             <vindi_subscription>
                 <class>Vindi_Subscription_Trait_PaymentMethod</class>
+                <class>Vindi_Subscription_Trait_LogMessenger</class>
             </vindi_subscription>
         </traits>
         <sales>
