@@ -2,359 +2,359 @@
 
 trait Vindi_Subscription_Trait_PaymentProcessor
 {
-    /**
-     * @param string $paymentAction
-     * @param object $stateObject
-     *
-     * @return bool|Mage_Payment_Model_Method_Abstract
-     */
-    public function initialize($paymentAction, $stateObject)
-    {
-        if ($this->checkForReorder()) {
-            return $this->processReorder($paymentAction, $stateObject);
-        }
+	/**
+	 * @param string $paymentAction
+	 * @param object $stateObject
+	 *
+	 * @return bool|Mage_Payment_Model_Method_Abstract
+	 */
+	public function initialize($paymentAction, $stateObject)
+	{
+		if ($this->checkForReorder()) {
+			return $this->processReorder($paymentAction, $stateObject);
+		}
 
-        return $this->processNewOrder($paymentAction, $stateObject);
-    }
+		return $this->processNewOrder($paymentAction, $stateObject);
+	}
 
-    /**
-     * @return bool
-     */
-    protected function checkForReorder()
-    {
-        $session = Mage::getSingleton('core/session');
-        $isReorder = $session->getData('vindi_is_reorder', false);
-        $session->unsetData('vindi_is_reorder');
+	/**
+	 * @return bool
+	 */
+	protected function checkForReorder()
+	{
+		$session = Mage::getSingleton('core/session');
+		$isReorder = $session->getData('vindi_is_reorder', false);
+		$session->unsetData('vindi_is_reorder');
 
-        return $isReorder;
-    }
+		return $isReorder;
+	}
 
-    /**
-     * @param Mage_Customer_Model_Customer $customer
-     *
-     * @return bool|string
-     * @throws \Mage_Core_Exception
-     */
-    protected function getCustomerTipoPessoa($customer)
-    {
-        $attribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'tipopessoa');
+	/**
+	 * @param Mage_Customer_Model_Customer $customer
+	 *
+	 * @return bool|string
+	 * @throws \Mage_Core_Exception
+	 */
+	protected function getCustomerTipoPessoa($customer)
+	{
+		$attribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'tipopessoa');
 
-        $tipopessoa = $customer->getTipopessoa();
+		$tipopessoa = $customer->getTipopessoa();
 
-        if ($attribute && $attribute->usesSource() && $tipopessoa) {
-            return $attribute->getSource()->getOptionText($tipopessoa);
-        }
+		if ($attribute && $attribute->usesSource() && $tipopessoa) {
+			return $attribute->getSource()->getOptionText($tipopessoa);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * @param array Customer phones $phone
-     * @return array
-     */
-    public function format_phone($phone)
-    {
-        $phone = '55' . preg_replace('/^0|\D+/', '', $phone);
+	/**
+	 * @param array Customer phones $phone
+	 * @return array
+	 */
+	public function format_phone($phone)
+	{
+		$phone = '55' . preg_replace('/^0|\D+/', '', $phone);
 
-        switch(strlen($phone)) {
-            case 12:
-                $phone_type = 'landline';
-                break;
-            case 13:
-                $phone_type = 'mobile';
-                break;
-        }
+		switch(strlen($phone)) {
+			case 12:
+				$phone_type = 'landline';
+				break;
+			case 13:
+				$phone_type = 'mobile';
+				break;
+		}
 
-        if (isset($phone_type)) {
-            return [[
-                'phone_type' => $phone_type,
-                'number'     => $phone
-            ]];
-        }
-    }
+		if (isset($phone_type)) {
+			return [[
+				'phone_type' => $phone_type,
+				'number'     => $phone
+			]];
+		}
+	}
 
-    /**
-     * @param Mage_Sales_Model_Order       $order
-     * @param Mage_Customer_Model_Customer $customer
-     *
-     * @return bool|int|null
-     */
+	/**
+	 * @param Mage_Sales_Model_Order       $order
+	 * @param Mage_Customer_Model_Customer $customer
+	 *
+	 * @return bool|int|null
+	 */
    protected function createCustomer($order, $customer)
-    {
-        $billing = $order->getBillingAddress();
+	{
+		$billing = $order->getBillingAddress();
 
-        if (Mage::app()->getStore()->isAdmin()) {
-            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
-        } else {
-            $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
-            $customer->loadByEmail($billing->getEmail());
-        }
+		if (Mage::app()->getStore()->isAdmin()) {
+			$customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
+		} else {
+			$customer->setWebsiteId(Mage::app()->getWebsite()->getId());
+			$customer->loadByEmail($billing->getEmail());
+		}
 
-        //TODO fix user being created again if validation fails 
-        if (! ($userCode = $customer->getVindiUserCode())) {
-            $userCode = 'mag-' . $customer->getId() . '-' . time();
+		//TODO fix user being created again if validation fails 
+		if (! ($userCode = $customer->getVindiUserCode())) {
+			$userCode = 'mag-' . $customer->getId() . '-' . time();
 
-            $customer->setVindiUserCode($userCode);
-            $customer->save();
-        }
+			$customer->setVindiUserCode($userCode);
+			$customer->save();
+		}
 
-        $address = [
-            'street'             => $billing->getStreet(1),
-            'number'             => $billing->getStreet(2),
-            'additional_details' => $billing->getStreet(3),
-            'neighborhood'       => $billing->getStreet(4),
-            'zipcode'            => $billing->getPostcode(),
-            'city'               => $billing->getCity(),
-            'state'              => $billing->getRegionCode(),
-            'country'            => $billing->getCountry(),
-        ];
+		$address = [
+			'street'             => $billing->getStreet(1),
+			'number'             => $billing->getStreet(2),
+			'additional_details' => $billing->getStreet(3),
+			'neighborhood'       => $billing->getStreet(4),
+			'zipcode'            => $billing->getPostcode(),
+			'city'               => $billing->getCity(),
+			'state'              => $billing->getRegionCode(),
+			'country'            => $billing->getCountry(),
+		];
 
-        $customerVindi = [
-            'name'          => $billing->getFirstname() . ' ' . $billing->getLastname(),
-            'email'         => $order->getBillingAddress()->getEmail(),
-            'registry_code' => $order->getData('customer_taxvat'),
-            'code'          => $userCode,
-            'phones'        => $this->format_phone($order->getBillingAddress()->getTelephone()),
-            'address'       => $address
-        ];
+		$customerVindi = [
+			'name'          => $billing->getFirstname() . ' ' . $billing->getLastname(),
+			'email'         => $order->getBillingAddress()->getEmail(),
+			'registry_code' => $order->getData('customer_taxvat'),
+			'code'          => $userCode,
+			'phones'        => $this->format_phone($order->getBillingAddress()->getTelephone()),
+			'address'       => $address
+		];
 
-        if (Mage::getStoreConfig('vindi_subscription/general/send_nfe_information')) {
-            switch ($this->getCustomerTipoPessoa($customer)) {
-                case "Física":
-                    $customerVindi['metadata'] = [
-                        'carteira_de_identidade' => $customer->getIe(),
-                    ];
-                    break;
-                case "Jurídica":
-                    $customerVindi['metadata'] = [
-                        'inscricao_estadual' => $customer->getIe(),
-                    ];
-                    break;
-            }
-        }
+		if (Mage::getStoreConfig('vindi_subscription/general/send_nfe_information')) {
+			switch ($this->getCustomerTipoPessoa($customer)) {
+				case "Física":
+					$customerVindi['metadata'] = [
+						'carteira_de_identidade' => $customer->getIe(),
+					];
+					break;
+				case "Jurídica":
+					$customerVindi['metadata'] = [
+						'inscricao_estadual' => $customer->getIe(),
+					];
+					break;
+			}
+		}
 
-        $customerId = $this->api()->findOrCreateCustomer($customerVindi);
+		$customerId = $this->api()->findOrCreateCustomer($customerVindi);
 
-        if ($customerId === false) {
-            Mage::throwException('Falha ao registrar o usuário. Verifique os dados e tente novamente!');
-        }
+		if ($customerId === false) {
+			Mage::throwException('Falha ao registrar o usuário. Verifique os dados e tente novamente!');
+		}
 
-        return $customerId;
-    }
+		return $customerId;
+	}
 
-    /**
-     * @return Vindi_Subscription_Helper_API
-     */
-    protected function api()
-    {
-        if (isset($this->vindiApi)) {
-            return $this->vindiApi;
-        }
+	/**
+	 * @return Vindi_Subscription_Helper_API
+	 */
+	protected function api()
+	{
+		if (isset($this->vindiApi)) {
+			return $this->vindiApi;
+		}
 
-        return $this->vindiApi = Mage::helper('vindi_subscription/api');
-    }
+		return $this->vindiApi = Mage::helper('vindi_subscription/api');
+	}
 
-    /**
-     * @param string $paymentAction
-     * @param object $stateObject
-     *
-     * @return bool|Mage_Payment_Model_Method_Abstract
-     */
-    protected function processReorder($paymentAction, $stateObject)
-    {
-        $payment = $this->getInfoInstance();
-        $order = $payment->getOrder();
+	/**
+	 * @param string $paymentAction
+	 * @param object $stateObject
+	 *
+	 * @return bool|Mage_Payment_Model_Method_Abstract
+	 */
+	protected function processReorder($paymentAction, $stateObject)
+	{
+		$payment = $this->getInfoInstance();
+		$order = $payment->getOrder();
 
-        $payment->setAmount($order->getTotalDue());
-        $this->setStore($order->getStoreId());
+		$payment->setAmount($order->getTotalDue());
+		$this->setStore($order->getStoreId());
 
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
-            'Novo período da assinatura criado', true);
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
-            ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+		$payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
+			'Novo período da assinatura criado', true);
+		$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
+			->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param Mage_Payment_Model_Method_Abstract $payment
-     * @param Mage_Sales_Model_Order             $order
-     * @param int                                $customerId
-     *
-     * @return bool
-     * @throws \Mage_Core_Exception
-     */
-    protected function processSubscription($payment, $order, $customerId)
-    {
-        $subscription = $this->createSubscription($payment, $order, $customerId);
+	/**
+	 * @param Mage_Payment_Model_Method_Abstract $payment
+	 * @param Mage_Sales_Model_Order             $order
+	 * @param int                                $customerId
+	 *
+	 * @return bool
+	 * @throws \Mage_Core_Exception
+	 */
+	protected function processSubscription($payment, $order, $customerId)
+	{
+		$subscription = $this->createSubscription($payment, $order, $customerId);
 
-        if ($subscription === false) {
-            Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
+		if ($subscription === false) {
+			Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
 
-            return false;
-        }
+			return false;
+		}
 
-        $payment->setAmount($order->getTotalDue());
-        $this->setStore($order->getStoreId());
+		$payment->setAmount($order->getTotalDue());
+		$this->setStore($order->getStoreId());
 
-        $payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
-            'Assinatura criada', true);
+		$payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
+			'Assinatura criada', true);
 
-        return $subscription['bill'];
-    }
+		return $subscription['bill'];
+	}
 
-    /**
-     * @param Mage_Payment_Model_Method_Abstract $payment
-     * @param Mage_Sales_Model_Order             $order
-     * @param int                                $customerId
-     *
-     * @return bool
-     * @throws \Mage_Core_Exception
-     */
-    protected function processSinglePayment($payment, $order, $customerId)
-    {
-        $uniquePaymentProduct = $this->api()->findOrCreateUniquePaymentProduct();
+	/**
+	 * @param Mage_Payment_Model_Method_Abstract $payment
+	 * @param Mage_Sales_Model_Order             $order
+	 * @param int                                $customerId
+	 *
+	 * @return bool
+	 * @throws \Mage_Core_Exception
+	 */
+	protected function processSinglePayment($payment, $order, $customerId)
+	{
+		$uniquePaymentProduct = $this->api()->findOrCreateUniquePaymentProduct();
 
-        $this->log(sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct));
+		$this->log(sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct));
 
-        $body = [
-            'customer_id'         => $customerId,
-            'payment_method_code' => $this->getPaymentMethodCode(),
-            'bill_items'          => [
-                [
-                    'product_id' => $uniquePaymentProduct,
-                    'amount'     => $order->getGrandTotal(),
-                ],
-            ]
-        ];
+		$body = [
+			'customer_id'         => $customerId,
+			'payment_method_code' => $this->getPaymentMethodCode(),
+			'bill_items'          => [
+				[
+					'product_id' => $uniquePaymentProduct,
+					'amount'     => $order->getGrandTotal(),
+				],
+			]
+		];
 
-        $paymentProfile = $payment->getPaymentProfile();
+		$paymentProfile = $payment->getPaymentProfile();
 
-        if ($paymentProfile) {
-            $body['payment_profile'] = [
-                'id' => $paymentProfile['payment_profile']['id']
-            ];
-        }
+		if ($paymentProfile) {
+			$body['payment_profile'] = [
+				'id' => $paymentProfile['payment_profile']['id']
+			];
+		}
 
-        if ($installments = $payment->getAdditionalInformation('installments')) {
-            $body['installments'] = (int) $installments;
-        }
+		if ($installments = $payment->getAdditionalInformation('installments')) {
+			$body['installments'] = (int) $installments;
+		}
 
-        if ($bill = $this->api()->createBill($body)) {
-            if ($body['payment_method_code'] === "bank_slip"
-                || $body['payment_method_code'] === "debit_card"
-                || $bill['status'] === "paid"
-                || $bill['status'] === "review"
-                || $bill['charges'][0]['status'] === "fraud_review") {
-                $order->setVindiBillId($bill['id']);
-                $order->save();
-                return $bill;
-            }
-            $this->api()->deleteBill($bill['id']);
-        }
+		if ($bill = $this->api()->createBill($body)) {
+			if ($body['payment_method_code'] === "bank_slip"
+				|| $body['payment_method_code'] === "debit_card"
+				|| $bill['status'] === "paid"
+				|| $bill['status'] === "review"
+				|| $bill['charges'][0]['status'] === "fraud_review") {
+				$order->setVindiBillId($bill['id']);
+				$order->save();
+				return $bill;
+			}
+			$this->api()->deleteBill($bill['id']);
+		}
 
-        $this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
-        $message = "Houve um problema na confirmação do pagamento. Verifique os dados e tente novamente.";
-        $payment->setStatus(
-            Mage_Sales_Model_Order::STATE_CANCELED,
-            Mage_Sales_Model_Order::STATE_CANCELED,
-            $message,
-            true
-        );
-        Mage::throwException($message);
-    }
+		$this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
+		$message = "Houve um problema na confirmação do pagamento. Verifique os dados e tente novamente.";
+		$payment->setStatus(
+			Mage_Sales_Model_Order::STATE_CANCELED,
+			Mage_Sales_Model_Order::STATE_CANCELED,
+			$message,
+			true
+		);
+		Mage::throwException($message);
+	}
 
-    /**
-     * @param Mage_Payment_Model_Method_Abstract    $payment
-     * @param Mage_Sales_Model_Order                $order
-     * @param int                                   $customerId
-     *
-     * @return bool
-     */
-    protected function createSubscription($payment, $order, $customerId)
-    {
-        $orderItems = $order->getItemsCollection();
-        
-        foreach ($orderItems as $item) {
-            $plan = (!empty(Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan'))) ? 
-                    Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan')  : null;
+	/**
+	 * @param Mage_Payment_Model_Method_Abstract    $payment
+	 * @param Mage_Sales_Model_Order                $order
+	 * @param int                                   $customerId
+	 *
+	 * @return bool
+	 */
+	protected function createSubscription($payment, $order, $customerId)
+	{
+		$orderItems = $order->getItemsCollection();
+		
+		foreach ($orderItems as $item) {
+			$plan = (!empty(Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan'))) ? 
+					Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan')  : null;
 
-            if (null !== $plan)
-                break;
-        }
+			if (null !== $plan)
+				break;
+		}
 
-        $productItems = $this->api()->buildPlanItemsForSubscription($order);
-        if (!$productItems) {
-            return false;
-        }
+		$productItems = $this->api()->buildPlanItemsForSubscription($order);
+		if (!$productItems) {
+			return false;
+		}
 
-        $body = array(
-            'customer_id'         => $customerId,
-            'payment_method_code' => $this->getPaymentMethodCode(),
-            'plan_id'             => $plan,
-            'code'                => 'mag-' . $order->getIncrementId() . '-' . time(),
-            'product_items'       => $productItems,
-        );
+		$body = array(
+			'customer_id'         => $customerId,
+			'payment_method_code' => $this->getPaymentMethodCode(),
+			'plan_id'             => $plan,
+			'code'                => 'mag-' . $order->getIncrementId() . '-' . time(),
+			'product_items'       => $productItems,
+		);
 
-        if ($installments = $payment->getAdditionalInformation('installments')) {
-            $body['installments'] = (int) $installments;
-        }
+		if ($installments = $payment->getAdditionalInformation('installments')) {
+			$body['installments'] = (int) $installments;
+		}
 
-        $paymentProfile = $payment->getPaymentProfile();
+		$paymentProfile = $payment->getPaymentProfile();
 
-        if ($paymentProfile) {
-            $body['payment_profile'] = array(
-                'id' => $paymentProfile['payment_profile']['id']
-            );
-        }
+		if ($paymentProfile) {
+			$body['payment_profile'] = array(
+				'id' => $paymentProfile['payment_profile']['id']
+			);
+		}
 
-        $subscription = $this->api()->createSubscription($body);
+		$subscription = $this->api()->createSubscription($body);
 
-        $test = $payment->getAdditionalInformation();
+		$test = $payment->getAdditionalInformation();
 
-        $this->log($test);
+		$this->log($test);
 
-        if (! isset($subscription['id']) || empty($subscription['id'])) {
-            $message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
-            $this->log(sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message));
+		if (! isset($subscription['id']) || empty($subscription['id'])) {
+			$message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
+			$this->log(sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message));
 
-            Mage::throwException($message);
+			Mage::throwException($message);
 
-            // TODO update order status?
-            return false;
-        }
+			// TODO update order status?
+			return false;
+		}
 
-        $order->setVindiSubscriptionId($subscription['id']);
-        $order->setVindiBillId($subscription['bill']['id']);
-        $order->setVindiSubscriptionPeriod(1);
-        $order->save();
+		$order->setVindiSubscriptionId($subscription['id']);
+		$order->setVindiBillId($subscription['bill']['id']);
+		$order->setVindiSubscriptionPeriod(1);
+		$order->save();
 
-        return $subscription;
-    }
+		return $subscription;
+	}
 
-    /**
-     * @param string   $message
-     * @param int|null $level
-     */
-    protected function log($message, $level = null)
-    {
-        Mage::log($message, $level, $this->_code . '.log');
-    }
+	/**
+	 * @param string   $message
+	 * @param int|null $level
+	 */
+	protected function log($message, $level = null)
+	{
+		Mage::log($message, $level, $this->_code . '.log');
+	}
 
-    /*
-     * @param Mage_Sales_Model_Order $order
-     */
-    protected function isSingleOrder($order)
-    {
-        if (! $order) {
-            return false;
-        }
+	/*
+	 * @param Mage_Sales_Model_Order $order
+	 */
+	protected function isSingleOrder($order)
+	{
+		if (! $order) {
+			return false;
+		}
 
-        foreach ($order->getAllVisibleItems() as $item) {
-            if (($product = $item->getProduct()) && ($product->getTypeId() === 'subscription')) {
-                return false;
-            }
-        }
-        return true;
-    }
+		foreach ($order->getAllVisibleItems() as $item) {
+			if (($product = $item->getProduct()) && ($product->getTypeId() === 'subscription')) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
