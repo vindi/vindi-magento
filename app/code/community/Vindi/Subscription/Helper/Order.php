@@ -100,7 +100,9 @@ class Vindi_Subscription_Helper_Order
 		$orderId = $order->getId();
 		if ($orderId && $order->canInvoice()) {
 			$this->logWebhook('Gerando fatura para o pedido: ' . $orderId);
-			$this->updateToSuccess($order, $data);
+			$this->updateToSuccess($order);
+			$paymentMethod = new Vindi_Subscription_Model_PaymentMethod();
+			$paymentMethod->processPaidReturn($data);
 			$this->logWebhook('Fatura gerada com sucesso.');
 			return true;
 		}
@@ -115,7 +117,7 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @param Mage_Sales_Model_Order $order
 	 */
-	public function updateToSuccess($order, $data)
+	public function updateToSuccess($order)
 	{
 		$invoice = $order->prepareInvoice();
 		$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
