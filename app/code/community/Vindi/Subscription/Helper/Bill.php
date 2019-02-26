@@ -104,6 +104,6 @@ class Vindi_Subscription_Helper_Bill
 				$data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
 			return false;
 		}
-		return $this->orderHandler->createInvoice($order);
+		return $this->orderHandler->createInvoice($order, $data);
 	}
 }
