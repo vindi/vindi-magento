@@ -61,16 +61,6 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
             ->setAdditionalInformation($this->saveMethod, false);
     }
 
-    protected function createInvoice($order)
-    {
-        $invoice = $order->prepareInvoice();
-        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
-        $invoice->register();
-        Mage::getModel('core/resource_transaction')->addObject($invoice)->addObject($invoice->getOrder())->save();
-        $invoice->sendEmail(true);
-        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true,'O pagamento foi confirmado e o pedido está sendo processado.', true);   
-    }
-
     /**
      * @param int $customerId
      *
