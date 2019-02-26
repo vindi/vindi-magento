@@ -35,35 +35,4 @@ class Vindi_Subscription_Model_BankSlip extends Vindi_Subscription_Model_Payment
 		$info->setAdditionalInformation('installments', 1);
 		return $this;
 	}
-
-	/**
-	 * @param string $paymentAction
-	 * @param object $stateObject
-	 *
-	 * @return bool|Mage_Payment_Model_Method_Abstract
-	 */
-	protected function processNewOrder($paymentAction, $stateObject)
-	{
-		$payment = $this->getInfoInstance();
-		$order = $payment->getOrder();
-
-		$customer = Mage::getModel('customer/customer');
-
-		$customerId = $this->createCustomer($order, $customer);
-
-		if ($this->isSingleOrder($order)) {
-			$bill = $this->processSinglePayment($payment, $order, $customerId);
-		} else {
-			$bill = $this->processSubscription($payment, $order, $customerId);
-		}
-
-		if (! $bill) {
-			return false;
-		}
-
-		$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
-			->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
-
-		return $this;
-	}
 }

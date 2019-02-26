@@ -154,6 +154,53 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		return $this->vindiApi = Mage::helper('vindi_subscription/api');
 	}
 
+    /**
+     * @param string $paymentAction
+     * @param object $stateObject
+     *
+     * @return bool|Mage_Payment_Model_Method_Abstract
+     */
+    protected function processNewOrder($paymentAction, $stateObject)
+    {
+        $payment = $this->getInfoInstance();
+        $order = $payment->getOrder();
+
+        $customer = Mage::getModel('customer/customer');
+
+        $customerId      = $this->createCustomer($order, $customer);
+        $customerVindiId = $customer->getVindiUserCode();
+
+        $this->processCardInformation($payment, $customerId, $customerVindiId);
+
+        $bill = $this->filterOrder($order, $payment, $customerId);
+
+        if (! $bill || ! $order->getId() || ! $order->canInvoice()) {
+            return false;
+        }
+
+        if ($this->processPaidReturn()) {
+	        $orderHandler = Mage::helper('vindi_subscription/order');
+        	$orderHandler->updateToSuccess($order);
+	        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)
+	        	->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
+
+	        return $this;
+        }
+
+        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
+            ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+
+        return $this;
+    }
+
+    protected function filterOrder($order, $payment, $customerId)
+    {
+        if ($this->isSingleOrder($order)) {
+            return $this->processSinglePayment($payment, $order, $customerId);
+        }
+
+        return $this->processSubscription($payment, $order, $customerId);
+    }
 	/**
 	 * @param string $paymentAction
 	 * @param object $stateObject

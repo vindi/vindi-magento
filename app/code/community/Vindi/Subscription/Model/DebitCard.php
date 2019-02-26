@@ -19,7 +19,7 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	/**
 	 * @var string
 	 */
-	protected $save_method = 'use_saved_dc';
+	protected $saveMethod = 'use_saved_dc';
 
 	/**
 	 * @var bool
@@ -37,44 +37,6 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	protected $_infoBlockType = 'vindi_subscription/info_dc';
 
 	/**
-	 * @param string $paymentAction
-	 * @param object $stateObject
-	 *
-	 * @return bool|Mage_Payment_Model_Method_Abstract
-	 */
-	protected function processNewOrder($paymentAction, $stateObject)
-	{
-		$payment = $this->getInfoInstance();
-		$order = $payment->getOrder();
-
-		$customer = Mage::getModel('customer/customer');
-
-		$customerId      = $this->createCustomer($order, $customer);
-		$customerVindiId = $customer->getVindiUserCode();
-
-		if (! $payment->getAdditionalInformation('use_saved_dc')) {
-			$this->createPaymentProfile($customerId);
-		} else {
-			$this->assignDataFromPreviousPaymentProfile($customerVindiId);
-		}
-
-		if ($this->isSingleOrder($order)) {
-			$bill = $this->processSinglePayment($payment, $order, $customerId);
-		} else {
-			$bill = $this->processSubscription($payment, $order, $customerId);
-		}
-
-		if (! $bill) {
-			return false;
-		}
-
-		$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
-			->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
-
-		return $this;
-	}
-
-	/**
 	 * @param mixed $info|$data
 	 *
 	 * @return Mage_Payment_Model_Method_Abstract|null
@@ -83,7 +45,7 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	{
 		if ('saved' === $data->getDcChoice()) {
 			$info->setAdditionalInformation('PaymentMethod', $this->_code)
-				->setAdditionalInformation($this->save_method, true);
+				->setAdditionalInformation($this->saveMethod, true);
 
 			return $this;
 		}
@@ -100,7 +62,7 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 			->setCcSsStartMonth($data->getDcSsStartMonth())
 			->setCcSsStartYear($data->getDcSsStartYear())
 			->setAdditionalInformation('PaymentMethod', $this->_code)
-			->setAdditionalInformation($this->save_method, false);
+			->setAdditionalInformation($this->saveMethod, false);
 	}
 
 	/**

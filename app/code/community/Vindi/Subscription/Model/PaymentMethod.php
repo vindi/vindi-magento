@@ -85,6 +85,57 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return $this->vindiMethodCode;
 	}
 
+	protected function processCardInformation($payment, $customerId, $customerVindiId)
+	{
+		if ('bank_slip' != $this->vindiMethodCode) {
+			return;
+		}
+
+        if (! $payment->getAdditionalInformation($this->saveMethod)) {
+            $this->createPaymentProfile($customerId);
+            return;
+        }
+        $this->assignDataFromPreviousPaymentProfile($customerVindiId);
+	}
+
+    protected function processPaidReturn($bill)
+    {
+        if ('paid' != $bill['status']) {
+        	return false;
+        }
+
+ 		$charge = $bill['charges'][0];
+        if ($charge) {
+        	if ('PaymentMethod::CreditCard' == $charge['payment_method']['type']) {
+		        $this->getInfoInstance()->setAdditionalInformation(
+            		array('installments' => $bill['installments'])
+            	);
+        	}
+        }
+
+        $nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
+
+        if ($nsu) {
+	        $this->getInfoInstance()->setAdditionalInformation(array('nsu' => $nsu));
+        }
+
+        return true;
+    }
+
+    protected function getAcquirerId($response_fields)
+    {
+        $possibles = array('nsu', 'proof_of_sale');
+        $nsu = '';
+
+        foreach ($possibles as $nsu_field) {
+            if ($response_fields[$nsu_field]) {
+                $nsu = $response_fields[$nsu_field];
+            }
+        }
+
+        return $nsu;
+    }
+
 	/**
 	 * Check whether payment method can be used
 	 *

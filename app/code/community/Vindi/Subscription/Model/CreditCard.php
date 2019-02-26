@@ -15,7 +15,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
     /**
      * @var string
      */
-    protected $save_method = 'use_saved_cc';
+    protected $saveMethod = 'use_saved_cc';
 
     /**
      * @var bool
@@ -33,61 +33,6 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
     protected $_infoBlockType = 'vindi_subscription/info_cc';
 
     /**
-     * @param string $paymentAction
-     * @param object $stateObject
-     *
-     * @return bool|Mage_Payment_Model_Method_Abstract
-     */
-    protected function processNewOrder($paymentAction, $stateObject)
-    {
-        $payment = $this->getInfoInstance();
-        $order = $payment->getOrder();
-
-        $customer = Mage::getModel('customer/customer');
-
-        $customerId      = $this->createCustomer($order, $customer);
-        $customerVindiId = $customer->getVindiUserCode();
-
-        if (! $payment->getAdditionalInformation('use_saved_cc')) {
-            $this->createPaymentProfile($customerId);
-        } else {
-            $this->assignDataFromPreviousPaymentProfile($customerVindiId);
-        }
-
-        if ($this->isSingleOrder($order)) {
-            $bill = $this->processSinglePayment($payment, $order, $customerId);
-        } else {
-            $bill = $this->processSubscription($payment, $order, $customerId);
-        }
-
-        if (! $bill || ! $order->getId() || ! $order->canInvoice()) {
-            return false;
-        }
-
-        if ($bill['status'] === "paid") {
-            $installments = $bill['installments'];
-            $response_fields = $bill['charges'][0]['last_transaction']['gateway_response_fields'];
-            $possible = ['nsu', 'proof_of_sale'];
-            $nsu = '';
-            foreach ($possible as $nsu_field) {
-                if ($response_fields[$nsu_field]) {
-                    $nsu = $response_fields[$nsu_field];
-                }
-            }
-
-            $this->getInfoInstance()->setAdditionalInformation(
-                [
-                    'installments' => $installments,
-                    'nsu' => $nsu
-                ]
-            );
-
-            $this->createInvoice($order);
-            $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
-        }
-    }
-
-    /**
      * @param mixed $info|$data
      *
      * @return Mage_Payment_Model_Method_Abstract|null
@@ -96,7 +41,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
     {
         if ('saved' === $data->getCcChoice()) {
             $info->setAdditionalInformation('PaymentMethod', $this->_code)
-                ->setAdditionalInformation($this->save_method, true);
+                ->setAdditionalInformation($this->saveMethod, true);
 
             return $this;
         }
@@ -113,7 +58,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
             ->setCcSsStartMonth($data->getCcSsStartMonth())
             ->setCcSsStartYear($data->getCcSsStartYear())
             ->setAdditionalInformation('PaymentMethod', $this->_code)
-            ->setAdditionalInformation($this->save_method, false);
+            ->setAdditionalInformation($this->saveMethod, false);
     }
 
     protected function createInvoice($order)
