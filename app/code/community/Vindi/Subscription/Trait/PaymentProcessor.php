@@ -263,7 +263,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	{
 		$uniquePaymentProduct = $this->api()->findOrCreateUniquePaymentProduct();
 
-		$this->log(sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct));
+		$this->log(sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct), $this->_code . 'log');
 
 		$body = [
 			'customer_id'         => $customerId,
@@ -301,7 +301,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$this->api()->deleteBill($bill['id']);
 		}
 
-		$this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()));
+		$this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()), $this->_code . 'log');
 		$message = "Houve um problema na confirmação do pagamento. Verifique os dados e tente novamente.";
 		$payment->setStatus(
 			Mage_Sales_Model_Order::STATE_CANCELED,
@@ -358,13 +358,11 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		$subscription = $this->api()->createSubscription($body);
 
-		$test = $payment->getAdditionalInformation();
-
-		$this->log($test);
+		$this->log($payment->getAdditionalInformation(), $this->_code . 'log');
 
 		if (! isset($subscription['id']) || empty($subscription['id'])) {
 			$message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
-			$this->log(sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message));
+			$this->log(sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message), $this->_code . 'log');
 
 			Mage::throwException($message);
 
