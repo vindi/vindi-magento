@@ -178,7 +178,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
             return false;
         }
 
-        if ($this->processPaidReturn()) {
+        if ($this->processPaidReturn($bill)) {
 	        $orderHandler = Mage::helper('vindi_subscription/order');
         	$orderHandler->updateToSuccess($order);
 	        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)
