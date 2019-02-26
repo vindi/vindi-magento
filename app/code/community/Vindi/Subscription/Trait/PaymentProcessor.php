@@ -380,15 +380,6 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		return $subscription;
 	}
 
-	/**
-	 * @param string   $message
-	 * @param int|null $level
-	 */
-	protected function log($message, $level = null)
-	{
-		Mage::log($message, $level, $this->_code . '.log');
-	}
-
 	/*
 	 * @param Mage_Sales_Model_Order $order
 	 */

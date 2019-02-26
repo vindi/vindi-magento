@@ -10,8 +10,6 @@ trait Vindi_Subscription_Trait_LogMessenger
 	public function log($message, $local = 'vindi_exception.log', $level = null)
 	{
 		Mage::log($message, $level, $local);
-
-		$this->manageWebhook($level);
 	}
 
 	/**

@@ -87,7 +87,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 
 	protected function processCardInformation($payment, $customerId, $customerVindiId)
 	{
-		if ('bank_slip' != $this->vindiMethodCode) {
+		if ('bank_slip' == $this->vindiMethodCode) {
 			return;
 		}
 
