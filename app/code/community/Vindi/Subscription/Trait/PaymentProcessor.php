@@ -201,6 +201,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
         return $this->processSubscription($payment, $order, $customerId);
     }
+    
 	/**
 	 * @param string $paymentAction
 	 * @param object $stateObject
