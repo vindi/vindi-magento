@@ -117,13 +117,9 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 			return $this;
 		}
 
-		$ccNumber = $info->getCcNumber();
-
 		// remove credit card non-numbers
-		$ccNumber = preg_replace('/\D/', '', $ccNumber);
-
+		$ccNumber = preg_replace('/\D/', '', $info->getCcNumber());
 		$info->setCcNumber($ccNumber);
-
 		return $this;
 	}
 }
