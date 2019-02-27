@@ -159,18 +159,12 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 			return $this;
 		}
 
-		$availableTypes = $this->api()->getCreditCardTypes();
-
 		$ccNumber = $info->getCcNumber();
 
 		// remove credit card non-numbers
 		$ccNumber = preg_replace('/\D/', '', $ccNumber);
 
 		$info->setCcNumber($ccNumber);
-
-		if (! array_key_exists($info->getCcType(), $availableTypes)) {
-			return $this->error(Mage::helper('payment')->__('Credit card type is not allowed for this payment method.'));
-		}
 
 		return $this;
 	}

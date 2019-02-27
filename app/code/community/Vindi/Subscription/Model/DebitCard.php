@@ -128,18 +128,12 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 			return $this;
 		}
 
-		$availableTypes = $this->api()->getDebitCardTypes();
-
 		$dcNumber = $info->getCcNumber();
 
 		// remove debit card non-numbers
 		$dcNumber = preg_replace('/\D/', '', $dcNumber);
 
 		$info->setCcNumber($dcNumber);
-
-		if (! array_key_exists($info->getCcType(), $availableTypes)) {
-			return $this->error(Mage::helper('payment')->__('Debit card type is not allowed for this payment method.'));
-		}
 
 		return $this;
 	}

@@ -32,7 +32,9 @@ class Vindi_Subscription_Model_BankSlip extends Vindi_Subscription_Model_Payment
 	public function assignData($data)
 	{
 		$info = $this->getInfoInstance();
-		$info->setAdditionalInformation('installments', 1);
+		$info->setAdditionalInformation('PaymentMethod', $this->_code)
+			->setAdditionalInformation('installments', 1);
+
 		return $this;
 	}
 }
