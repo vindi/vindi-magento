@@ -67,7 +67,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		if (isset($phoneType)) {
 			return array(array(
-				'phone_type' => $phonetype,
+				'phone_type' => $phoneType,
 				'number'     => $phone
 			));
 		}
@@ -340,7 +340,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$orderItems = $order->getItemsCollection();
 		
 		foreach ($orderItems as $item) {
-			$plan = !empty($this->getCurrentVindiPlan($item)) ? $plan : null; 
+			$plan = !empty($plan = $this->getCurrentVindiPlan($item)) ? $plan : null; 
 
 			if (null !== $plan) {
 				break;
