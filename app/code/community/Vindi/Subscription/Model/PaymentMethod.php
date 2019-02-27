@@ -84,6 +84,39 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return $this->vindiMethodCode;
 	}
 
+	/**
+	 * @param int $customerId
+	 *
+	 * @return array|bool
+	 */
+	protected function createPaymentProfile($customerId)
+	{
+		$payment = $this->getInfoInstance();
+
+		$cardData = array(
+			'holder_name'          => $payment->getCcOwner(),
+			'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
+				. '/' . $payment->getCcExpYear(),
+			'card_number'          => $payment->getCcNumber(),
+			'card_cvv'             => $payment->getCcCid() ?: '000',
+			'customer_id'          => $customerId,
+			'payment_company_code' => $payment->getCcType(),
+			'payment_method_code'  =>  $this->getPaymentMethodCode()
+		);
+
+		$paymentProfile = $this->api()->createCustomerPaymentProfile($cardData);
+
+		if ($paymentProfile === false) {
+			$this->error(
+				'Erro ao informar os dados do Cartão. Verifique os dados e tente novamente!'
+			);
+
+			return false;
+		}
+
+		return $paymentProfile;
+	}
+
 	protected function processCardInformation($payment, $customerId, $customerVindiId)
 	{
 		if ('bank_slip' == $this->vindiMethodCode) {

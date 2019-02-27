@@ -62,43 +62,6 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 	}
 
 	/**
-	 * @param int $customerId
-	 *
-	 * @return array|bool
-	 */
-	protected function createPaymentProfile($customerId)
-	{
-		$payment = $this->getInfoInstance();
-
-		$creditCardData = [
-			'holder_name'          => $payment->getCcOwner(),
-			'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
-				. '/' . $payment->getCcExpYear(),
-			'card_number'          => $payment->getCcNumber(),
-			'card_cvv'             => $payment->getCcCid() ?: '000',
-			'customer_id'          => $customerId,
-			'payment_company_code' => $payment->getCcType(),
-			'payment_method_code'  =>  $this->getPaymentMethodCode()
-		];
-
-		$paymentProfile = $this->api()->createCustomerPaymentProfile($creditCardData);
-
-		if ($paymentProfile === false) {
-			Mage::throwException('Erro ao informar os dados de cartão de crédito. Verifique os dados e tente novamente!');
-
-			return false;
-		}
-
-		$verifyMethod = Mage::getStoreConfig('vindi_subscription/general/verify_method');
-
-		if ($verifyMethod && !$this->verifyPaymentProfile($paymentProfile['payment_profile']['id'])) {
-			Mage::throwException('Não foi possível realizar a verificação do seu cartão de crédito!');
-			return false;
-		}
-		return $paymentProfile;    
-	}
-
-	/**
 	 * @param int $paymentProfileId
 	 *
 	 * @return array|bool

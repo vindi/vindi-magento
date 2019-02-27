@@ -66,38 +66,6 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	}
 
 	/**
-	 * @param int $customerId
-	 *
-	 * @return array|bool
-	 */
-	protected function createPaymentProfile($customerId)
-	{
-		$payment = $this->getInfoInstance();
-
-		$debitCardData = [
-			'holder_name'          => $payment->getCcOwner(),
-			'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
-				. '/' . $payment->getCcExpYear(),
-			'card_number'          => $payment->getCcNumber(),
-			'card_cvv'             => $payment->getCcCid() ?: '000',
-			'customer_id'          => $customerId,
-			'payment_company_code' => $payment->getCcType(),
-			'payment_method_code'  =>  $this->getPaymentMethodCode()
-		];
-
-		$paymentProfileId = $this->api()->createCustomerPaymentProfile($debitCardData);
-		$payment->setPaymentProfile($paymentProfileId);
-
-		if ($paymentProfileId === false) {
-			Mage::throwException('Erro ao informar os dados de cartão de crédito. Verifique os dados e tente novamente!');
-
-			return false;
-		}
-
-		return $paymentProfileId;
-	}
-
-	/**
 	 * @param int $customerVindiId
 	 */
 	protected function assignDataFromPreviousPaymentProfile($customerVindiId)
