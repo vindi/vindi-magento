@@ -136,7 +136,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$customerId = $this->api()->findOrCreateCustomer($customerVindi);
 
 		if ($customerId === false) {
-			Mage::throwException('Falha ao registrar o usuário. Verifique os dados e tente novamente!');
+			$this->error('Falha ao registrar o usuário. Verifique os dados e tente novamente!');
 		}
 
 		return $customerId;
@@ -241,7 +241,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$subscription = $this->createSubscription($payment, $order, $customerId);
 
 		if ($subscription === false) {
-			Mage::throwException('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
+			$this->error('Erro ao criar a assinatura. Verifique os dados e tente novamente!');
 
 			return false;
 		}
@@ -325,7 +325,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$message,
 			true
 		);
-		Mage::throwException($message);
+		$this->error($message);
 	}
 
 	/**
@@ -384,7 +384,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 				'vindi_api.log'
 			);
 
-			Mage::throwException($message);
+			$this->error($message);
 
 			// TODO update order status?
 			return false;
