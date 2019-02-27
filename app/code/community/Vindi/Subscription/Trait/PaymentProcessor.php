@@ -52,24 +52,24 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	 * @param array Customer phones $phone
 	 * @return array
 	 */
-	public function format_phone($phone)
+	public function formatPhone($phone)
 	{
 		$phone = '55' . preg_replace('/^0|\D+/', '', $phone);
 
 		switch(strlen($phone)) {
 			case 12:
-				$phone_type = 'landline';
+				$phoneType = 'landline';
 				break;
 			case 13:
-				$phone_type = 'mobile';
+				$phoneType = 'mobile';
 				break;
 		}
 
-		if (isset($phone_type)) {
-			return [[
-				'phone_type' => $phone_type,
+		if (isset($phoneType)) {
+			return array(array(
+				'phone_type' => $phonetype,
 				'number'     => $phone
-			]];
+			));
 		}
 	}
 
@@ -80,7 +80,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	 * @return bool|int|null
 	 */
    protected function createCustomer($order, $customer)
-	{
+   {
 		$billing = $order->getBillingAddress();
 
 		if (Mage::app()->getStore()->isAdmin()) {
@@ -98,7 +98,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$customer->save();
 		}
 
-		$address = [
+		$address = array(
 			'street'             => $billing->getStreet(1),
 			'number'             => $billing->getStreet(2),
 			'additional_details' => $billing->getStreet(3),
@@ -107,28 +107,28 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			'city'               => $billing->getCity(),
 			'state'              => $billing->getRegionCode(),
 			'country'            => $billing->getCountry(),
-		];
+		);
 
-		$customerVindi = [
+		$customerVindi = array(
 			'name'          => $billing->getFirstname() . ' ' . $billing->getLastname(),
 			'email'         => $order->getBillingAddress()->getEmail(),
 			'registry_code' => $order->getData('customer_taxvat'),
 			'code'          => $userCode,
-			'phones'        => $this->format_phone($order->getBillingAddress()->getTelephone()),
+			'phones'        => $this->formatPhone($order->getBillingAddress()->getTelephone()),
 			'address'       => $address
-		];
+		);
 
 		if (Mage::getStoreConfig('vindi_subscription/general/send_nfe_information')) {
 			switch ($this->getCustomerTipoPessoa($customer)) {
 				case "Física":
-					$customerVindi['metadata'] = [
+					$customerVindi['metadata'] = array(
 						'carteira_de_identidade' => $customer->getIe(),
-					];
+					);
 					break;
 				case "Jurídica":
-					$customerVindi['metadata'] = [
+					$customerVindi['metadata'] = array(
 						'inscricao_estadual' => $customer->getIe(),
-					];
+					);
 					break;
 			}
 		}
@@ -154,54 +154,54 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		return $this->vindiApi = Mage::helper('vindi_subscription/api');
 	}
 
-    /**
-     * @param string $paymentAction
-     * @param object $stateObject
-     *
-     * @return bool|Mage_Payment_Model_Method_Abstract
-     */
-    protected function processNewOrder($paymentAction, $stateObject)
-    {
-        $payment = $this->getInfoInstance();
-        $order = $payment->getOrder();
+	/**
+	 * @param string $paymentAction
+	 * @param object $stateObject
+	 *
+	 * @return bool|Mage_Payment_Model_Method_Abstract
+	 */
+	protected function processNewOrder($paymentAction, $stateObject)
+	{
+		$payment = $this->getInfoInstance();
+		$order = $payment->getOrder();
 
-        $customer = Mage::getModel('customer/customer');
+		$customer = Mage::getModel('customer/customer');
 
-        $customerId      = $this->createCustomer($order, $customer);
-        $customerVindiId = $customer->getVindiUserCode();
+		$customerId      = $this->createCustomer($order, $customer);
+		$customerVindiId = $customer->getVindiUserCode();
 
-        $this->processCardInformation($payment, $customerId, $customerVindiId);
+		$this->processCardInformation($payment, $customerId, $customerVindiId);
 
-        $bill = $this->filterOrder($order, $payment, $customerId);
+		$bill = $this->filterOrder($order, $payment, $customerId);
 
-        if (! $bill || ! $order->getId() || ! $order->canInvoice()) {
-            return false;
-        }
+		if (! $bill || ! $order->getId() || ! $order->canInvoice()) {
+			return false;
+		}
 
-        if ($this->processPaidReturn($bill)) {
-	        $orderHandler = Mage::helper('vindi_subscription/order');
-        	$orderHandler->updateToSuccess($order);
-	        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)
-	        	->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
+		if ($this->processPaidReturn($bill)) {
+			$orderHandler = Mage::helper('vindi_subscription/order');
+			$orderHandler->updateToSuccess($order);
+			$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)
+				->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
 
-	        return $this;
-        }
+			return $this;
+		}
 
-        $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
-            ->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+		$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
+			->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    protected function filterOrder($order, $payment, $customerId)
-    {
-        if ($this->isSingleOrder($order)) {
-            return $this->processSinglePayment($payment, $order, $customerId);
-        }
+	protected function filterOrder($order, $payment, $customerId)
+	{
+		if ($this->isSingleOrder($order)) {
+			return $this->processSinglePayment($payment, $order, $customerId);
+		}
 
-        return $this->processSubscription($payment, $order, $customerId);
-    }
-    
+		return $this->processSubscription($payment, $order, $customerId);
+	}
+	
 	/**
 	 * @param string $paymentAction
 	 * @param object $stateObject
@@ -216,8 +216,12 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$payment->setAmount($order->getTotalDue());
 		$this->setStore($order->getStoreId());
 
-		$payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
-			'Novo período da assinatura criado', true);
+		$payment->setStatus(
+			Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
+			Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
+			'Novo período da assinatura criado', true
+		);
+		
 		$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
 			->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
@@ -245,8 +249,11 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$payment->setAmount($order->getTotalDue());
 		$this->setStore($order->getStoreId());
 
-		$payment->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
-			'Assinatura criada', true);
+		$payment->setStatus(
+			Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
+			Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
+			'Assinatura criada', true
+		);
 
 		return $subscription['bill'];
 	}
@@ -263,25 +270,28 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	{
 		$uniquePaymentProduct = $this->api()->findOrCreateUniquePaymentProduct();
 
-		$this->log(sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct), $this->_code . 'log');
+		$this->log(
+			sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct),
+			$this->_code . 'log'
+		);
 
-		$body = [
+		$body = array(
 			'customer_id'         => $customerId,
 			'payment_method_code' => $this->getPaymentMethodCode(),
-			'bill_items'          => [
-				[
+			'bill_items'          => array(
+				array(
 					'product_id' => $uniquePaymentProduct,
 					'amount'     => $order->getGrandTotal(),
-				],
-			]
-		];
+				),
+			)
+		);
 
 		$paymentProfile = $payment->getPaymentProfile();
 
 		if ($paymentProfile) {
-			$body['payment_profile'] = [
+			$body['payment_profile'] = array(
 				'id' => $paymentProfile['payment_profile']['id']
-			];
+			);
 		}
 
 		if ($installments = $payment->getAdditionalInformation('installments')) {
@@ -301,8 +311,14 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$this->api()->deleteBill($bill['id']);
 		}
 
-		$this->log(sprintf('Erro no pagamento do pedido %d.', $order->getId()), $this->_code . 'log');
-		$message = "Houve um problema na confirmação do pagamento. Verifique os dados e tente novamente.";
+		$this->log(
+			sprintf('Erro no pagamento do pedido %d.', $order->getId()),
+			$this->_code . 'log'
+		);
+
+		$message = 'Houve um problema na confirmação do pagamento.' .
+		'Verifique os dados e tente novamente.';
+
 		$payment->setStatus(
 			Mage_Sales_Model_Order::STATE_CANCELED,
 			Mage_Sales_Model_Order::STATE_CANCELED,
@@ -324,11 +340,11 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$orderItems = $order->getItemsCollection();
 		
 		foreach ($orderItems as $item) {
-			$plan = (!empty(Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan'))) ? 
-					Mage::getModel('catalog/product')->load($item->getProductId())->getData('vindi_subscription_plan')  : null;
+			$plan = !empty($this->getCurrentVindiPlan($item)) ? $plan : null; 
 
-			if (null !== $plan)
+			if (null !== $plan) {
 				break;
+			}
 		}
 
 		$productItems = $this->api()->buildPlanItemsForSubscription($order);
@@ -362,7 +378,11 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		if (! isset($subscription['id']) || empty($subscription['id'])) {
 			$message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
-			$this->log(sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message), $this->_code . 'log');
+
+			$this->log(
+				sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message),
+				$this->_code . 'log'
+			);
 
 			Mage::throwException($message);
 
@@ -376,6 +396,13 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$order->save();
 
 		return $subscription;
+	}
+
+	public function getCurrentVindiPlan($product)
+	{
+		return Mage::getModel('catalog/product')
+			->load($product->getProductId())
+			->getData('vindi_subscription_plan');
 	}
 
 	/*

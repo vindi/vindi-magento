@@ -69,8 +69,6 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		}
 
 		$info = $this->getInfoInstance();
-		$quote = $info->getQuote();
-
 		$this->loadAttributes($info, $data);
 
 		return $this;
@@ -91,50 +89,52 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 			return;
 		}
 
-        if (! $payment->getAdditionalInformation($this->saveMethod)) {
-            $this->createPaymentProfile($customerId);
-            return;
-        }
-        $this->assignDataFromPreviousPaymentProfile($customerVindiId);
+		if (! $payment->getAdditionalInformation($this->saveMethod)) {
+			$this->createPaymentProfile($customerId);
+			return;
+		}
+		
+		$this->assignDataFromPreviousPaymentProfile($customerVindiId);
 	}
 
-    protected function processPaidReturn($bill)
-    {
-        if ('paid' != $bill['status']) {
-        	return false;
-        }
+	protected function processPaidReturn($bill)
+	{
+		if ('paid' != $bill['status']) {
+			return false;
+		}
 
- 		$charge = $bill['charges'][0];
-        if ($charge) {
-        	if ('PaymentMethod::CreditCard' == $charge['payment_method']['type']) {
-		        $this->getInfoInstance()->setAdditionalInformation(
-            		array('installments' => $bill['installments'])
-            	);
-        	}
-        }
+		$charge = $bill['charges'][0];
 
-        $nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
+		if ($charge) {
+			if ('PaymentMethod::CreditCard' == $charge['payment_method']['type']) {
+				$this->getInfoInstance()->setAdditionalInformation(
+					array('installments' => $bill['installments'])
+				);
+			}
+		}
 
-        if ($nsu) {
-	        $this->getInfoInstance()->setAdditionalInformation(array('nsu' => $nsu));
-        }
+		$nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
 
-        return true;
-    }
+		if ($nsu) {
+			$this->getInfoInstance()->setAdditionalInformation(array('nsu' => $nsu));
+		}
 
-    protected function getAcquirerId($response_fields)
-    {
-        $possibles = array('nsu', 'proof_of_sale');
-        $nsu = '';
+		return true;
+	}
 
-        foreach ($possibles as $nsu_field) {
-            if ($response_fields[$nsu_field]) {
-                $nsu = $response_fields[$nsu_field];
-            }
-        }
+	protected function getAcquirerId($responseFields)
+	{
+		$possibles = array('nsu', 'proof_of_sale');
+		$nsu = '';
 
-        return $nsu;
-    }
+		foreach ($possibles as $nsuField) {
+			if ($responseFields[$nsuField]) {
+				$nsu = $responseFields[$nsuField];
+			}
+		}
+
+		return $nsu;
+	}
 
 	/**
 	 * Check whether payment method can be used
