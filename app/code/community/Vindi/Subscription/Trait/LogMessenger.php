@@ -19,9 +19,9 @@ trait Vindi_Subscription_Trait_LogMessenger
 	 *
 	 * @return  bool
 	 */
-	public function logWebhook($message, $level)
+	public function logWebhook($message, $level = null)
 	{
-	$this->log($message, 'vindi_webhooks.log', $level);
+		$this->log($message, 'vindi_webhooks.log', $level);
 
 		switch ($level) {
 		case 4:
