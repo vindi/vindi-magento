@@ -36,7 +36,8 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 	{
 		if ('saved' === $data->getCcChoice()) {
 			$info->setAdditionalInformation('PaymentMethod', $this->_code)
-				->setAdditionalInformation('use_saved_cc', true);
+				->setAdditionalInformation('use_saved_cc', true)
+				->setAdditionalInformation('installments', $data->getCcInstallments());
 
 			return $this;
 		}
@@ -53,7 +54,8 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 			->setCcSsStartMonth($data->getCcSsStartMonth())
 			->setCcSsStartYear($data->getCcSsStartYear())
 			->setAdditionalInformation('PaymentMethod', $this->_code)
-			->setAdditionalInformation('use_saved_cc', false);
+			->setAdditionalInformation('use_saved_cc', false)
+			->setAdditionalInformation('installments', $data->getCcInstallments());
 	}
 
 	/**
@@ -92,9 +94,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 	{
 		$info = $this->getInfoInstance();
 
-		$quote = $info->getQuote();
-
-		if ($this->isSingleOrder($quote)
+		if ($this->isSingleOrder($info->getQuote())
 			&& 'valid' != ($result = $this->validateInstallments($info))) {
 			return $this->error($result);
 		}
