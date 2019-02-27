@@ -13,11 +13,6 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 	protected $vindiMethodCode = 'credit_card';
 
 	/**
-	 * @var string
-	 */
-	protected $saveMethod = 'use_saved_cc';
-
-	/**
 	 * @var bool
 	 */
 	protected $_canSaveCc = false;
@@ -41,7 +36,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 	{
 		if ('saved' === $data->getCcChoice()) {
 			$info->setAdditionalInformation('PaymentMethod', $this->_code)
-				->setAdditionalInformation($this->saveMethod, true);
+				->setAdditionalInformation('use_saved_cc', true);
 
 			return $this;
 		}
@@ -58,7 +53,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 			->setCcSsStartMonth($data->getCcSsStartMonth())
 			->setCcSsStartYear($data->getCcSsStartYear())
 			->setAdditionalInformation('PaymentMethod', $this->_code)
-			->setAdditionalInformation($this->saveMethod, false);
+			->setAdditionalInformation('use_saved_cc', false);
 	}
 
 	/**

@@ -17,11 +17,6 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	protected $vindiMethodCode = 'debit_card';
 
 	/**
-	 * @var string
-	 */
-	protected $saveMethod = 'use_saved_dc';
-
-	/**
 	 * @var bool
 	 */
 	protected $_canSaveDc = false;
@@ -44,8 +39,7 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	public function loadAttributes($info, $data)
 	{
 		if ('saved' === $data->getDcChoice()) {
-			$info->setAdditionalInformation('PaymentMethod', $this->_code)
-				->setAdditionalInformation($this->saveMethod, true);
+			$info->setAdditionalInformation('PaymentMethod', $this->_code);
 
 			return $this;
 		}
@@ -61,24 +55,7 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 			->setCcSsIssue($data->getDcSsIssue())
 			->setCcSsStartMonth($data->getDcSsStartMonth())
 			->setCcSsStartYear($data->getDcSsStartYear())
-			->setAdditionalInformation('PaymentMethod', $this->_code)
-			->setAdditionalInformation($this->saveMethod, false);
-	}
-
-	/**
-	 * @param int $customerVindiId
-	 */
-	protected function assignDataFromPreviousPaymentProfile($customerVindiId)
-	{
-		$api     = Mage::helper('vindi_subscription/api');
-		$savedDc = $api->getCustomerPaymentProfile($customerVindiId);
-		$info    = $this->getInfoInstance();
-
-		$info->setCcType($savedDc['payment_company']['name'])
-			 ->setCcOwner($savedDc['holder_name'])
-			 ->setCcLast4($savedDc['card_number_last_four'])
-			 ->setCcNumber($savedDc['card_number_last_four'])
-			 ->setAdditionalInformation('use_saved_dc', true);
+			->setAdditionalInformation('PaymentMethod', $this->_code);
 	}
 
 	/**

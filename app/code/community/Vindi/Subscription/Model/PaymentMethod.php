@@ -119,12 +119,12 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 
 	protected function processCardInformation($payment, $customerId, $customerVindiId)
 	{
-		if ('bank_slip' == $this->vindiMethodCode) {
+		if ('bank_slip' == $this->vindiMethodCode || 'debit_card' == $this->vindiMethodCode) {
 			return true;
 		}
 
 
-		if ($payment->getAdditionalInformation($this->saveMethod)) {
+		if ($payment->getAdditionalInformation('use_saved_cc')) {
 			$this->assignDataFromPreviousPaymentProfile($customerVindiId);
 			return true;
 		}
