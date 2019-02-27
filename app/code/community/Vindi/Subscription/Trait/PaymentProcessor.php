@@ -221,7 +221,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
 			'Novo período da assinatura criado', true
 		);
-		
+
 		$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)
 			->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
 
@@ -374,7 +374,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		$subscription = $this->api()->createSubscription($body);
 
-		$this->log($payment->getAdditionalInformation(), $this->_code . 'log');
+		$this->log(json_encode($payment->getAdditionalInformation()), $this->_code . 'log');
 
 		if (! isset($subscription['id']) || empty($subscription['id'])) {
 			$message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
