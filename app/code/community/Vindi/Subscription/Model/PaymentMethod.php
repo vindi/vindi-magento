@@ -147,12 +147,11 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 					array('installments' => $bill['installments'])
 				);
 			}
-		}
 
-		$nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
-
-		if ($nsu) {
-			$this->getInfoInstance()->setAdditionalInformation(array('nsu' => $nsu));
+			$nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
+			if ($nsu) {
+				$this->getInfoInstance()->setAdditionalInformation(array('nsu' => $nsu));
+			}
 		}
 
 		return true;
