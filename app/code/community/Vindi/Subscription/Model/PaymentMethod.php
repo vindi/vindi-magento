@@ -120,15 +120,17 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 	protected function processCardInformation($payment, $customerId, $customerVindiId)
 	{
 		if ('bank_slip' == $this->vindiMethodCode) {
-			return;
+			return true;
 		}
 
-		if (! $payment->getAdditionalInformation($this->saveMethod)) {
-			$this->createPaymentProfile($customerId);
-			return;
+
+		if ($payment->getAdditionalInformation($this->saveMethod)) {
+			$this->assignDataFromPreviousPaymentProfile($customerVindiId);
+			return true;
 		}
 
-		$this->assignDataFromPreviousPaymentProfile($customerVindiId);
+		$paymentProfile = $this->createPaymentProfile($customerId);
+		return $this->verifyPaymentProfile($paymentProfile);
 	}
 
 	protected function processPaidReturn($bill)
@@ -168,6 +170,20 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		}
 
 		return $nsu;
+	}
+
+	protected function verifyPaymentProfile($paymentProfile)
+	{
+		$isVerifyEnabled = Mage::getStoreConfig('vindi_subscription/general/verify_method');
+
+		if ($isVerifyEnabled && 'credit_card' == $this->_code) {
+			if (!$this->verifyCreditCard($paymentProfile['payment_profile']['id'])) {
+				$this->error('Não foi possível realizar a validação do seu Cartão!');
+				return false;
+			}
+		}
+
+		return $paymentProfile; 
 	}
 
 	/**

@@ -66,7 +66,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 	 *
 	 * @return array|bool
 	 */
-	public function verifyPaymentProfile($paymentProfileId)
+	public function verifyCreditCard($paymentProfileId)
 	{
 		$verify_status = $this->api()->verifyCustomerPaymentProfile($paymentProfileId);
 		return ($verify_status['transaction']['status'] === 'success');
