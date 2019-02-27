@@ -272,7 +272,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		$this->log(
 			sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct),
-			$this->_code . 'log'
+			'vindi_api.log'
 		);
 
 		$body = array(
@@ -313,7 +313,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		$this->log(
 			sprintf('Erro no pagamento do pedido %d.', $order->getId()),
-			$this->_code . 'log'
+			'vindi_api.log'
 		);
 
 		$message = 'Houve um problema na confirmação do pagamento.' .
@@ -374,14 +374,14 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		$subscription = $this->api()->createSubscription($body);
 
-		$this->log(json_encode($payment->getAdditionalInformation()), $this->_code . 'log');
+		$this->log(json_encode($payment->getAdditionalInformation()), $this->_code . '.log');
 
 		if (! isset($subscription['id']) || empty($subscription['id'])) {
 			$message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
 
 			$this->log(
 				sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message),
-				$this->_code . 'log'
+				'vindi_api.log'
 			);
 
 			Mage::throwException($message);

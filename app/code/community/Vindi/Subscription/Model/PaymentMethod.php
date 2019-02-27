@@ -4,6 +4,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 {
 	use Vindi_Subscription_Trait_PaymentProcessor;
 	use Vindi_Subscription_Trait_ExceptionMessenger;
+	use Vindi_Subscription_Trait_LogMessenger;
 
 	/**
 	 * @var bool
@@ -93,7 +94,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 			$this->createPaymentProfile($customerId);
 			return;
 		}
-		
+
 		$this->assignDataFromPreviousPaymentProfile($customerVindiId);
 	}
 
