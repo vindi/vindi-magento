@@ -2,7 +2,7 @@
 
 class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 {
-  	use Vindi_Subscription_Trait_LogMessenger;
+	use Vindi_Subscription_Trait_LogMessenger;
 	use Vindi_Subscription_Trait_ExceptionMessenger;
 
 	protected $billHandler;
