@@ -2,7 +2,8 @@
 
 class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 {
-  use Vindi_Subscription_Trait_LogMessenger;
+	use Vindi_Subscription_Trait_LogMessenger;
+	use Vindi_Subscription_Trait_ExceptionMessenger;
 
 	protected $billHandler;
 	protected $orderHandler;
@@ -27,7 +28,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 			$jsonBody = json_decode($body, true);
 
 			if (! $jsonBody || ! isset($jsonBody['event'])) {
-				Mage::throwException('Evento do Webhook não encontrado!');
+				$this->error('Evento do Webhook não encontrado!');
 			}
 
 			$type = $jsonBody['event']['type'];

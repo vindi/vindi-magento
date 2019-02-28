@@ -10,8 +10,6 @@ trait Vindi_Subscription_Trait_LogMessenger
 	public function log($message, $local = 'vindi_exception.log', $level = null)
 	{
 		Mage::log($message, $level, $local);
-
-		$this->manageWebhook($level);
 	}
 
 	/**
@@ -21,9 +19,9 @@ trait Vindi_Subscription_Trait_LogMessenger
 	 *
 	 * @return  bool
 	 */
-	public function logWebhook($message, $level)
+	public function logWebhook($message, $level = null)
 	{
-	$this->log($message, 'vindi_webhooks.log', $level);
+		$this->log($message, 'vindi_webhooks.log', $level);
 
 		switch ($level) {
 		case 4:
