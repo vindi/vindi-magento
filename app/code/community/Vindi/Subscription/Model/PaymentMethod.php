@@ -162,7 +162,14 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 
 	protected function getAcquirerId($responseFields)
 	{
-		$possibles = array('nsu', 'proof_of_sale');
+		$possibles = array(
+			'nsu',									// Cielo 1.5
+			'proof_of_sale',  			// Cielo v3
+			'tid',            			// E-rede
+			'Tid',									// Rede komerci
+			'stone_id_tx_id_tx_ref' // Stone
+		);
+
 		$nsu = '';
 
 		foreach ($possibles as $nsuField) {
