@@ -67,8 +67,6 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	{
 		$info = $this->getInfoInstance();
 
-		$quote = $info->getQuote();
-
 		if ($info->getAdditionalInformation('use_saved_dc')) {
 			return $this;
 		}
