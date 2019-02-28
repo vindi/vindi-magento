@@ -27,7 +27,7 @@ class Vindi_Subscription_Model_BankSlip extends Vindi_Subscription_Model_Payment
 	 *
 	 * @param   mixed $data
 	 *
-	 * @return  Mage_Payment_Model_Method_Abstract
+	 * @return  Vindi_Subscription_Model_BankSlip
 	 */
 	public function assignData($data)
 	{

@@ -170,11 +170,11 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$customerId      = $this->createCustomer($order, $customer);
 		$customerVindiId = $customer->getVindiUserCode();
 
-		$paymentProfile = $this->processCardInformation($payment, $customerId, $customerVindiId);
+		$hasPaymentProfile = $this->processCardInformation($payment, $customerId, $customerVindiId);
 
 		$bill = $this->filterOrder($order, $payment, $customerId);
 
-		if (! $bill || ! $paymentProfile || ! $order->getId() || ! $order->canInvoice()) {
+		if (! $bill || ! $hasPaymentProfile || ! $order->getId() || ! $order->canInvoice()) {
 			return false;
 		}
 

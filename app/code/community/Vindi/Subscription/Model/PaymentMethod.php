@@ -61,7 +61,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 	 *
 	 * @param   mixed $data
 	 *
-	 * @return  Mage_Payment_Model_Method_Abstract
+	 * @return  Vindi_Subscription_Model_[CreditCard|DebitCard]
 	 */
 	public function assignData($data)
 	{
@@ -80,7 +80,6 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 	 */
 	protected function getPaymentMethodCode()
 	{
-		// TODO fix it to proper method code
 		return $this->vindiMethodCode;
 	}
 
@@ -130,7 +129,11 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		}
 
 		$paymentProfile = $this->createPaymentProfile($customerId);
-		return $this->verifyPaymentProfile($paymentProfile);
+		if ($paymentProfile) {
+			return $this->verifyPaymentProfile($paymentProfile);
+		}
+
+		return false;
 	}
 
 	protected function processPaidReturn($bill)
@@ -182,7 +185,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 			}
 		}
 
-		return $paymentProfile; 
+		return true; 
 	}
 
 	/**
