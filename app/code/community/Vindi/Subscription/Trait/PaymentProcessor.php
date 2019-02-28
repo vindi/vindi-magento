@@ -8,13 +8,17 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	 *
 	 * @return bool|Mage_Payment_Model_Method_Abstract
 	 */
-	public function initialize($paymentAction, $stateObject)
+	public function initialize($paymentAction = null, $stateObject)
 	{
-		if ($this->checkForReorder()) {
-			return $this->processReorder($paymentAction, $stateObject);
+		if (is_null($paymentAction)){
+			return;
 		}
 
-		return $this->processNewOrder($paymentAction, $stateObject);
+		if ($this->checkForReorder()) {
+			return $this->processReorder($stateObject);
+		}
+
+		return $this->processNewOrder($stateObject);
 	}
 
 	/**
@@ -155,12 +159,11 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	}
 
 	/**
-	 * @param string $paymentAction
 	 * @param object $stateObject
 	 *
 	 * @return bool|Mage_Payment_Model_Method_Abstract
 	 */
-	protected function processNewOrder($paymentAction, $stateObject)
+	protected function processNewOrder($stateObject)
 	{
 		$payment = $this->getInfoInstance();
 		$order = $payment->getOrder();
@@ -203,12 +206,11 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	}
 	
 	/**
-	 * @param string $paymentAction
 	 * @param object $stateObject
 	 *
 	 * @return bool|Mage_Payment_Model_Method_Abstract
 	 */
-	protected function processReorder($paymentAction, $stateObject)
+	protected function processReorder($stateObject)
 	{
 		$payment = $this->getInfoInstance();
 		$order = $payment->getOrder();
