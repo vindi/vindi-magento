@@ -166,7 +166,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return $order->getPayment();
 	}
 
-	protected function getAcquirerId($responseFields)
+	public function getAcquirerId($responseFields)
 	{
 		$possibles = array(
 			'nsu',			// Cielo 1.5
