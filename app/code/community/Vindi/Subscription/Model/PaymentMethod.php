@@ -176,6 +176,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		foreach ($possibles as $nsuField) {
 			if ($responseFields[$nsuField]) {
 				$nsu = $responseFields[$nsuField];
+				break;
 			}
 		}
 
