@@ -102,7 +102,7 @@ class Vindi_Subscription_Helper_Order
 			$this->logWebhook('Gerando fatura para o pedido: ' . $orderId);
 			$this->updateToSuccess($order);
 			$paymentMethod = new Vindi_Subscription_Model_PaymentMethod();
-			$paymentMethod->processPaidReturn($data['bill'], $order->getPayment());
+			$paymentMethod->processPaidReturn($data['bill'], $order);
 			$this->logWebhook('Fatura gerada com sucesso.');
 			return true;
 		}
