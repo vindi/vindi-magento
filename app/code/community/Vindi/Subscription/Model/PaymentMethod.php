@@ -136,28 +136,34 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return false;
 	}
 
-	protected function processPaidReturn($bill)
+	public function processPaidReturn($bill, $order = null)
 	{
 		if ('paid' != $bill['status']) {
 			return false;
 		}
-
+		$payment = $this->getPaymentSender($order);
 		$charge = $bill['charges'][0];
+		$additionalInfo = [];
 
-		if ($charge) {
-			if ('PaymentMethod::CreditCard' == $charge['payment_method']['type']) {
-				$this->getInfoInstance()->setAdditionalInformation(
-					array('installments' => $bill['installments'])
-				);
-			}
-
-			$nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
-			if ($nsu) {
-				$this->getInfoInstance()->setAdditionalInformation(array('nsu' => $nsu));
-			}
+		if ('PaymentMethod::CreditCard' == $charge['payment_method']['type']) {
+			$additionalInfo['installments'] = $bill['installments'];
 		}
 
+		$nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
+		if ($nsu) {
+			$additionalInfo['nsu'] = $nsu;
+		}
+
+		$payment->setAdditionalInformation($additionalInfo);
 		return true;
+	}
+
+	public function getPaymentSender($order)
+	{
+		if (is_null($order))
+			return $this->getInfoInstance();
+
+		return $order->getPayment();
 	}
 
 	protected function getAcquirerId($responseFields)
