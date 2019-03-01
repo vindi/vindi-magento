@@ -95,12 +95,14 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @return bool
 	 */
-	public function createInvoice($order)
+	public function createInvoice($order, $data)
 	{
 		$orderId = $order->getId();
 		if ($orderId && $order->canInvoice()) {
 			$this->logWebhook('Gerando fatura para o pedido: ' . $orderId);
 			$this->updateToSuccess($order);
+			$paymentMethod = new Vindi_Subscription_Model_PaymentMethod();
+			$paymentMethod->processPaidReturn($data['bill'], $order->getPayment());
 			$this->logWebhook('Fatura gerada com sucesso.');
 			return true;
 		}

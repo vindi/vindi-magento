@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.5.0 - 01/03/2019](https://github.com/vindi/vindi-magento/releases/tag/1.5.0)
+
+### Adicionado
+- Insere informações de NSU nas renovações de pedidos via Webhooks
+
+
 ## [1.4.2 - 19/02/2019](https://github.com/vindi/vindi-magento/releases/tag/1.4.2)
 
 ### Corrigido

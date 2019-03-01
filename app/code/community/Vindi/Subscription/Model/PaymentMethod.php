@@ -136,38 +136,53 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return false;
 	}
 
-	protected function processPaidReturn($bill)
+	public function processPaidReturn($bill, $order = null)
 	{
 		if ('paid' != $bill['status']) {
 			return false;
 		}
-
+		$payment = $this->getPaymentSender($order);
 		$charge = $bill['charges'][0];
+		$additionalInfo = [];
 
-		if ($charge) {
-			if ('PaymentMethod::CreditCard' == $charge['payment_method']['type']) {
-				$this->getInfoInstance()->setAdditionalInformation(
-					array('installments' => $bill['installments'])
-				);
-			}
-
-			$nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
-			if ($nsu) {
-				$this->getInfoInstance()->setAdditionalInformation(array('nsu' => $nsu));
-			}
+		if ('PaymentMethod::CreditCard' == $charge['payment_method']['type']) {
+			$additionalInfo['installments'] = $bill['installments'];
 		}
 
+		$nsu = $this->getAcquirerId($charge['last_transaction']['gateway_response_fields']);
+		if ($nsu) {
+			$additionalInfo['nsu'] = $nsu;
+		}
+
+		$payment->setAdditionalInformation($additionalInfo);
 		return true;
 	}
 
-	protected function getAcquirerId($responseFields)
+	public function getPaymentSender($order)
 	{
-		$possibles = array('nsu', 'proof_of_sale');
+		if (is_null($order))
+			return $this->getInfoInstance();
+
+		return $order->getPayment();
+	}
+
+	public function getAcquirerId($responseFields)
+	{
+		$possibles = array(
+			'nsu',			// Cielo 1.5
+			'proof_of_sale',  	// Cielo v3
+			'NumSqn',               // E-rede SOAP
+			'tid',            	// E-rede
+			'Tid',			// Rede komerci
+			'stone_id_tx_id_tx_ref' // Stone
+		);
+
 		$nsu = '';
 
 		foreach ($possibles as $nsuField) {
 			if ($responseFields[$nsuField]) {
 				$nsu = $responseFields[$nsuField];
+				break;
 			}
 		}
 
