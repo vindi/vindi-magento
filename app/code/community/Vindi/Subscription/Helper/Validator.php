@@ -30,6 +30,10 @@ class Vindi_Subscription_Helper_Validator
 			return false;
 		}
 
+		# Inválida evento se o pedido já estiver pago
+		if ($order->getStatusLabel() == 'processing')
+			return true;
+
 		$gatewayMessage = $charge['last_transaction']['gateway_message'];
 
 		if (is_null($charge['next_attempt'])) {
