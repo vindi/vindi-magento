@@ -30,6 +30,15 @@ class Vindi_Subscription_Helper_Validator
 			return false;
 		}
 
+		# Inválida evento se a cobrança já estiver paga
+		if (($chargeStatus = $charge['status']) == 'paid') {
+			$orderStatus = $order->getStatusLabel();
+			$this->logWebhook('Evento não processado!');
+			$this->logWebhook("O pedido possui o status: '$orderStatus' e " .
+				"a cobrança possui o status: '$chargeStatus'");	
+			return true;
+		}
+
 		$gatewayMessage = $charge['last_transaction']['gateway_message'];
 
 		if (is_null($charge['next_attempt'])) {

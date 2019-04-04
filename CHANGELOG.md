@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.5.1 - 04/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.5.1)
+
+### Ajustado
+- Corrige comportamento do Webhook 'charge_rejected' para cobranças via Cartão de Débito
+
+
 ## [1.5.0 - 01/03/2019](https://github.com/vindi/vindi-magento/releases/tag/1.5.0)
 
 ### Adicionado
