@@ -699,6 +699,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'status'         => 'active',
                 'pricing_schema' => [
                     'price' => 0,
+                    'schema_type': 'per_unit'
                 ],
             ]);
         }
