@@ -83,7 +83,25 @@ class Vindi_Subscription_Helper_Bill
 				continue;
 			}
 			$vindiData['products'][] = $billItem;
+
 		}
+                
+		$products = [];
+    	$key = 0;
+
+		foreach ($vindiData['products'] as $product) {
+		    if ($lastCode && $lastCode == $product['product']['code']) {
+		        $products[$key - 1]['quantity'] += $product['quantity'];
+		    	(float)$products[$key - 1]['pricing_schema']['price'] +=
+		    		(float)$product['pricing_schema']['price'];
+		    }
+		    else {
+		        $products[$key] = $product;
+		        $lastCode = $product['product']['code'];
+		    }
+		    $key++;
+		}
+        $vindiData['products'] = $products;
 		return $vindiData;
 	}
 

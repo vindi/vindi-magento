@@ -319,8 +319,8 @@ class Vindi_Subscription_Helper_Order
 					$item['pricing_schema']['price']));
 
 				$quote->getItemByProduct($magentoProduct)
-					->setOriginalCustomPrice($item['pricing_schema']['price'])
-					->setCustomPrice($item['pricing_schema']['price'])
+					->setOriginalCustomPrice($item['pricing_schema']['price'] / $item['quantity'])
+					->setCustomPrice($item['pricing_schema']['price'] / $item['quantity'])
 					->setQty($item['quantity'])
 					->save();
 			}
