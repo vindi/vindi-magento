@@ -665,20 +665,23 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function findOrCreateUniquePaymentProduct()
-    {
-        $productId = $this->findProductByCode('mag-pagtounico');
-        if (false === $productId) {
-            return $this->createProduct([
-                'name'           => 'Pagamento Único (não remover)',
-                'code'           => 'mag-pagtounico',
-                'status'         => 'active',
-                'pricing_schema' => [
-                    'price' => 0,
-                ],
-            ]);
+    public function findOrCreateUniquePaymentProduct($order)
+    {      
+        $billItems = [];
+        foreach ($order as $item) {
+            $productId = $this->findOrCreateProduct(
+                array(
+                    'sku' => $item->getSku(),
+                    'name' => $item->getName()
+                )
+            );
+
+            $billItems[] = array(
+                'product_id' => $productId,
+                'amount'     => $item->getPrice()
+            );
         }
-        return $productId;
+        return $billItems;
     }
 
     /**
@@ -689,7 +692,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function findOrCreateProduct($product)
     {
-        //
         $productId = $this->findProductByCode($product['sku']);
 
         if (false === $productId) {
@@ -699,7 +701,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'status'         => 'active',
                 'pricing_schema' => [
                     'price' => 0,
-                    'schema_type': 'per_unit'
+                    'schema_type' => 'per_unit'
                 ],
             ]);
         }
