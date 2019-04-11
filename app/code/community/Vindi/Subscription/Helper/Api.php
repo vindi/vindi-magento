@@ -686,7 +686,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             $billItems = array(
                 'product_id'      => $productId,
                 'quantity'        => $item->getQtyOrdered(),
-                'schema_type'     => array(
+                'pricing_schema'     => array(
                     'price'       => $item->getPrice(),
                     'schema_type' => 'per_unit'
                 )
