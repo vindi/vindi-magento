@@ -566,12 +566,19 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 }
 
                 $list[] = array(
-                    'product_id'     => $this->findOrCreateProduct(array(
-                    	'sku' => $item->getSku(),
-                    	'name' => $item->getName())),
-                    'cycles'         => $cycles,
-                    'pricing_schema' => array('price' => $item->getPrice()),
-                    'discounts'      => $discount,
+                    'product_id'          => $this->findOrCreateProduct(
+                        array(
+                        	'sku'         => $item->getSku(),
+                        	'name'        => $item->getName()
+                        )
+                    ),
+                    'cycles'              => $cycles,
+                    'quantity'            => $item->getQtyOrdered(),
+                    'pricing_schema'      => array(
+                        'price'           => $item->getPrice(),
+                        'schema_type'     => 'per_unit'
+                    ),
+                    'discounts'           => $discount,
                 );
             }
         }
@@ -668,7 +675,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function findOrCreateUniquePaymentProduct($order)
     {      
         $billItems = [];
-        foreach ($order as $item) {
+        foreach ($order->getItemsCollection() as $item) {
             $productId = $this->findOrCreateProduct(
                 array(
                     'sku' => $item->getSku(),
@@ -676,9 +683,13 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 )
             );
 
-            $billItems[] = array(
-                'product_id' => $productId,
-                'amount'     => $item->getPrice()
+            $billItems = array(
+                'product_id'      => $productId,
+                'quantity'        => $item->getQtyOrdered(),
+                'schema_type'     => array(
+                    'price'       => $item->getPrice(),
+                    'schema_type' => 'per_unit'
+                )
             );
         }
         return $billItems;
