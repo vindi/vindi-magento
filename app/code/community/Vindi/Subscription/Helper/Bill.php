@@ -85,24 +85,35 @@ class Vindi_Subscription_Helper_Bill
 			$vindiData['products'][] = $billItem;
 
 		}
-                
-		$products = [];
-    	$key = 0;
-
-		foreach ($vindiData['products'] as $product) {
-		    if ($lastCode && $lastCode == $product['product']['code']) {
-		        $products[$key - 1]['quantity'] += $product['quantity'];
-		    	(float)$products[$key - 1]['pricing_schema']['price'] +=
-		    		(float)$product['pricing_schema']['price'];
-		    }
-		    else {
-		        $products[$key] = $product;
-		        $lastCode = $product['product']['code'];
-		    }
-		    $key++;
-		}
-        $vindiData['products'] = $products;
+		$vindiData['products'] = $this->unifiesProducts($vindiData['products']);
 		return $vindiData;
+	}
+
+	/**
+	 * Unifica os produtos somando os valores e quantidades
+	 *
+	 * @param array | $vindiData['products']
+	 *
+	 * @return array | new $vindiData['products']
+	 */ 
+	public function unifiesProducts($currentData)
+	{
+		$newData = array();
+		$key = 0;
+
+		foreach ($currentData as $product) {
+			if ($lastCode && $lastCode == $product['product']['code']) {
+				$newData[$key - 1]['quantity'] += $product['quantity'];
+				(float)$newData[$key - 1]['pricing_schema']['price'] +=
+				(float)$product['pricing_schema']['price'];
+				$key++;
+				continue;
+			}
+			$newData[$key] = $product;
+			$lastCode = $product['product']['code'];
+			$key++;
+		}
+		return $newData;
 	}
 
 	/**
