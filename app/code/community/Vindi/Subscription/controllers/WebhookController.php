@@ -24,7 +24,12 @@ class Vindi_Subscription_WebhookController extends Mage_Core_Controller_Front_Ac
 		$body = file_get_contents('php://input');
 		$this->logWebhook(sprintf("Novo evento dos webhooks!\n%s", $body));
 
-		return $handler->handle($body);
+		if (!$handler->handle($body)) {
+            $this->getResponse()->clearHeaders();
+            $this->getResponse()->setHeader('HTTP/1.1','422 Unprocessable Entity');
+            return false;
+        }
+        return true;
 	}
 
 	/**

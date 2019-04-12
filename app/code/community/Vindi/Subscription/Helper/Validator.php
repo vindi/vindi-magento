@@ -74,13 +74,13 @@ class Vindi_Subscription_Helper_Validator
 
 		if (! isset($bill['subscription']) || is_null($bill['subscription'])) {
 			$this->logWebhook(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 5);
-			return false;
+			return true;
 		}
 
 		if (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
 			$this->logWebhook(sprintf(
 				'Ignorando o evento "bill_created" para o primeiro ciclo.'), 5);
-			return false;
+			return true;
 		}
 
 		$order = $this->orderHandler->getOrder($data);
@@ -88,7 +88,7 @@ class Vindi_Subscription_Helper_Validator
 		if ($order) {
 			$this->logWebhook(sprintf('Já existe o pedido %s para o evento "bill_created".',
 				$order->getId()), 5);
-			return false;
+			return true;
 		}
 
 		if (isset($bill['subscription']['id']) && $bill['period']['cycle']) {
@@ -97,5 +97,25 @@ class Vindi_Subscription_Helper_Validator
 		}
 		$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
 		return false;
+	}
+
+	/**
+	 * Valida estrutura do Webhook 'bill_paid'
+	 * A fatura pode estar relacionada a uma assinatura ou uma compra avulsa
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function validateBillPaidWebhook($data)
+	{
+		$order = $this->orderHandler->getOrder($data);
+		if (! $order) {
+			$this->logWebhook(sprintf(
+				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
+				$data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
+			return false;
+		}
+		return $this->billHandler->processBillPaid($order, $data);
 	}
 }
