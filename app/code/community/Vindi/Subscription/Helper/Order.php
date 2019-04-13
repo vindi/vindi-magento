@@ -80,7 +80,7 @@ class Vindi_Subscription_Helper_Order
 		}
 
 		if (! $order || ! $order->getId()) {
-			$this->logWebhook(sprintf('Nenhum pedido encontrado para a "%s": %d.', $orderType,
+			$this->logWebhook(sprintf('Pedido não encontrado para a "%s": %d.', $orderType,
 				$orderCode));
 			return false;
 		}

@@ -109,13 +109,39 @@ class Vindi_Subscription_Helper_Validator
 	 */
 	public function validateBillPaidWebhook($data)
 	{
-		$order = $this->orderHandler->getOrder($data);
-		if (! $order) {
+		$billInfo = $this->getBillInfo($data['bill']);
+		$order = $this->orderHandler->getOrderFromMagento(
+			$billInfo['type'],
+			$billInfo['id'],
+			$billInfo['cycle']
+		);
+
+		if ($order)
+			return $this->billHandler->processBillPaid($order, $data);
+
+		if ($billInfo['type'] == 'assinatura') {
 			$this->logWebhook(sprintf(
 				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
-				$data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
+				$billInfo['cycle'], $billInfo['id']), 4);
 			return false;
 		}
-		return $this->billHandler->processBillPaid($order, $data);
+		$this->logWebhook(sprintf('Pedido não encontrado para a "fatura": %d.', $billInfo['id']));
+		return false;
+	}
+
+	public function getBillInfo($bill)
+	{
+		if (is_null($bill['subscription']) {
+			return array(
+				'type' 	=> 'fatura',
+				'id' 	=> $bill['id'],
+				'cycle' => null
+			);
+		}
+		return array(
+			'type' 	=> 'assinatura',
+			'id' 	=> $bill['subscription']['id'],
+			'cycle' => $bill['period']['cycle']
+		);
 	}
 }
