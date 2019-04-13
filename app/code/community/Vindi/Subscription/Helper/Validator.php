@@ -131,7 +131,7 @@ class Vindi_Subscription_Helper_Validator
 
 	public function getBillInfo($bill)
 	{
-		if (is_null($bill['subscription']) {
+		if (is_null($bill['subscription'])) {
 			return array(
 				'type' 	=> 'fatura',
 				'id' 	=> $bill['id'],
