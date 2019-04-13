@@ -161,6 +161,10 @@ class Vindi_Subscription_Helper_Order
 		if ($lastPeriod->getData()) {
 			return $lastPeriod;
 		}
+
+		$this->logWebhook("Pedido não encontrado para o ciclo: $subscriptionPeriod
+			da Assinatura: $vindiId", 4);
+
 		return $orders->getFirstItem();
 	}
 
