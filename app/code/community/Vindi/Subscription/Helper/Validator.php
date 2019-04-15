@@ -129,6 +129,13 @@ class Vindi_Subscription_Helper_Validator
 		return false;
 	}
 
+	/**
+	 * Carrega informações fatura paga (ID, Tipo, Ciclo)
+	 *
+	 * @param array $bill
+	 *
+	 * @return array
+	 */
 	public function getBillInfo($bill)
 	{
 		if (is_null($bill['subscription'])) {
