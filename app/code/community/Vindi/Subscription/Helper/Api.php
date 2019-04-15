@@ -547,7 +547,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $orderDiscount = $order->getDiscountAmount() * -1;
 
         $discount = null;
-        if(!empty($orderDiscount)){
+        if(! empty($orderDiscount)) {
             $discountPercentage = $orderDiscount * 100 / $orderSubtotal;
             $discountPercentage = number_format(floor($discountPercentage*100)/100, 2);
 
@@ -561,7 +561,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             $cycles         = null;
 
             for ($i = 1; $i <= $item->getQtyOrdered(); $i++) {
-                if (Mage::getModel('catalog/product')->load($item->getProductId())->getTypeID() !== 'subscription') {
+                if (Mage::getModel('catalog/product')->load($item->getProductId())->getTypeID()
+                    !== 'subscription') {
                     $cycles = 1;
                 }
 
@@ -582,22 +583,46 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 );
             }
         }
+        return $this->buildTaxAndshipping($list, $order);
+    }
 
+    /**
+     * Carrega Frete e Taxa para a Fatura Vindi
+     *
+     * @param array $items, Mage_Sales_Model_Order $order
+     *
+     * @return array
+     */
+    public function buildTaxAndshipping($items, $order)
+    {
         if ($order->getShippingAmount() > 0) {
-            $list[] = array(
-                'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'frete', 'name' => 'Frete')),
+            $items[] = array(
+                'product_id'     => $this->findOrCreateProduct(
+                    array(
+                        'sku'    => 'frete',
+                        'name'   => 'Frete'
+                    )
+                ),
+                'quantity'       => 1,
                 'pricing_schema' => array('price' => $order->getShippingAmount()),
             );
         }
-        
+
         if (array_key_exists('tax', $order->getQuote()->getTotals())) {
-            $list[] = array(
-                'product_id'     => $this->findOrCreateProduct(array( 'sku' => 'taxa', 'name' => 'Taxa')),
-                'pricing_schema' => array('price' => $order->getQuote()->getTotals()['tax']->getData('value')),
+            $items[] = array(
+                'product_id'     => $this->findOrCreateProduct(
+                    array(
+                        'sku'    => 'taxa',
+                        'name'   => 'Taxa'
+                    )
+                ),
+                'quantity'       => 1,
+                'pricing_schema' => array(
+                    'price'      => $order->getQuote()->getTotals()['tax']->getData('value')
+                ),
             );
         }
-
-        return $list;
+        return $items;
     }
 
     /**
@@ -692,7 +717,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 )
             ));
         }
-        return $billItems;
+        return $this->buildTaxAndshipping($billItems, $order);
     }
 
     /**
