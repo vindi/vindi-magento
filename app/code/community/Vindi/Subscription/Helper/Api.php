@@ -566,7 +566,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                     $cycles = 1;
                 }
 
-                $list[] = array(
+                array_push($list, array(
                     'product_id'          => $this->findOrCreateProduct(
                         array(
                         	'sku'         => $item->getSku(),
@@ -580,7 +580,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                         'schema_type'     => 'per_unit'
                     ),
                     'discounts'           => $discount,
-                );
+                ));
             }
         }
         return $this->buildTaxAndshipping($list, $order);
@@ -596,7 +596,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function buildTaxAndshipping($items, $order)
     {
         if ($order->getShippingAmount() > 0) {
-            $items[] = array(
+            array_push($items, array(
                 'product_id'     => $this->findOrCreateProduct(
                     array(
                         'sku'    => 'frete',
@@ -605,11 +605,11 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 ),
                 'quantity'       => 1,
                 'pricing_schema' => array('price' => $order->getShippingAmount()),
-            );
+            ));
         }
 
         if (array_key_exists('tax', $order->getQuote()->getTotals())) {
-            $items[] = array(
+            array_push($items, array(
                 'product_id'     => $this->findOrCreateProduct(
                     array(
                         'sku'    => 'taxa',
@@ -620,7 +620,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'pricing_schema' => array(
                     'price'      => $order->getQuote()->getTotals()['tax']->getData('value')
                 ),
-            );
+            ));
         }
         return $items;
     }
