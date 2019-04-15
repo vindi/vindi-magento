@@ -80,7 +80,7 @@ class Vindi_Subscription_Helper_Order
 		}
 
 		if (! $order || ! $order->getId()) {
-			$this->logWebhook(sprintf('Nenhum pedido encontrado para a "%s": %d.', $orderType,
+			$this->logWebhook(sprintf('Pedido não encontrado para a "%s": %d.', $orderType,
 				$orderCode));
 			return false;
 		}
@@ -161,6 +161,10 @@ class Vindi_Subscription_Helper_Order
 		if ($lastPeriod->getData()) {
 			return $lastPeriod;
 		}
+
+		$this->logWebhook("Pedido não encontrado para o ciclo: $subscriptionPeriod" . 
+			" da Assinatura: $vindiId", 4);
+
 		return $orders->getFirstItem();
 	}
 

@@ -48,7 +48,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 		case 'bill_created':
 			return $this->validator->validateBillCreatedWebhook($data);
 		case 'bill_paid':
-			return $this->billHandler->processBillPaid($data);
+			return $this->validator->validateBillPaidWebhook($data);
 		case 'charge_rejected':
 			return $this->validator->validateChargeWebhook($data);
 		default:
