@@ -74,13 +74,13 @@ class Vindi_Subscription_Helper_Validator
 
 		if (! isset($bill['subscription']) || is_null($bill['subscription'])) {
 			$this->logWebhook(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 5);
-			return false;
+			return true;
 		}
 
 		if (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
 			$this->logWebhook(sprintf(
 				'Ignorando o evento "bill_created" para o primeiro ciclo.'), 5);
-			return false;
+			return true;
 		}
 
 		$order = $this->orderHandler->getOrder($data);
@@ -88,7 +88,7 @@ class Vindi_Subscription_Helper_Validator
 		if ($order) {
 			$this->logWebhook(sprintf('Já existe o pedido %s para o evento "bill_created".',
 				$order->getId()), 5);
-			return false;
+			return true;
 		}
 
 		if (isset($bill['subscription']['id']) && $bill['period']['cycle']) {
@@ -97,5 +97,58 @@ class Vindi_Subscription_Helper_Validator
 		}
 		$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
 		return false;
+	}
+
+	/**
+	 * Valida estrutura do Webhook 'bill_paid'
+	 * A fatura pode estar relacionada a uma assinatura ou uma compra avulsa
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function validateBillPaidWebhook($data)
+	{
+		$billInfo = $this->getBillInfo($data['bill']);
+		$order = $this->orderHandler->getOrderFromMagento(
+			$billInfo['type'],
+			$billInfo['id'],
+			$billInfo['cycle']
+		);
+
+		if ($order)
+			return $this->billHandler->processBillPaid($order, $data);
+
+		if ($billInfo['type'] == 'assinatura') {
+			$this->logWebhook(sprintf(
+				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
+				$billInfo['cycle'], $billInfo['id']), 4);
+			return false;
+		}
+		$this->logWebhook(sprintf('Pedido não encontrado para a "fatura": %d.', $billInfo['id']));
+		return false;
+	}
+
+	/**
+	 * Carrega informações fatura paga (ID, Tipo, Ciclo)
+	 *
+	 * @param array $bill
+	 *
+	 * @return array
+	 */
+	public function getBillInfo($bill)
+	{
+		if (is_null($bill['subscription'])) {
+			return array(
+				'type' 	=> 'fatura',
+				'id' 	=> $bill['id'],
+				'cycle' => null
+			);
+		}
+		return array(
+			'type' 	=> 'assinatura',
+			'id' 	=> $bill['subscription']['id'],
+			'cycle' => $bill['period']['cycle']
+		);
 	}
 }

@@ -120,19 +120,12 @@ class Vindi_Subscription_Helper_Bill
 	 * Trata o Webhook 'bill_paid'
 	 * A fatura pode estar relacionada a uma assinatura ou uma compra avulsa
 	 *
-	 * @param array $data
+	 * @param Mage_Sales_Model_Order $order | array $data
 	 *
 	 * @return bool
 	 */
-	public function processBillPaid($data)
+	public function processBillPaid($order, $data)
 	{
-		$order = $this->orderHandler->getOrder($data);
-		if (! $order) {
-			$this->logWebhook(sprintf(
-				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
-				$data['bill']['period']['cycle'], $data['bill']['subscription']['id']), 4);
-			return false;
-		}
 		return $this->orderHandler->createInvoice($order, $data);
 	}
 }
