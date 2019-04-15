@@ -1,8 +1,17 @@
 # Notas das versões
 
-## [1.5.1 - 04/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.5.1)
+## [1.6.0 - 15/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.6.0)
+
+### Corrigido
+- Corrige status de retorno para os eventos de Webhooks Vindi
 
 ### Ajustado
+- Altera tipo de produto utilizado para geração de cobranças
+
+
+## [1.5.1 - 04/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.5.1)
+
+### Corrigido
 - Corrige comportamento do Webhook 'charge_rejected' para cobranças via Cartão de Débito
 
 
