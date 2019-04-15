@@ -270,22 +270,10 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	 */
 	protected function processSinglePayment($payment, $order, $customerId)
 	{
-		$uniquePaymentProduct = $this->api()->findOrCreateUniquePaymentProduct();
-
-		$this->log(
-			sprintf('Produto para pagamento único: %d.', $uniquePaymentProduct),
-			'vindi_api.log'
-		);
-
 		$body = array(
 			'customer_id'         => $customerId,
 			'payment_method_code' => $this->getPaymentMethodCode(),
-			'bill_items'          => array(
-				array(
-					'product_id' => $uniquePaymentProduct,
-					'amount'     => $order->getGrandTotal(),
-				),
-			)
+			'bill_items'          => $this->api()->findOrCreateUniquePaymentProduct($order)
 		);
 
 		$paymentProfile = $payment->getPaymentProfile();

@@ -83,12 +83,42 @@ class Vindi_Subscription_Helper_Bill
 				continue;
 			}
 			$vindiData['products'][] = $billItem;
+
 		}
+		$vindiData['products'] = $this->unifiesProducts($vindiData['products']);
 		return $vindiData;
 	}
 
 	/**
-	 * Registra o pagamento do pedido no Magento
+	 * Unifica os produtos somando os valores e quantidades
+	 *
+	 * @param array | $vindiData['products']
+	 *
+	 * @return array | new $vindiData['products']
+	 */ 
+	public function unifiesProducts($currentData)
+	{
+		$newData = array();
+		$key = 0;
+
+		foreach ($currentData as $product) {
+			if ($lastCode && $lastCode == $product['product']['code']) {
+				$newData[$key - 1]['quantity'] += $product['quantity'];
+				(float)$newData[$key - 1]['pricing_schema']['price'] +=
+				(float)$product['pricing_schema']['price'];
+				$key++;
+				continue;
+			}
+			$newData[$key] = $product;
+			$lastCode = $product['product']['code'];
+			$key++;
+		}
+		return $newData;
+	}
+
+	/**
+	 * Trata o Webhook 'bill_paid'
+	 * A fatura pode estar relacionada a uma assinatura ou uma compra avulsa
 	 *
 	 * @param Mage_Sales_Model_Order $order | array $data
 	 *
