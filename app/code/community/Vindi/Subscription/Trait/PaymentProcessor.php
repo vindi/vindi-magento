@@ -273,9 +273,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$body = array(
 			'customer_id'         => $customerId,
 			'payment_method_code' => $this->getPaymentMethodCode(),
-			'bill_items'          => array(
-				$this->api()->findOrCreateUniquePaymentProduct($order)
-			)
+			'bill_items'          => $this->api()->findOrCreateUniquePaymentProduct($order)
 		);
 
 		$paymentProfile = $payment->getPaymentProfile();

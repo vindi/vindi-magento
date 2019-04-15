@@ -674,7 +674,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function findOrCreateUniquePaymentProduct($order)
     {      
-        $billItems = [];
+        $billItems = array();
         foreach ($order->getItemsCollection() as $item) {
             $productId = $this->findOrCreateProduct(
                 array(
@@ -683,14 +683,14 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 )
             );
 
-            $billItems = array(
+            array_push($billItems, array(
                 'product_id'      => $productId,
                 'quantity'        => $item->getQtyOrdered(),
                 'pricing_schema'     => array(
                     'price'       => $item->getPrice(),
                     'schema_type' => 'per_unit'
                 )
-            );
+            ));
         }
         return $billItems;
     }
