@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.6.1 - 16/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.6.1)
+
+### Corrigido
+- Corrige geração de items duplicados na Fatura Vindi
+
+
 ## [1.6.0 - 15/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.6.0)
 
 ### Corrigido
