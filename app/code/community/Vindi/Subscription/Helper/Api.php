@@ -559,29 +559,26 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         foreach ($orderItems as $item) {
             $cycles         = null;
-
-            for ($i = 1; $i <= $item->getQtyOrdered(); $i++) {
-                if (Mage::getModel('catalog/product')->load($item->getProductId())->getTypeID()
-                    !== 'subscription') {
-                    $cycles = 1;
-                }
-
-                array_push($list, array(
-                    'product_id'          => $this->findOrCreateProduct(
-                        array(
-                        	'sku'         => $item->getSku(),
-                        	'name'        => $item->getName()
-                        )
-                    ),
-                    'cycles'              => $cycles,
-                    'quantity'            => $item->getQtyOrdered(),
-                    'pricing_schema'      => array(
-                        'price'           => $item->getPrice(),
-                        'schema_type'     => 'per_unit'
-                    ),
-                    'discounts'           => $discount,
-                ));
+            if (Mage::getModel('catalog/product')->load($item->getProductId())->getTypeID()
+                !== 'subscription') {
+                $cycles = 1;
             }
+
+            array_push($list, array(
+                'product_id'          => $this->findOrCreateProduct(
+                    array(
+                    	'sku'         => $item->getSku(),
+                    	'name'        => $item->getName()
+                    )
+                ),
+                'cycles'              => $cycles,
+                'quantity'            => $item->getQtyOrdered(),
+                'pricing_schema'      => array(
+                    'price'           => $item->getPrice(),
+                    'schema_type'     => 'per_unit'
+                ),
+                'discounts'           => $discount,
+            ));
         }
         return $this->buildTaxAndshipping($list, $order);
     }
