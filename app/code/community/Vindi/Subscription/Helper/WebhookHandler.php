@@ -44,7 +44,7 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 
 		case 'test':
 			$this->logWebhook('Evento de teste do webhook.');
-			return false;
+			return true;
 		case 'bill_created':
 			return $this->validator->validateBillCreatedWebhook($data);
 		case 'bill_paid':

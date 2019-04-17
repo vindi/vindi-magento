@@ -1,5 +1,12 @@
 # Notas das versões
 
+## [1.6.2 - 17/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.6.2)
+
+### Ajustado
+- Ajusta alteração de valores do produto no Magento
+- Ajusta status do retorno para Webhook de Teste
+
+
 ## [1.6.1 - 16/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.6.1)
 
 ### Corrigido
