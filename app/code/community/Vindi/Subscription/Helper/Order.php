@@ -308,8 +308,10 @@ class Vindi_Subscription_Helper_Order
 			if (! $magentoProduct) {
 				$this->logWebhook(sprintf('O produto com ID Vindi #%s não existe no Magento.',
 					$item['product']['id']), 5);
+				continue;
 			}
-			elseif (number_format($magentoProduct->getPrice(), 2)
+
+			if (number_format($magentoProduct->getPrice(), 2)
 				!== number_format($item['pricing_schema']['price'], 2)) {
 
 				$this->logWebhook(sprintf("Divergencia de valores na fatura #%s:  " . 
@@ -321,13 +323,13 @@ class Vindi_Subscription_Helper_Order
 					$item['product']['id'],
 					$magentoProduct->getPrice(),
 					$item['pricing_schema']['price']));
-
-				$quote->getItemByProduct($magentoProduct)
-					->setOriginalCustomPrice($item['pricing_schema']['price'] / $item['quantity'])
-					->setCustomPrice($item['pricing_schema']['price'] / $item['quantity'])
-					->setQty($item['quantity'])
-					->save();
 			}
+
+			$quote->getItemByProduct($magentoProduct)
+				->setOriginalCustomPrice($item['pricing_schema']['price'])
+				->setCustomPrice($item['pricing_schema']['price'])
+				->setQty($item['quantity'])
+				->save();
 		}
 		$quote->setTotalsCollectedFlag(false)
 			->collectTotals()
