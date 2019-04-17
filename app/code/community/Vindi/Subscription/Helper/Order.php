@@ -323,7 +323,7 @@ class Vindi_Subscription_Helper_Order
 					$item['product']['id'],
 					$magentoProduct->getPrice(),
 					$item['pricing_schema']['price']));
-            }
+			}
 
 			$quote->getItemByProduct($magentoProduct)
 				->setOriginalCustomPrice($item['pricing_schema']['price'])
