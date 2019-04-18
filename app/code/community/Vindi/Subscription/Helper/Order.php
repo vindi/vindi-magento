@@ -98,15 +98,19 @@ class Vindi_Subscription_Helper_Order
 	public function createInvoice($order, $data)
 	{
 		$orderId = $order->getId();
-		if ($orderId && $order->canInvoice()) {
-			$this->logWebhook('Gerando fatura para o pedido: ' . $orderId);
-			$this->updateToSuccess($order);
-			$paymentMethod = new Vindi_Subscription_Model_PaymentMethod();
-			$paymentMethod->processPaidReturn($data['bill'], $order);
-			$this->logWebhook('Fatura gerada com sucesso.');
-			return true;
-		}
-		elseif ($orderId) { 
+		if ($orderId) {
+			if ($order->canInvoice()) {
+				$this->logWebhook('Gerando fatura para o pedido: ' . $orderId);
+				$this->updateToSuccess($order);
+				$paymentMethod = new Vindi_Subscription_Model_PaymentMethod();
+				$paymentMethod->processPaidReturn($data['bill'], $order);
+				$this->logWebhook('Fatura gerada com sucesso.');
+				return true;
+			}
+			elseif ($order->canHold()) {
+				$this->logWebhook('O pedido ' . $orderId . 'estava com o status:' . $order->getState());
+				return true;
+			}
 			$this->logWebhook('Impossível gerar fatura para o pedido ' . $orderId, 4);
 		}
 		return false;
