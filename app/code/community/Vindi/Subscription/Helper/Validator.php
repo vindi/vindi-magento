@@ -25,17 +25,16 @@ class Vindi_Subscription_Helper_Validator
 		$charge = $data['charge'];
 		$order = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
 		
-		if (! $order) {
-			$this->logWebhook('Pedido não encontrado.', 4);
-			return false;
+		if (! $order || true === $order) {
+			return $order;
 		}
 
 		# Inválida evento se a cobrança já estiver paga
-		if (($chargeStatus = $charge['status']) == 'paid') {
+		if (! $order->canInvoice()) {
 			$orderStatus = $order->getStatusLabel();
 			$this->logWebhook('Evento não processado!');
-			$this->logWebhook("O pedido possui o status: '$orderStatus' e " .
-				"a cobrança possui o status: '$chargeStatus'");	
+			$this->logWebhook('O pedido possui o status: $orderStatus e ' .
+				'a cobrança possui o status:'. $charge['status']);	
 			return true;
 		}
 
