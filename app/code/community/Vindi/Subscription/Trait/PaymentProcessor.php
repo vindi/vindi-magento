@@ -374,11 +374,12 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 				$type = 'subscriptions';
 			}
 
-			if ($paymentMethod = reset($payment['charges'])['payment_method']['code'] === "bank_slip"
-				|| $paymentMethod === "debit_card"
-				|| $payment['status'] === "paid"
-				|| $payment['status'] === "review"
-				|| reset($payment['charges'])['status'] === "fraud_review")
+			$paymentMethod = reset($payment['charges'])['payment_method']['type'];
+			if ($paymentMethod === 'PaymentMethod::BankSlip'
+				|| $paymentMethod === 'PaymentMethod::DebitCard'
+				|| $payment['status'] === 'paid'
+				|| $payment['status'] === 'review'
+				|| reset($payment['charges'])['status'] === 'fraud_review')
 				return $payment;
 
 			$this->api()->deletePurchase($vindiId, $type);
