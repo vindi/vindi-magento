@@ -29,7 +29,7 @@ class Vindi_Subscription_Helper_Validator
 			return $order;
 		}
 
-		# Inválida evento se a cobrança já estiver paga
+		# Invalida evento se a cobrança já estiver paga
 		if (! $order->canInvoice()) {
 			$orderStatus = $order->getStatusLabel();
 			$this->logWebhook('Evento não processado!');
