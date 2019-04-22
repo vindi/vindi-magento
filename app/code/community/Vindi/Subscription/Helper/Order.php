@@ -108,7 +108,7 @@ class Vindi_Subscription_Helper_Order
 				return true;
 			}
 			elseif ($order->canHold()) {
-				$this->logWebhook('O pedido ' . $orderId . 'estava com o status:' . $order->getState());
+				$this->logWebhook('O pedido ' . $orderId . 'possui o status:' . $order->getState());
 				return true;
 			}
 			$this->logWebhook('Impossível gerar fatura para o pedido ' . $orderId, 4);
