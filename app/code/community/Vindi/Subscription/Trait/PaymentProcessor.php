@@ -382,7 +382,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 				|| reset($payment['charges'])['status'] === 'fraud_review')
 				return $payment;
 
-			$this->api()->deletePurchase($vindiId, $type);
+			$this->api()->cancelPurchase($vindiId, $type);
 		}
 
 		$this->cancelOrder($orderAttempt);

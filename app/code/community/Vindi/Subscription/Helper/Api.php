@@ -477,7 +477,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @param $vindiId
      */
-    public function deletePurchase($vindiId, $type)
+    public function cancelPurchase($vindiId, $type)
     {
         $this->request("{$type}/{$vindiId}", 'DELETE');
     }
