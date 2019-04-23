@@ -24,6 +24,10 @@ class Vindi_Subscription_Helper_Validator
 	{
 		$charge = $data['charge'];
 		$vindiOrder = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
+
+		if (is_null($vindiOrder))
+			return false;
+		
 		$paymentMethod = reset($vindiOrder['bill']['charges'])['payment_method']['type'];
 
 		# Ignora evento se for o primeiro ciclo de uma assinatura via cartão de crédito;
