@@ -52,7 +52,7 @@ class Vindi_Subscription_Helper_Validator
 			$orderStatus = $order->getStatusLabel();
 			$this->logWebhook('Evento não processado!');
 			$this->logWebhook('O pedido possui o status: $orderStatus e ' .
-				'a cobrança possui o status:'. $charge['status']);	
+				'a cobrança possui o status:' . $charge['status']);	
 			return true;
 		}
 
