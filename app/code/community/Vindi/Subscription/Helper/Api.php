@@ -473,7 +473,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Cancela a assinatura e fatura na Vindi após falha no pagamento
+     * Cancela assinaturas e faturas na Vindi após falha no pagamento
      *
      * @param $vindiId
      */
