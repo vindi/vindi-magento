@@ -51,7 +51,7 @@ class Vindi_Subscription_Helper_Order
 		if (! $bill) {
 			return false;
 		}
-		return $this->getOrder(compact('bill'));
+		return compact('bill');
 	}
 
 	/**
@@ -80,15 +80,6 @@ class Vindi_Subscription_Helper_Order
 		}
 
 		if (! $order || ! $order->getId()) {
-
-			# Ignora evento se for o primeiro ciclo de uma assinatura via cartão de crédito;
-			# Com exceção de transações com suspeita de fraude, 
-			# o Magento exclui o pedido caso o pagamento seja imediatamente rejeitado.
-			# Desse modo, não é possível realizar alterações no pedido
-			if (reset($data['bill']['charges'])['payment_method']['type'] == 'PaymentMethod::CreditCard' &&
-				$data['bill']['period']['cycle'] == 1)
-				return true;
-
 			$this->logWebhook(sprintf('Pedido não encontrado para a "%s": %d.', $orderType,
 				$orderCode));
 			return false;

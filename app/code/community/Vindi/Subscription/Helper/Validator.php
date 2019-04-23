@@ -23,7 +23,20 @@ class Vindi_Subscription_Helper_Validator
 	public function validateChargeWebhook($data)
 	{
 		$charge = $data['charge'];
-		$order = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
+		$vindiOrder = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
+		$paymentMethod = reset($vindiOrder['bill']['charges'])['payment_method']['type'];
+
+		# Ignora evento se for o primeiro ciclo de uma assinatura via cartão de crédito;
+		# Com exceção de transações com suspeita de fraude, 
+		# o Magento exclui o pedido caso o pagamento seja imediatamente rejeitado.
+		# Desse modo, não é possível realizar alterações no pedido
+		if ($paymentMethod == 'PaymentMethod::CreditCard'
+			&& $vindiOrder['bill']['period']['cycle'] == 1) {
+			$this->logWebhook('Ignorando evento "charge_rejected" para o primeiro ciclo.');
+			return true;
+		}
+
+		$this->orderHandler->getOrder($vindiOrder);
 		
 		if (! $order || true === $order) {
 			return $order;
