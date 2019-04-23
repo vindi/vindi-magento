@@ -38,8 +38,9 @@ class Vindi_Subscription_Helper_Validator
 
 		$this->orderHandler->getOrder($vindiOrder);
 		
-		if (! $order || true === $order) {
-			return $order;
+		if (! $order) {
+			$this->logWebhook('Pedido não encontrado.', 4);
+			return false;
 		}
 
 		# Invalida evento se a cobrança já estiver paga
