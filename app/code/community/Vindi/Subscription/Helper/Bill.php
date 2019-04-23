@@ -99,6 +99,7 @@ class Vindi_Subscription_Helper_Bill
 	public function unifiesProducts($currentData)
 	{
 		$newData = array();
+		$lastCode = null;
 		$key = 0;
 
 		foreach ($currentData as $product) {

@@ -473,11 +473,13 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param $billId
+     * Cancela assinaturas e faturas na Vindi.
+     *
+     * @param $vindiId
      */
-    public function deleteBill($billId)
+    public function cancelPurchase($vindiId, $type)
     {
-        $this->request("bills/{$billId}", 'DELETE');
+        $this->request("{$type}/{$vindiId}", 'DELETE');
     }
 
     /**

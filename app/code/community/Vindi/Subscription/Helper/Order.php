@@ -49,9 +49,9 @@ class Vindi_Subscription_Helper_Order
 		$bill = $api->getBill($billId);
 
 		if (! $bill) {
-			return false;
+			return null;
 		}
-		return $this->getOrder(compact('bill'));
+		return compact('bill');
 	}
 
 	/**

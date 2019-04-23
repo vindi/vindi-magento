@@ -23,19 +23,36 @@ class Vindi_Subscription_Helper_Validator
 	public function validateChargeWebhook($data)
 	{
 		$charge = $data['charge'];
-		$order = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
+		$vindiOrder = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
+
+		if (is_null($vindiOrder))
+			return false;
+		
+		$paymentMethod = reset($vindiOrder['bill']['charges'])['payment_method']['type'];
+
+		# Ignora evento se for o primeiro ciclo de uma assinatura via cartão de crédito;
+		# Com exceção de transações com suspeita de fraude, 
+		# o Magento exclui o pedido caso o pagamento seja imediatamente rejeitado.
+		# Desse modo, não é possível realizar alterações no pedido
+		if ($paymentMethod == 'PaymentMethod::CreditCard'
+			&& $vindiOrder['bill']['period']['cycle'] == 1) {
+			$this->logWebhook('Ignorando evento "charge_rejected" para o primeiro ciclo.');
+			return true;
+		}
+
+		$order = $this->orderHandler->getOrder($vindiOrder);
 		
 		if (! $order) {
 			$this->logWebhook('Pedido não encontrado.', 4);
 			return false;
 		}
 
-		# Inválida evento se a cobrança já estiver paga
-		if (($chargeStatus = $charge['status']) == 'paid') {
+		# Invalida evento se a cobrança já estiver paga
+		if (! $order->canInvoice()) {
 			$orderStatus = $order->getStatusLabel();
 			$this->logWebhook('Evento não processado!');
-			$this->logWebhook("O pedido possui o status: '$orderStatus' e " .
-				"a cobrança possui o status: '$chargeStatus'");	
+			$this->logWebhook('O pedido possui o status: $orderStatus e ' .
+				'a cobrança possui o status:' . $charge['status']);	
 			return true;
 		}
 

@@ -288,34 +288,13 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$body['installments'] = (int) $installments;
 		}
 
-		if ($bill = $this->api()->createBill($body)) {
-			if ($body['payment_method_code'] === "bank_slip"
-				|| $body['payment_method_code'] === "debit_card"
-				|| $bill['status'] === "paid"
-				|| $bill['status'] === "review"
-				|| $bill['charges'][0]['status'] === "fraud_review") {
-				$order->setVindiBillId($bill['id']);
-				$order->save();
-				return $bill;
-			}
-			$this->api()->deleteBill($bill['id']);
+		$bill = $this->api()->createBill($body);
+
+		if ($this->validatePayment($bill, $order, $payment)) {
+			$order->setVindiBillId($bill['id']);
+			$order->save();
+			return $bill;
 		}
-
-		$this->log(
-			sprintf('Erro no pagamento do pedido %d.', $order->getId()),
-			'vindi_api.log'
-		);
-
-		$message = 'Houve um problema na confirmação do pagamento.' .
-		'Verifique os dados e tente novamente.';
-
-		$payment->setStatus(
-			Mage_Sales_Model_Order::STATE_CANCELED,
-			Mage_Sales_Model_Order::STATE_CANCELED,
-			$message,
-			true
-		);
-		$this->error($message);
 	}
 
 	/**
@@ -366,26 +345,53 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		$this->log(json_encode($payment->getAdditionalInformation()), $this->_code . '.log');
 
-		if (! isset($subscription['id']) || empty($subscription['id'])) {
-			$message = sprintf('Pagamento Falhou. (%s)', $this->api()->lastError);
+		if ($this->validatePayment($subscription, $order, $payment)) {
+			$order->setVindiSubscriptionId($subscription['id']);
+			$order->setVindiBillId($subscription['bill']['id']);
+			$order->setVindiSubscriptionPeriod(1);
+			$order->save();
+			return $subscription;
+		}
+	}
 
-			$this->log(
-				sprintf('Erro no pagamento do pedido %s.\n%s', $order->getId(), $message),
-				'vindi_api.log'
-			);
+	public function cancelOrder($order)
+	{
+		$order->setStatus(
+			Mage_Sales_Model_Order::STATE_CANCELED,
+			Mage_Sales_Model_Order::STATE_CANCELED,
+			'Houve um problema na confirmação do pagamento.',
+			true
+		);
+	}
 
-			$this->error($message);
+	public function validatePayment($payment, $order, $orderAttempt)
+	{
+		$type = 'bills';
+		if($payment && $payment['id']) {
+			$vindiId = $payment['id'];
+			if (! $this->isSingleOrder($order)) {
+				$payment = $payment['bill'];
+				$type = 'subscriptions';
+			}
 
-			// TODO update order status?
-			return false;
+			$paymentMethod = reset($payment['charges'])['payment_method']['type'];
+			if ($paymentMethod === 'PaymentMethod::BankSlip'
+				|| $paymentMethod === 'PaymentMethod::DebitCard'
+				|| $payment['status'] === 'paid'
+				|| $payment['status'] === 'review'
+				|| reset($payment['charges'])['status'] === 'fraud_review')
+				return $payment;
+
+			$this->api()->cancelPurchase($vindiId, $type);
 		}
 
-		$order->setVindiSubscriptionId($subscription['id']);
-		$order->setVindiBillId($subscription['bill']['id']);
-		$order->setVindiSubscriptionPeriod(1);
-		$order->save();
-
-		return $subscription;
+		$this->cancelOrder($orderAttempt);
+		$this->log(
+			sprintf('Erro no pagamento do pedido %d.', $order->getId()), 'vindi_api.log'
+		);
+		$message = 'Houve um problema na confirmação do pagamento. ' .
+		'Verifique os dados e tente novamente.';
+		$this->error($message);
 	}
 
 	public function getCurrentVindiPlan($product)
