@@ -1,5 +1,13 @@
 # Notas das versões
 
+## [1.7.0 - 23/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.7.0)
+
+### Adicionado
+- Adiciona validação de pedidos finalizados para Webhook de Fatura Paga
+- Adiciona fluxo de cancelamento de assinaturas após pagamento rejeitado
+- Associa ID da fatura Vindi ao pedido no Magento 
+
+
 ## [1.6.2 - 17/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.6.2)
 
 ### Ajustado
