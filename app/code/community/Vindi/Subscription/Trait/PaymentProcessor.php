@@ -389,7 +389,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$this->log(
 			sprintf('Erro no pagamento do pedido %d.', $order->getId()), 'vindi_api.log'
 		);
-		$message = 'Houve um problema na confirmação do pagamento.' .
+		$message = 'Houve um problema na confirmação do pagamento. ' .
 		'Verifique os dados e tente novamente.';
 		$this->error($message);
 	}
