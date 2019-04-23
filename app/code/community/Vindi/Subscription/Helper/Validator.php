@@ -40,7 +40,7 @@ class Vindi_Subscription_Helper_Validator
 			return true;
 		}
 
-		$this->orderHandler->getOrder($vindiOrder);
+		$order = $this->orderHandler->getOrder($vindiOrder);
 		
 		if (! $order) {
 			$this->logWebhook('Pedido não encontrado.', 4);
