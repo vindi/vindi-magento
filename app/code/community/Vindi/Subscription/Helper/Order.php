@@ -205,6 +205,7 @@ class Vindi_Subscription_Helper_Order
 	public function renewalOrder($order, $vindiData, $charges)
 	{
 		$order->setVindiSubscriptionId($vindiData['bill']['subscription']);
+		$order->setVindiBillId($vindiData['bill']['id']);	
 		$order->setVindiSubscriptionPeriod($vindiData['bill']['cycle']);
 		$order->setBaseGrandTotal($vindiData['bill']['amount']);
 		$order->setGrandTotal($vindiData['bill']['amount']);
