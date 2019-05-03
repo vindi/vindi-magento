@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.7.1 - 03/05/2019](https://github.com/vindi/vindi-magento/releases/tag/1.7.1)
+
+### Corrigido
+- Persiste os dados do método de pagamento no pedido Magento
+
+
 ## [1.7.0 - 23/04/2019](https://github.com/vindi/vindi-magento/releases/tag/1.7.0)
 
 ### Adicionado
