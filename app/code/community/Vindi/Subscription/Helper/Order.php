@@ -51,7 +51,7 @@ class Vindi_Subscription_Helper_Order
 		if (! $bill) {
 			return null;
 		}
-		return compact('bill');
+		return $bill;
 	}
 
 	/**
@@ -63,18 +63,18 @@ class Vindi_Subscription_Helper_Order
 	 */
 	public function getOrder($data)
 	{
-		if (! isset($data['bill'])) {
+		if (! isset($data)) {
 			return false;
 		}
 
-		$orderCode = filter_var($data['bill']['subscription']['id'], FILTER_SANITIZE_NUMBER_INT);
-		if (isset($data['bill']['subscription']['id']) && $orderCode) {
+		$orderCode = filter_var($data['subscription']['id'], FILTER_SANITIZE_NUMBER_INT);
+		if (isset($data['subscription']['id']) && $orderCode) {
 			$orderType = 'assinatura';
 			$order = $this->getOrderFromMagento($orderType,
-				$orderCode, $data['bill']['period']['cycle']);
+				$orderCode, $data['period']['cycle']);
 		}
 		else {
-			$orderCode = filter_var($data['bill']['id'], FILTER_SANITIZE_NUMBER_INT);
+			$orderCode = filter_var($data['id'], FILTER_SANITIZE_NUMBER_INT);
 			$orderType = 'fatura';
 			$order = $this->getOrderFromMagento($orderType, $orderCode);
 		}

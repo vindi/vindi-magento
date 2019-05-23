@@ -46,8 +46,8 @@ class Vindi_Subscription_Helper_Bill
 	 */
 	public function getLastPeriod($data)
 	{
-		$currentPeriod = $data['bill']['period']['cycle'];
-		$subscriptionId = $data['bill']['subscription']['id'];
+		$currentPeriod = $data['period']['cycle'];
+		$subscriptionId = $data['subscription']['id'];
 		return $this->orderHandler->getOrderFromMagento('subscription',
 			$subscriptionId, $currentPeriod - 1);
 	}
@@ -63,17 +63,17 @@ class Vindi_Subscription_Helper_Bill
 	{
 		$vindiData = [
 			'bill'     => [
-				'id'           => $data['bill']['id'],
-				'amount'       => $data['bill']['amount'],
-				'subscription' => $data['bill']['subscription']['id'],
-				'cycle'        => $data['bill']['period']['cycle']
+				'id'           => $data['id'],
+				'amount'       => $data['amount'],
+				'subscription' => $data['subscription']['id'],
+				'cycle'        => $data['period']['cycle']
 			],
 			'products' => [],
 			'shipping' => [],
 			'taxes'    => [],
 		];
 
-		foreach ($data['bill']['bill_items'] as $billItem) {
+		foreach ($data['bill_items'] as $billItem) {
 			if ($billItem['product']['code'] == 'frete') {
 				$vindiData['shipping'] = $billItem;
 				continue;

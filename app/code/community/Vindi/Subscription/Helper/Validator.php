@@ -22,20 +22,19 @@ class Vindi_Subscription_Helper_Validator
 	 */
 	public function validateChargeWebhook($data)
 	{
-		$charge = $data['charge'];
-		$vindiOrder = $this->orderHandler->getOrderFromVindi($charge['bill']['id']);
+		$vindiOrder = $this->orderHandler->getOrderFromVindi($data['charge']['bill']['id']);
 
 		if (is_null($vindiOrder))
 			return false;
 		
-		$paymentMethod = reset($vindiOrder['bill']['charges'])['payment_method']['type'];
+		$paymentMethod = reset($vindiOrder['charges'])['payment_method']['type'];
 
 		# Ignora evento se for o primeiro ciclo de uma assinatura via cartão de crédito;
 		# Com exceção de transações com suspeita de fraude, 
 		# o Magento exclui o pedido caso o pagamento seja imediatamente rejeitado.
 		# Desse modo, não é possível realizar alterações no pedido
 		if ($paymentMethod == 'PaymentMethod::CreditCard'
-			&& $vindiOrder['bill']['period']['cycle'] == 1) {
+			&& $vindiOrder['period']['cycle'] == 1) {
 			$this->logWebhook('Ignorando evento "charge_rejected" para o primeiro ciclo.');
 			return true;
 		}
@@ -56,6 +55,7 @@ class Vindi_Subscription_Helper_Validator
 			return true;
 		}
 
+		$charge = reset($vindiOrder['charges']);
 		$gatewayMessage = $charge['last_transaction']['gateway_message'];
 
 		if (is_null($charge['next_attempt'])) {
@@ -82,12 +82,12 @@ class Vindi_Subscription_Helper_Validator
 	 */
 	public function validateBillCreatedWebhook($data)
 	{
-		$bill = $data['bill'];
-
-		if (! $bill) {
+		if (! $data['bill']) {
 			$this->logWebhook('Erro ao interpretar webhook "bill_created".', 5);
 			return false;
 		}
+
+		$bill = $this->orderHandler->getOrderFromVindi($data['bill']['id']);
 
 		if (! isset($bill['subscription']) || is_null($bill['subscription'])) {
 			$this->logWebhook(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 5);
@@ -100,7 +100,7 @@ class Vindi_Subscription_Helper_Validator
 			return true;
 		}
 
-		$order = $this->orderHandler->getOrder($data);
+		$order = $this->orderHandler->getOrder($bill);
 
 		if ($order) {
 			$this->logWebhook(sprintf('Já existe o pedido %s para o evento "bill_created".',
@@ -109,7 +109,8 @@ class Vindi_Subscription_Helper_Validator
 		}
 
 		if (isset($bill['subscription']['id']) && $bill['period']['cycle']) {
-			$this->billHandler->processBillCreated($data);
+			if ($this->billHandler->processBillCreated($bill) && $bill['status'] === 'paid')
+				$this->billHandler->validateBillPaidWebhook(compact('bill'));
 			return true;
 		}
 		$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
@@ -133,17 +134,20 @@ class Vindi_Subscription_Helper_Validator
 			$billInfo['cycle']
 		);
 
-		if ($order)
+		if ($order && !$order->canHold() && $order->canInvoice())
 			return $this->billHandler->processBillPaid($order, $data);
 
-		if ($billInfo['type'] == 'assinatura') {
-			$this->logWebhook(sprintf(
-				'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
-				$billInfo['cycle'], $billInfo['id']), 4);
-			return false;
-		}
-		$this->logWebhook(sprintf('Pedido não encontrado para a "fatura": %d.', $billInfo['id']));
-		return false;
+
+		return $this->validateBillCreatedWebhook($data);
+
+		// if ($billInfo['type'] == 'assinatura') {
+		// 	$this->logWebhook(sprintf(
+		// 		'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
+		// 		$billInfo['cycle'], $billInfo['id']), 4);
+		// 	return false;
+		// }
+		// $this->logWebhook(sprintf('Pedido não encontrado para a "fatura": %d.', $billInfo['id']));
+		// return false;
 	}
 
 	/**
