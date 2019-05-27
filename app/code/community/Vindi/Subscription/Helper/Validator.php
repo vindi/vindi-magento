@@ -100,20 +100,19 @@ class Vindi_Subscription_Helper_Validator
 			return true;
 		}
 
-		$order = $this->orderHandler->getOrder($bill);
-
-		if ($order) {
-			$this->logWebhook(sprintf('Já existe o pedido %s para o evento "bill_created".',
-				$order->getId()), 5);
-			return true;
+		if (! isset($bill['subscription']['id']) || ! isset($bill['period']['cycle'])) {
+			$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
+			return false;
 		}
 
-		if (isset($bill['subscription']['id']) && $bill['period']['cycle']) {
-			if ($this->billHandler->processBillCreated($bill) && $bill['status'] === 'paid')
-				$this->billHandler->validateBillPaidWebhook(compact('bill'));
-			return true;
+		if (! $this->orderHandler->getOrder($bill)) {
+			$this->billHandler->processBillCreated($bill);
 		}
-		$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
+
+		if ($this->orderHandler->getOrder($bill) && $bill['status'] === 'paid') {
+			return $this->billHandler->validateBillPaidWebhook(compact('bill'));
+		}
+
 		return false;
 	}
 
@@ -134,11 +133,11 @@ class Vindi_Subscription_Helper_Validator
 			$billInfo['cycle']
 		);
 
-		if ($order && !$order->canHold() && $order->canInvoice())
+		if (! $order)
+			return $this->validateBillCreatedWebhook($data);
+
+		if ($order && ! $order->canHold() && $order->canInvoice())
 			return $this->billHandler->processBillPaid($order, $data);
-
-
-		return $this->validateBillCreatedWebhook($data);
 
 		// if ($billInfo['type'] == 'assinatura') {
 		// 	$this->logWebhook(sprintf(

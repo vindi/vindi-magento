@@ -22,7 +22,7 @@ class Vindi_Subscription_Helper_Bill
 	{
 		$bill = $data['bill'];
 		$vindiData = $this->loadBillData($data);
-		$lastOrder = $this->getLastPeriod($data);
+		$lastOrder = $this->getLastPeriod($bill);
 
 		$order = $this->orderHandler->createOrder($lastOrder, $vindiData);
 
