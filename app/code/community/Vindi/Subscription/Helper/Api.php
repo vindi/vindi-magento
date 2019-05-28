@@ -716,6 +716,21 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 )
             ));
         }
+
+        if ($dicountAmount = $order->getDiscountAmount() > 0) {
+            array_push($billItems, array(
+                'product_id'     => $this->findOrCreateProduct(
+                    array(
+                        'sku'    => 'cupom-desconto',
+                        'name'   => 'Cupom de Desconto'
+                    )
+                ),
+                'quantity'       => 1,
+                'pricing_schema' => array(
+                    'price'      => number_format(floor($dicountAmount * -1, 2)
+                ),
+            ));
+        }
         return $this->buildTaxAndshipping($billItems, $order);
     }
 
