@@ -106,7 +106,7 @@ class Vindi_Subscription_Helper_Validator
 		}
 
 		if (! $this->orderHandler->getOrder($bill)) {
-			$this->billHandler->processBillCreated($bill);
+			$this->billHandler->processBillCreated(compact('bill'));
 		}
 
 		if ($this->orderHandler->getOrder($bill) && $bill['status'] === 'paid') {
@@ -136,7 +136,7 @@ class Vindi_Subscription_Helper_Validator
 		if (! $order)
 			return $this->validateBillCreatedWebhook($data);
 
-		if ($order && ! $order->canHold() && $order->canInvoice())
+		if ($order && $order->canInvoice())
 			return $this->billHandler->processBillPaid($order, $data);
 
 		// if ($billInfo['type'] == 'assinatura') {

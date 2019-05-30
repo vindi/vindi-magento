@@ -21,7 +21,7 @@ class Vindi_Subscription_Helper_Bill
 	public function processBillCreated($data)
 	{
 		$bill = $data['bill'];
-		$vindiData = $this->loadBillData($data);
+		$vindiData = $this->loadBillData($bill);
 		$lastOrder = $this->getLastPeriod($bill);
 
 		$order = $this->orderHandler->createOrder($lastOrder, $vindiData);
