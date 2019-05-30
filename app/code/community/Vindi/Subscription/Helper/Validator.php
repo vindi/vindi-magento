@@ -50,8 +50,8 @@ class Vindi_Subscription_Helper_Validator
 		if (! $order->canInvoice()) {
 			$orderStatus = $order->getStatusLabel();
 			$this->logWebhook('Evento não processado!');
-			$this->logWebhook('O pedido possui o status: $orderStatus e ' .
-				'a cobrança possui o status:' . $charge['status']);	
+			$this->logWebhook("O pedido possui o status: '$orderStatus'" . 
+				" e a cobrança possui o status: '$charge[status]'");	
 			return true;
 		}
 
@@ -90,13 +90,19 @@ class Vindi_Subscription_Helper_Validator
 		$bill = $this->orderHandler->getOrderFromVindi($data['bill']['id']);
 
 		if (! isset($bill['subscription']) || is_null($bill['subscription'])) {
-			$this->logWebhook(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 5);
+			$this->logWebhook(sprintf('Ignorando o evento "bill_created" para venda avulsa.'), 7);
 			return true;
 		}
 
 		if (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
 			$this->logWebhook(sprintf(
-				'Ignorando o evento "bill_created" para o primeiro ciclo.'), 5);
+				'Ignorando o evento "bill_created" para pedido concluído.'), 7);
+			return true;
+		}
+
+		if (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
+			$this->logWebhook(sprintf(
+				'Ignorando o evento "bill_created" para o primeiro ciclo.'), 7);
 			return true;
 		}
 
@@ -106,14 +112,10 @@ class Vindi_Subscription_Helper_Validator
 		}
 
 		if (! $this->orderHandler->getOrder($bill)) {
-			$this->billHandler->processBillCreated(compact('bill'));
+			if ('paid' != $bill['status'])
+				return $this->billHandler->processBillCreated($bill);
 		}
-
-		if ($this->orderHandler->getOrder($bill) && $bill['status'] === 'paid') {
-			return $this->billHandler->validateBillPaidWebhook(compact('bill'));
-		}
-
-		return false;
+		return $this->validateBillPaidWebhook($bill);
 	}
 
 	/**
@@ -124,29 +126,24 @@ class Vindi_Subscription_Helper_Validator
 	 *
 	 * @return bool
 	 */
-	public function validateBillPaidWebhook($data)
+	public function validateBillPaidWebhook($bill)
 	{
-		$billInfo = $this->getBillInfo($data['bill']);
+		$billInfo = $this->getBillInfo($bill);
 		$order = $this->orderHandler->getOrderFromMagento(
 			$billInfo['type'],
 			$billInfo['id'],
 			$billInfo['cycle']
 		);
 
-		if (! $order)
-			return $this->validateBillCreatedWebhook($data);
+		if (! $order->getId()) {
+			$order = $this->billHandler->processBillCreated($bill);
+		}
 
-		if ($order && $order->canInvoice())
-			return $this->billHandler->processBillPaid($order, $data);
-
-		// if ($billInfo['type'] == 'assinatura') {
-		// 	$this->logWebhook(sprintf(
-		// 		'Ainda não existe um pedido para ciclo %s da assinatura: %d.',
-		// 		$billInfo['cycle'], $billInfo['id']), 4);
-		// 	return false;
-		// }
-		// $this->logWebhook(sprintf('Pedido não encontrado para a "fatura": %d.', $billInfo['id']));
-		// return false;
+		if ('paid' != $bill['status'] || ! $order) {
+			$this->logWebhook('Impossível atualizar status do pedido!', 4);
+			return false;
+		}
+		return $this->billHandler->processBillPaid($order, $bill);
 	}
 
 	/**

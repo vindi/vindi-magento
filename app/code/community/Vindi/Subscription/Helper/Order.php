@@ -95,7 +95,7 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @return bool
 	 */
-	public function createInvoice($order, $data)
+	public function createInvoice($order, $bill)
 	{
 		$orderId = $order->getId();
 		if ($orderId) {
@@ -103,12 +103,12 @@ class Vindi_Subscription_Helper_Order
 				$this->logWebhook('Gerando fatura para o pedido: ' . $orderId);
 				$this->updateToSuccess($order);
 				$paymentMethod = new Vindi_Subscription_Model_PaymentMethod();
-				$paymentMethod->processPaidReturn($data['bill'], $order);
+				$paymentMethod->processPaidReturn($bill, $order);
 				$this->logWebhook('Fatura gerada com sucesso.');
 				return true;
 			}
 			elseif ($order->canHold()) {
-				$this->logWebhook('O pedido ' . $orderId . 'possui o status:' . $order->getState());
+				$this->logWebhook("O pedido $orderId possui o status: '$order->getState()'");
 				return true;
 			}
 			$this->logWebhook('Impossível gerar fatura para o pedido ' . $orderId, 4);
@@ -165,10 +165,6 @@ class Vindi_Subscription_Helper_Order
 		if ($lastPeriod->getData()) {
 			return $lastPeriod;
 		}
-
-		$this->logWebhook("Pedido não encontrado para o ciclo: $subscriptionPeriod" . 
-			" da Assinatura: $vindiId", 4);
-
 		return $orders->getFirstItem();
 	}
 
@@ -223,7 +219,7 @@ class Vindi_Subscription_Helper_Order
 			}
 		}
 		$this->logWebhook(sprintf('Novo pedido gerado: %s.', $order->getId()));
-		return true;
+		return $order;
 	}
 
 	/*
