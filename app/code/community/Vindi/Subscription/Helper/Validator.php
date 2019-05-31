@@ -95,21 +95,15 @@ class Vindi_Subscription_Helper_Validator
 			return true;
 		}
 
-		if (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
-			$this->logWebhook(sprintf(
-				'Ignorando o evento "bill_created" para pedido concluído.'), 7);
-			return true;
+		if (! isset($bill['subscription']['id']) || ! isset($bill['period']['cycle'])) {
+			$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
+			return false;
 		}
 
 		if (isset($bill['period']) && ($bill['period']['cycle'] === 1)) {
 			$this->logWebhook(sprintf(
 				'Ignorando o evento "bill_created" para o primeiro ciclo.'), 7);
 			return true;
-		}
-
-		if (! isset($bill['subscription']['id']) || ! isset($bill['period']['cycle'])) {
-			$this->logWebhook('Pedido anterior não encontrado. Ignorando evento.', 4);
-			return false;
 		}
 
 		if (! $this->orderHandler->getOrder($bill)) {
