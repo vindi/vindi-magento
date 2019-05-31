@@ -46,6 +46,8 @@ class Vindi_Subscription_Helper_Validator
 			return false;
 		}
 
+		$charge = reset($vindiOrder['charges']);
+
 		# Invalida evento se a cobrança já estiver paga
 		if (! $order->canInvoice()) {
 			$orderStatus = $order->getStatusLabel();
@@ -55,7 +57,6 @@ class Vindi_Subscription_Helper_Validator
 			return true;
 		}
 
-		$charge = reset($vindiOrder['charges']);
 		$gatewayMessage = $charge['last_transaction']['gateway_message'];
 
 		if (is_null($charge['next_attempt'])) {
