@@ -18,11 +18,13 @@ class Vindi_Subscription_Helper_Bill
 	 *
 	 * @return bool
 	 */
-	public function processBillCreated($data)
+	public function processBillCreated($bill)
 	{
-		$bill = $data['bill'];
-		$vindiData = $this->loadBillData($data);
-		$lastOrder = $this->getLastPeriod($data);
+		$vindiData = $this->loadBillData($bill);
+		$lastOrder = $this->getLastPeriod($bill);
+
+		if (! $lastOrder->getId())
+			return false;
 
 		$order = $this->orderHandler->createOrder($lastOrder, $vindiData);
 
@@ -44,10 +46,10 @@ class Vindi_Subscription_Helper_Bill
 	 *
 	 * @return bool|Mage_Sales_Model_Order
 	 */
-	public function getLastPeriod($data)
+	public function getLastPeriod($bill)
 	{
-		$currentPeriod = $data['bill']['period']['cycle'];
-		$subscriptionId = $data['bill']['subscription']['id'];
+		$currentPeriod = $bill['period']['cycle'];
+		$subscriptionId = $bill['subscription']['id'];
 		return $this->orderHandler->getOrderFromMagento('subscription',
 			$subscriptionId, $currentPeriod - 1);
 	}
@@ -63,17 +65,17 @@ class Vindi_Subscription_Helper_Bill
 	{
 		$vindiData = [
 			'bill'     => [
-				'id'           => $data['bill']['id'],
-				'amount'       => $data['bill']['amount'],
-				'subscription' => $data['bill']['subscription']['id'],
-				'cycle'        => $data['bill']['period']['cycle']
+				'id'           => $data['id'],
+				'amount'       => $data['amount'],
+				'subscription' => $data['subscription']['id'],
+				'cycle'        => $data['period']['cycle']
 			],
 			'products' => [],
 			'shipping' => [],
 			'taxes'    => [],
 		];
 
-		foreach ($data['bill']['bill_items'] as $billItem) {
+		foreach ($data['bill_items'] as $billItem) {
 			if ($billItem['product']['code'] == 'frete') {
 				$vindiData['shipping'] = $billItem;
 				continue;
@@ -125,8 +127,8 @@ class Vindi_Subscription_Helper_Bill
 	 *
 	 * @return bool
 	 */
-	public function processBillPaid($order, $data)
+	public function processBillPaid($order, $bill)
 	{
-		return $this->orderHandler->createInvoice($order, $data);
+		return $this->orderHandler->createInvoice($order, $bill);
 	}
 }
