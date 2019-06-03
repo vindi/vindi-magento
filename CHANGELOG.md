@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.8.0 - 03/06/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.0)
+
+### Ajustado
+- Ajusta tratativa de Webhooks (Fatura Criada e Fatura Paga)
+
+
 ## [1.7.1 - 03/05/2019](https://github.com/vindi/vindi-magento/releases/tag/1.7.1)
 
 ### Corrigido
