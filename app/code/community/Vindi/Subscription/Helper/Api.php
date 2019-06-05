@@ -6,7 +6,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @const string API base path.
      */
-    private $base_path ;
+    protected $base_path ;
 
     /**
      * @var string
@@ -16,7 +16,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @var string
      */
-    private $version;
+    protected $version;
 
     /**
      * @var string
@@ -26,7 +26,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @var bool
      */
-    private $acceptBankSlip;
+    protected $acceptBankSlip;
 
     public function __construct()
     {
@@ -39,7 +39,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      * @param string   $message
      * @param int|null $level
      */
-    private function log($message, $level = null)
+    protected function log($message, $level = null)
     {
         Mage::log($message, $level, 'vindi_api.log');
     }
@@ -47,7 +47,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @return \Zend_Cache_Core
      */
-    private function cache()
+    protected function cache()
     {
         return Mage::app()->getCache();
     }
@@ -59,7 +59,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return string
      */
-    private function buildBody($data)
+    protected function buildBody($data)
     {
         $body = null;
 
@@ -76,7 +76,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return string
      */
-    private function getErrorMessage($error, $endpoint)
+    protected function getErrorMessage($error, $endpoint)
     {
         return "Erro em $endpoint: {$error['id']}: {$error['parameter']} - {$error['message']}";
     }
@@ -87,7 +87,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    private function checkResponse($response, $endpoint)
+    protected function checkResponse($response, $endpoint)
     {
         if (isset($response['errors']) && ! empty($response['errors'])) {
             foreach ($response['errors'] as $error) {
@@ -116,7 +116,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    private function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
+    protected function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
     {
         if (! $this->key) {
             return false;

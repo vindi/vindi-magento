@@ -227,7 +227,7 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @param Mage_Sales_Model_Quote $quote, array $vindiData, Mage_Sales_Model_Quote $shippingMethod 
 	 */
-	private function loadShipping($quote, $vindiData, $shippingMethod)
+	protected function loadShipping($quote, $vindiData, $shippingMethod)
 	{
 		// Carrega todos os métodos de entrega
 		$shippingMethods = Mage::getSingleton('vindi_subscription/config_shippingmethod')
@@ -283,7 +283,7 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @param Mage_Sales_Model_Quote $quote, array $vindiData
 	 */
-	private function loadTaxes($quote, $vindiData)
+	protected function loadTaxes($quote, $vindiData)
 	{
 		if (isset(reset($vindiData['taxes'])['pricing_schema']['price'])
 			&& ! empty(reset($vindiData['taxes'])['pricing_schema']['price'])) {
@@ -300,7 +300,7 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @param Mage_Sales_Model_Quote $quote, array $vindiData
 	 */
-	private function loadProducts($quote, $vindiData)
+	protected function loadProducts($quote, $vindiData)
 	{
 		foreach ($vindiData['products'] as $item) {
 			$magentoProduct = Mage::getModel('catalog/product')

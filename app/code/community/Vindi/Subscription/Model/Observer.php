@@ -5,7 +5,7 @@ class Vindi_Subscription_Model_Observer
     /**
      * @var \Vindi_Subscription_Helper_Data
      */
-    private $_helper;
+    protected $_helper;
 
     /**
      * Constructor.
@@ -95,7 +95,7 @@ class Vindi_Subscription_Model_Observer
     /**
      * @param $message
      */
-    private function addNotice($message)
+    protected function addNotice($message)
     {
         Mage::getSingleton('core/session')->addNotice($message);
         Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
@@ -107,7 +107,7 @@ class Vindi_Subscription_Model_Observer
      *
      * @return int
      */
-    private function countSubscriptions($quote)
+    protected function countSubscriptions($quote)
     {
         $count = 0;
 
@@ -125,7 +125,7 @@ class Vindi_Subscription_Model_Observer
      *
      * @return bool
      */
-    private function isSubscription($product)
+    protected function isSubscription($product)
     {
         return $product->getTypeId() === 'subscription';
     }

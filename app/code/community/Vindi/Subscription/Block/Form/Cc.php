@@ -14,7 +14,7 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     /**
      * @return bool
      */
-    private function isAdmin()
+    protected function isAdmin()
     {
         return Mage::app()->getStore()->isAdmin();
     }
@@ -22,7 +22,7 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     /**
      * @return \Mage_Customer_Model_Customer
      */
-    private function getCustomer()
+    protected function getCustomer()
     {
         if ($this->isAdmin()) {
             return Mage::getSingleton('adminhtml/session_quote')->getCustomer();
@@ -34,7 +34,7 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     /**
      * @return \Mage_Sales_Model_Quote
      */
-    private function getQuote()
+    protected function getQuote()
     {
         if ($this->isAdmin()) {
             return Mage::getSingleton('adminhtml/session_quote')->getQuote();
@@ -153,7 +153,7 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
     /**
      * @return Vindi_Subscription_Helper_API
      */
-    private function api()
+    protected function api()
     {
         return Mage::helper('vindi_subscription/api');
     }
