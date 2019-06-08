@@ -116,7 +116,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    protected function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
+    private function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
     {
         if (! $this->key) {
             return false;
