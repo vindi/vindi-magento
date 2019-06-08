@@ -6,7 +6,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @const string API base path.
      */
-    protected $base_path ;
+    private $base_path ;
 
     /**
      * @var string
@@ -16,7 +16,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * @var string
      */
-    protected $version;
+    private $version;
 
     /**
      * @var string
