@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.8.1 - 10/06/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.1)
+
+### Ajustado
+- Altera visibilidade de métodos e variáveis de `private` para `protected`
+
+
 ## [1.8.0 - 03/06/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.0)
 
 ### Ajustado
