@@ -111,27 +111,28 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 
 	public function validateInstallments($info)
 	{
-		$installments = $info->getAdditionalInformation('installments');
+		if (Mage::getStoreConfig('payment/vindi_creditcard/enable_installments')) {
+			$installments = $info->getAdditionalInformation('installments');
 
-		if (! $installments) {
-			return 'Você deve informar o número de parcelas.';
-		}
-
-		if ($installments != 1) { 
-			$maxInstallmentNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
-
-			if ($installments > $maxInstallmentNumber) {
-				return 'O número de parcelas selecionado é inválido.';
+			if (! $installments) {
+				return 'Você deve informar o número de parcelas.';
 			}
 
-			$minInstallmentsValue = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
-			$installmentValue = ceil($info->getQuote()->getGrandTotal() / $installments * 100) / 100;
+			if ($installments != 1) { 
+				$maxInstallmentNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
 
-			if (($installmentValue < $minInstallmentsValue) && ($installments > 1)) {
-				return 'O número de parcelas selecionado é inválido.';
+				if ($installments > $maxInstallmentNumber) {
+					return 'O número de parcelas selecionado é inválido.';
+				}
+
+				$minInstallmentsValue = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
+				$installmentValue = ceil($info->getQuote()->getGrandTotal() / $installments * 100) / 100;
+
+				if (($installmentValue < $minInstallmentsValue) && ($installments > 1)) {
+					return 'O número de parcelas selecionado é inválido.';
+				}
 			}
 		}
-
 		return 'valid';
 	}
 }
