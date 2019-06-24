@@ -32,7 +32,7 @@ Obs.: Gostamos muito do [MEQP1](https://github.com/magento/marketplace-eqp):smil
 
 - **Fragmentação** - Quando um PR for parte de uma tarefa e não entregar valor de forma isolada, será necessário explicitar na motivação quais são os objetivos da tarefa, e na solução proposta, os objetivos que foram concluídos no PR em questão e os que serão concluídos em PRs futuros.
 
-#### Se você nunca criou um Pull Request (PR) na vida, seja bem vindo :tada: :smile: [Aqui está um ótimo tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github) de como enviar um.
+#### Se você nunca criou um Pull Request (PR), seja bem vindo :tada: :smile: [Aqui está um ótimo tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github) de como enviar um.
 
 1. Faça um [fork](http://help.github.com/fork-a-repo/) do projeto, clone seu repositório (fork):
 
@@ -62,73 +62,14 @@ Obs.: Gostamos muito do [MEQP1](https://github.com/magento/marketplace-eqp):smil
 # Qualidade do código
 Para garantir a qualidade do código, a gente disponibiliza alguns testes funcionais e code style MEQP1 do magento em Vindi/Subscription/tests.
  
-#### Se você nunca utilizou o composer na vida, seja bem vindo :tada: :smile: [Aqui está o link do composer](https://getcomposer.org/download/), depois instale as dependências do composer.json.
+#### Se você nunca utilizou o composer, seja bem vindo :tada: :smile: [Aqui está o link do composer](https://getcomposer.org/download/), depois instale as dependências do composer.json.
 
-#### Se você nunca rodou testes funcionais com Selenium na vida, seja bem vindo :tada: :smile: [Aqui está um ótimo tutorial do framework de teste para o magento](https://magiumlib.com/) e você vai precisar do [java](https://www.java.com/pt_BR/download/) também.
-
-## Configuração dos arquivos do framework de testes
-1. Vindi/Subscription/tests/configuration/Magium/TestCaseConfiguration.php
-```php
-    <?php
-    
-    # Trocar o browser caso for utilizar outro
-    $this->capabilities = \Magium\TestCaseConfiguration::CAPABILITIES_CHROME;
-    
-    # Trocar o dominio onde o selenium server estiver rodando
-    $this->webDriverRemote = 'http://selenium:4444/wd/hub';
-```
-
-2. Vindi/Subscription/tests/configuration/Magium/Magento/Identities/Admin.php
-```php
-    <?php
-    # Trocar o admin da adminstração do Magento
-    $this->account = 'admin';
-    
-    # Trocar a senha da adminstração do Magento
-    $this->password = 'password';
-```
-
-3. Vindi/Subscription/tests/configuration/Magium/Magento/Identities/Customer.php
-```php
-    <?php
-    # Trocar o e-mail do usuário
-    $this->emailAddress = 'example@vindi.com.br';
-    
-    # Trocar a password do usuário
-    $this->password = 'password';
-```
- 
-4. Vindi/Subscription/tests/configuration/Magium/Magento/Themes/Admin/ThemeConfiguration.php
-```php
-    <?php
-    # Trocar a URI da área adminstrativa do Magento
-    $this->baseUrl = 'https://example.local/admin/';
-```
- 
-5. Vindi/Subscription/tests/configuration/Magium/Magento/Themes/Magento19/ThemeConfiguration.php
-```php
-    <?php
-    # Trocar a URI da área da loja
-    $this->baseUrl = 'https://example.local/';
-```
- 
+#### Se você nunca rodou testes funcionais com Codeception, seja bem vindo :tada: :smile: [Aqui está o link da documentação oficial](https://codeception.com/docs/02-GettingStarted).
  
 ## Rodando os Testes
 
 ``` bash
 composer test
-```
-
-## Verificando estilo do código
-
-``` bash
-composer style
-```
-
-## Corrigindo estilo do código
-
-``` bash
-composer fix
 ```
 
 ## Revisão da Comunidade
