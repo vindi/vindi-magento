@@ -37,7 +37,7 @@ class Vindi_Subscription_WebhookController extends Mage_Core_Controller_Front_Ac
 	 *
 	 * @return bool
 	 */
-	private function validateRequest()
+	protected function validateRequest()
 	{
 		$systemKey = Mage::helper('vindi_subscription')->getHashKey();
 		$requestKey = $this->getRequest()->getParam('key');

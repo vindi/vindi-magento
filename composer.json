@@ -1,0 +1,8 @@
+{
+    "require-dev": {
+        "codeception/codeception": "^3.0"
+    },
+    "scripts": {
+        "test": "codecept run"
+    }
+}
