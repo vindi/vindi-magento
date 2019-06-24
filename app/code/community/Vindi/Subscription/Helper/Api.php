@@ -582,17 +582,17 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'discounts'           => $discount,
             ));
         }
-        return $this->buildTaxAndshipping($list, $order);
+        return $this->buildShipping($this->buildTax($list, $order), $order);
     }
 
     /**
-     * Carrega Frete e Taxa para a Fatura Vindi
+     * Carrega Frete para a Fatura Vindi
      *
      * @param array $items, Mage_Sales_Model_Order $order
      *
      * @return array
      */
-    public function buildTaxAndshipping($items, $order)
+    public function buildShipping($items, $order)
     {
         if ($order->getShippingAmount() > 0) {
             array_push($items, array(
@@ -606,7 +606,18 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'pricing_schema' => array('price' => $order->getShippingAmount()),
             ));
         }
+        return $items;
+    }
 
+    /**
+     * Carrega Taxas para a Fatura Vindi
+     *
+     * @param array $items, Mage_Sales_Model_Order $order
+     *
+     * @return array
+     */
+    public function buildTax($items, $order)
+    {
         if (array_key_exists('tax', $order->getQuote()->getTotals())) {
             array_push($items, array(
                 'product_id'     => $this->findOrCreateProduct(
@@ -620,7 +631,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                     'price'      => $order->getQuote()->getTotals()['tax']->getData('value')
                 ),
             ));
-        }
+        }        
         return $items;
     }
 
@@ -716,22 +727,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 )
             ));
         }
-
-        if ($dicountAmount = $order->getDiscountAmount() > 0) {
-            array_push($billItems, array(
-                'product_id'     => $this->findOrCreateProduct(
-                    array(
-                        'sku'    => 'cupom-desconto',
-                        'name'   => 'Cupom de Desconto'
-                    )
-                ),
-                'quantity'       => 1,
-                'pricing_schema' => array(
-                    'price'      => number_format(floor($dicountAmount * -1, 2)
-                ),
-            ));
-        }
-        return $this->buildTaxAndshipping($billItems, $order);
+        return $this->buildShipping($this->buildTax($billItems, $order), $order);
     }
 
     /**
