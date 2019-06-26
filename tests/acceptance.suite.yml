@@ -7,7 +7,8 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-            url: http://localhost/myapp
+        - WebDriver:
+            url: http://vindi.magento
+            browser: phantomjs
         - \Helper\Acceptance
     step_decorators: ~        
