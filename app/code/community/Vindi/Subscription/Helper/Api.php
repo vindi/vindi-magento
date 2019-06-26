@@ -631,7 +631,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                     'price'      => $order->getQuote()->getTotals()['tax']->getData('value')
                 ),
             ));
-        }        
+        }
         return $items;
     }
 
