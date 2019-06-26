@@ -20,6 +20,11 @@ class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
 
+    public function isModuleConfigured()
+    {
+        return getenv('CONFIGURED') == true;
+    }
+
     public function goToAdminPanel($I)
     {
         $I->amOnPage('/admin');
@@ -34,5 +39,16 @@ class AcceptanceTester extends \Codeception\Actor
         $I->click('System');
         $I->click('Configuration');
         $I->click('Configuração');
+        $I->click('#vindi_subscription_general-head');
+    }
+
+    public function goToCreditCardSettings($I)
+    {
+        $this->goToAdminPanel($I);
+        $I->click('System');
+        $I->click('Configuration');
+        $I->click('Payment Methods');
+        $I->click('Vindi - Cartão de Crédito');
+        $I->click('#payment_vindi_creditcard-head');
     }
 }

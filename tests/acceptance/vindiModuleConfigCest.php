@@ -1,11 +1,11 @@
 <?php 
 
-class SetupVindiModuleCest
+class VindiModuleConfigCest
 {
     public static function setConnectionConfig(AcceptanceTester $I)
     {
         // Caso o módulo já tenha sido configurado
-        if (getenv('CONFIGURED'))
+        if ($I->isModuleConfigured())
             return;
 
         $I->goToVindiSettings($I);
