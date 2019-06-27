@@ -14,6 +14,11 @@ services:
         - "80:80"
         links:
         - magento1_db:mysql
+    phantomjs:
+        image: laertejr/phantomjs
+        container_name: phantom_server
+        ports:
+        - "4444:4444"
 networks:
     default:
         external:
