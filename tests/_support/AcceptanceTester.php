@@ -29,7 +29,7 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $I->amOnPage('/admin');
         $I->fillField('login[username]', 'admin');
-        $I->fillField('login[password]', 'admin123');
+        $I->fillField('login[password]', 'password123');
         $I->click('Login');
     }
 
