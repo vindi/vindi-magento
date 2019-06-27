@@ -10,6 +10,5 @@ modules:
         - WebDriver:
             url: http://vindi.magento
             browser: phantomjs
-            host: phantomjs
         - \Helper\Acceptance
     step_decorators: ~        

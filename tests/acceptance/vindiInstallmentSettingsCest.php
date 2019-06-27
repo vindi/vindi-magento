@@ -6,7 +6,7 @@ class VindiInstallmentSettingsCest
     {
         // Caso o módulo não tenha sido configurado
         if (! $I->isModuleConfigured())
-            VindiModuleConfigCest::setConnectionConfig($I);
+            $I->setConnectionConfig($I);
     }
 
     public function enableCreditCardWithoutInstallments(AcceptanceTester $I)
@@ -19,6 +19,7 @@ class VindiInstallmentSettingsCest
 
     public function enableCreditCardWithInstallments(AcceptanceTester $I)
     {
+        $I->goToAdminPanel($I);
         $I->goToCreditCardSettings($I);
         $I->selectOption('#payment_vindi_creditcard_active', 'Yes');
         $I->selectOption('#payment_vindi_creditcard_enable_installments', 'Yes');

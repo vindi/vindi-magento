@@ -35,20 +35,36 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function goToVindiSettings($I)
     {
-        $this->goToAdminPanel($I);
         $I->click('System');
         $I->click('Configuration');
-        $I->click('Configuração');
-        $I->click('#vindi_subscription_general-head');
+
+        try {
+            $I->seeElement('#vindi_subscription_general_api_key');
+        } catch (Exception $e) {
+            $I->click('#vindi_subscription_general-head');
+        }
+    }
+
+    public function setConnectionConfig($I)
+    {
+        $I->goToAdminPanel($I);
+        $I->goToVindiSettings($I);
+        $I->fillField('#vindi_subscription_general_api_key', getenv('VINDI_API_KEY'));
+        $I->selectOption('#vindi_subscription_general_sandbox_mode', 'Sandbox');
+        $I->click('Save Config');
+        putenv("CONFIGURED=true");
     }
 
     public function goToCreditCardSettings($I)
     {
-        $this->goToAdminPanel($I);
         $I->click('System');
         $I->click('Configuration');
         $I->click('Payment Methods');
-        $I->click('Vindi - Cartão de Crédito');
-        $I->click('#payment_vindi_creditcard-head');
+
+        try {
+            $I->seeElement('#payment_vindi_creditcard_active');
+        } catch (Exception $e) {
+            $I->click('#payment_vindi_creditcard-head');
+        }
     }
 }
