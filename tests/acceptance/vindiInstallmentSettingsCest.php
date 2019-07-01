@@ -26,5 +26,4 @@ class VindiInstallmentSettingsCest
         $I->selectOption('#payment_vindi_creditcard_max_installments_number', '12x');
         $I->click('Save Config');
     }
-
 }

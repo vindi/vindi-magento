@@ -8,7 +8,8 @@ actor: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            url: http://vindi.magento/index.php/
-            browser: phantomjs
+            url: http://vindi.magento/
+            browser: chrome
+            port: 9515
         - \Helper\Acceptance
     step_decorators: ~        
