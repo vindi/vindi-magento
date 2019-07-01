@@ -1,6 +1,6 @@
 <?php 
 
-class VindiInstallmentSettingsCest
+class VindiCreditCardSettingsCest
 {
     public function _before(AcceptanceTester $I)
     {
@@ -11,6 +11,7 @@ class VindiInstallmentSettingsCest
 
     public function enableCreditCardWithoutInstallments(AcceptanceTester $I)
     {
+        $I->goToAdminPanel($I);
         $I->goToCreditCardSettings($I);
         $I->selectOption('#payment_vindi_creditcard_active', 'Yes');
         $I->selectOption('#payment_vindi_creditcard_enable_installments', 'No');

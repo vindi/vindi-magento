@@ -23,21 +23,21 @@ class VindiModuleConfigCest
         $I->selectOption('#vindi_subscription_general_default_shipping_method', 'Flat Rate');
     }
 
-    public function sendCustomerVat(AcceptanceTester $I, Bool $enabled = false)
+    public function sendCustomerVat(AcceptanceTester $I)
     {
         $I->goToAdminPanel($I);
         $I->goToVindiSettings($I);
         $I->selectOption('#vindi_subscription_general_send_nfe_information', 'Yes');
     }
 
-    public function showBankSlipOnOrder(AcceptanceTester $I, Bool $enabled = false)
+    public function showBankSlipOnOrder(AcceptanceTester $I)
     {
         $I->goToAdminPanel($I);
         $I->goToVindiSettings($I);
         $I->selectOption('#vindi_subscription_general_bankslip_link_in_order_comment', 'Yes');
     }
 
-    public function setVerifyTransactionStatus(AcceptanceTester $I, Bool $enabled = false)
+    public function setVerifyTransactionStatus(AcceptanceTester $I)
     {
         $I->goToAdminPanel($I);
         $I->goToVindiSettings($I);

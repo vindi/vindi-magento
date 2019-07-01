@@ -28,9 +28,12 @@ class AcceptanceTester extends \Codeception\Actor
     public function goToAdminPanel($I)
     {
         $I->amOnPage('/admin');
-        $I->fillField('login[username]', 'admin');
-        $I->fillField('login[password]', 'password123');
-        $I->click('Login');
+
+        try {
+            $I->fillField('login[username]', 'admin');
+            $I->fillField('login[password]', 'password123');
+            $I->click('Login');
+        } catch (Exception $e) { }
     }
 
     public function goToVindiSettings($I)
@@ -66,5 +69,41 @@ class AcceptanceTester extends \Codeception\Actor
         } catch (Exception $e) {
             $I->click('#payment_vindi_creditcard-head');
         }
+    }
+
+    public function setDefaultCreditCard($I, $withInstallments = true, $maxInstallment = 12)
+    {
+        $I->goToAdminPanel($I);
+        $I->goToCreditCardSettings($I);
+        $I->selectOption('#payment_vindi_creditcard_active', 'Yes');
+        $I->selectOption(
+            '#payment_vindi_creditcard_enable_installments', $withInstallments ? 'Yes' : 'No'
+        );
+        $I->selectOption('#payment_vindi_creditcard_max_installments_number', "{$maxInstallment}x");
+        $I->click('Save Config');
+    }
+
+    public function addProductToCart($I)
+    {
+        $I->amOnPage('/vindi-product.html');
+        $I->click('Add to Cart');
+        $I->click('Proceed to Checkout');
+    }
+
+    public function loginAsUser($I)
+    {
+        $I->wait(1);
+        $I->amOnPage('/customer/account/login');
+        $I->fillField('login[username]', 'comunidade@vindi.com.br');
+        $I->fillField('login[password]', 'password123');
+        $I->click('Login');
+    }
+
+    public function skipCheckoutForm($I)
+    {
+        $I->click('Continue', '#billing-buttons-container');
+        $I->wait(1);
+        $I->click('Continue', '#shipping-method-buttons-container');
+        $I->wait(1);
     }
 }
