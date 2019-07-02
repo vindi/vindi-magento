@@ -582,7 +582,9 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'discounts'           => $discount,
             ));
         }
-        return $this->buildShipping($this->buildTax($list, $order), $order);
+        $list = $this->buildTax($list, $order);
+        $list = $this->buildShipping($list, $order);
+        return $list;
     }
 
     /**
@@ -604,6 +606,30 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 ),
                 'quantity'       => 1,
                 'pricing_schema' => array('price' => $order->getShippingAmount()),
+            ));
+        }
+        return $items;
+    }
+
+    /**
+     * Carrega cupom de desconto para a Faturas Avulsas
+     *
+     * @param array $items, Mage_Sales_Model_Order $order
+     *
+     * @return array
+     */
+    public function buildSingleDiscount($items, $order)
+    {
+        if ($order->getDiscountAmount() > 0) {
+            array_push($items, array(
+                'product_id'     => $this->findOrCreateProduct(
+                    array(
+                        'sku'    => 'cupom',
+                        'name'   => 'Cupom de Desconto'
+                    )
+                ),
+                'quantity'       => 1,
+                'amount' =>  $order->getDiscountAmount(),
             ));
         }
         return $items;
@@ -727,7 +753,11 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 )
             ));
         }
-        return $this->buildShipping($this->buildTax($billItems, $order), $order);
+
+        $list = $this->buildTax($list, $order);
+        $list = $this->buildSingleDiscount($list, $order);
+        $list = $this->buildShipping($list, $order);
+        return $list;
     }
 
     /**
