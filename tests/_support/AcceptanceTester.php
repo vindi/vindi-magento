@@ -101,6 +101,7 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function skipCheckoutForm($I)
     {
+        $I->click('#billing:use_for_shipping_yes');
         $I->click('Continue', '#billing-buttons-container');
         $I->wait(1);
         $I->click('Continue', '#shipping-method-buttons-container');

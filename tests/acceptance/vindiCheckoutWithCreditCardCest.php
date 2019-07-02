@@ -15,9 +15,10 @@ class VindiCheckoutWithCreditCardCest
         $I->loginAsUser($I);
         $I->addProductToCart($I);
         $I->skipCheckoutForm($I);
+        $I->waitForElement('#dt_method_vindi_creditcard', 30);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
-        $I->wait(2);
-        $I->selectOption('select.required-entry', '2');
+        $I->waitForElement('#vindi_cc_installments', 30);
+        $I->selectOption('#vindi_cc_installments', '2');
 
         try
         {
@@ -30,10 +31,11 @@ class VindiCheckoutWithCreditCardCest
         } catch(Exception $e) { }
 
         $I->click('Continue', '#payment-buttons-container');
-        $I->wait(1);
+        $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
-        $I->wait(5);
+        $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->see('Your order has been received.');
     }
 
     public function buyAnProductWithoutInstallment(AcceptanceTester $I)
@@ -42,6 +44,7 @@ class VindiCheckoutWithCreditCardCest
         $I->loginAsUser($I);
         $I->addProductToCart($I);
         $I->skipCheckoutForm($I);
+        $I->waitForElement('#dt_method_vindi_creditcard', 30);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->dontSeeElement('select.required-entry');
 
@@ -56,9 +59,10 @@ class VindiCheckoutWithCreditCardCest
         } catch(Exception $e) { }
 
         $I->click('Continue', '#payment-buttons-container');
-        $I->wait(1);
+        $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
-        $I->wait(5);
+        $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->see('Your order has been received.');
     }
 }
