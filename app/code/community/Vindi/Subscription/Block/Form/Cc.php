@@ -97,26 +97,27 @@ class Vindi_Subscription_Block_Form_Cc extends Mage_Payment_Block_Form_Cc
      */
     public function getInstallments()
     {
-        $allowInstallments          = $this->isInstallmentsAllowedInStore();
+        if (! $this->isInstallmentsAllowedInStore())
+            return false;
+
         $maxInstallmentsNumber      = $this->getMaxInstallmentsNumber();
         $minInstallmentsValue       = Mage::getStoreConfig('payment/vindi_creditcard/min_installment_value');
         $quote                      = $this->getQuote();
         $installments               = false;
 
-            if ($maxInstallmentsNumber > 1 && $allowInstallments == true) {
-                $total             = $quote->getGrandTotal();
-                $installmentsTimes = floor($total / $minInstallmentsValue);
-                $installments      = '<option value="">' . Mage::helper('catalog')->__('-- Please Select --') . '</option>';
+        if ($maxInstallmentsNumber > 1) {
+            $total             = $quote->getGrandTotal();
+            $installmentsTimes = floor($total / $minInstallmentsValue);
+            $installments      = '<option value="">' . Mage::helper('catalog')->__('-- Please Select --') . '</option>';
 
-                    for ($i = 1; $i <= $maxInstallmentsNumber; $i++) {
-                        $value = ceil($total / $i * 100) / 100;
-                        $price = Mage::helper('core')->currency($value, true, false);
-                        $installments .= '<option value="' . $i . '">' . sprintf('%dx de %s', $i, $price) . '</option>';
-                        if(($i + 1) > $installmentsTimes)
-                            break;
-                    }
-            }
-
+                for ($i = 1; $i <= $maxInstallmentsNumber; $i++) {
+                    $value = ceil($total / $i * 100) / 100;
+                    $price = Mage::helper('core')->currency($value, true, false);
+                    $installments .= '<option value="' . $i . '">' . sprintf('%dx de %s', $i, $price) . '</option>';
+                    if(($i + 1) > $installmentsTimes)
+                        break;
+                }
+        }
         return $installments;
     }
     /**

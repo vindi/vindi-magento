@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.8.2 - 02/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.2)
+
+### Ajustado
+- Corrige validação de quantidade de parcelas no checkout
+
+
 ## [1.8.1 - 10/06/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.1)
 
 ### Ajustado
