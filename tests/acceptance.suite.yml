@@ -7,7 +7,9 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-            url: http://localhost/myapp
+        - WebDriver:
+            url: http://vindi.magento/
+            browser: chrome
+            port: 9515
         - \Helper\Acceptance
     step_decorators: ~        
