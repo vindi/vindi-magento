@@ -60,11 +60,11 @@ Obs.: Gostamos muito do [MEQP1](https://github.com/magento/marketplace-eqp):smil
 
 
 # Qualidade do código
-Para garantir a qualidade do código, a gente disponibiliza alguns testes funcionais e code style MEQP1 do magento em Vindi/Subscription/tests.
+Para garantir o controle da qualidade do código, disponibilizamos alguns testes via [Codecept](https://codecept.io/) em [Vindi/Subscription/tests](https://github.com/vindi/vindi-magento/tree/master/tests).
  
 #### Se você nunca utilizou o composer, seja bem vindo :tada: :smile: [Aqui está o link do composer](https://getcomposer.org/download/), depois instale as dependências do composer.json.
 
-#### Se você nunca rodou testes funcionais com Codeception, seja bem vindo :tada: :smile: [Aqui está o link da documentação oficial](https://codeception.com/docs/02-GettingStarted).
+#### Se você nunca rodou testes funcionais com Codeception, seja bem vindo :tada: :smile: [Aqui está o link da documentação oficial](https://codeception.com/docs/01-Introduction).
  
 ## Rodando os Testes
 
