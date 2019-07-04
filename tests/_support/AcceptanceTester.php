@@ -19,6 +19,7 @@
 class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
+    use Api;
 
     public function isModuleConfigured()
     {
