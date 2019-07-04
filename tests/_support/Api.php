@@ -38,29 +38,27 @@ trait Api
 
         curl_setopt_array($ch, $ch_options);
         $response = curl_exec($ch);
-        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $body = substr($response, curl_getinfo($ch, CURLINFO_HEADER_SIZE));
-
 
         if (curl_errno($ch) || $response === false)
             return false;
 
         curl_close($ch);
-
         $responseBody = json_decode($body, true);
 
         if (! $responseBody)
             return false;
 
-        return array(
-            'status'        => $statusCode,
-            'response_body' => $responseBody
-        );
+        return $responseBody;
     }
 
 
-    public function getBill($billId)
+    public function getLastVindiBill()
     {
-        return $this->request('GET', "bills/$billId");
+        $response = $this->request(
+            'GET', "bills?page=1&per_page=1&sort_by=created_at&sort_order=desc"
+        )['bills'][0];
+
+        return $response;
     }
 }

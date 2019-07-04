@@ -88,7 +88,12 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $I->amOnPage('/vindi-product.html');
         $I->click('Add to Cart');
-        $I->click('Proceed to Checkout');
+    }
+
+    public function addDiscountCode($I)
+    {
+        $I->fillField('#coupon_code', 'desconto');
+        $I->click('Apply');
     }
 
     public function loginAsUser($I)
