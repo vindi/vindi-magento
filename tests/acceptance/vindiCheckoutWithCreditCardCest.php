@@ -18,16 +18,10 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('#dt_method_vindi_creditcard', 30);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->waitForElement('#vindi_cc_installments', 30);
-        $I->selectOption('#vindi_cc_installments', '2');
 
         try
         {
-            $I->fillField('#vindi_creditcard_cc_owner', 'Vindi Magento');
-            $I->selectOption('#vindi_creditcard_cc_type', 'mastercard');
-            $I->fillField('#vindi_creditcard_cc_number', '5555555555555557');
-            $I->selectOption('select#vindi_creditcard_expiration.month', '12');
-            $I->selectOption('select#vindi_creditcard_expiration_yr.year', strval(date('Y') + 5));
-            $I->fillField('#vindi_creditcard_cc_cid', '123');
+            $I->fillCreditCardInfo($I, 2);
         } catch(Exception $e) { }
 
         $I->click('Continue', '#payment-buttons-container');
@@ -50,12 +44,7 @@ class VindiCheckoutWithCreditCardCest
 
         try
         {
-            $I->fillField('#vindi_creditcard_cc_owner', 'Vindi Magento');
-            $I->selectOption('#vindi_creditcard_cc_type', 'mastercard');
-            $I->fillField('#vindi_creditcard_cc_number', '5555555555555557');
-            $I->selectOption('select#vindi_creditcard_expiration.month', '12');
-            $I->selectOption('select#vindi_creditcard_expiration_yr.year', strval(date('Y') + 5));
-            $I->fillField('#vindi_creditcard_cc_cid', '123');
+            $I->fillCreditCardInfo($I);
         } catch(Exception $e) { }
 
         $I->click('Continue', '#payment-buttons-container');

@@ -108,4 +108,17 @@ class AcceptanceTester extends \Codeception\Actor
         $I->click('Continue', '#shipping-method-buttons-container');
         $I->wait(1);
     }
+
+    public function fillCreditCardInfo($I, $installments = false)
+    {
+        $I->fillField('#vindi_creditcard_cc_owner', 'Vindi Magento');
+        $I->selectOption('#vindi_creditcard_cc_type', 'mastercard');
+        $I->fillField('#vindi_creditcard_cc_number', '5555555555555557');
+        $I->selectOption('select#vindi_creditcard_expiration.month', '12');
+        $I->selectOption('select#vindi_creditcard_expiration_yr.year', strval(date('Y') + 5));
+        $I->fillField('#vindi_creditcard_cc_cid', '123');
+
+        if ($installments)
+            $I->selectOption('#vindi_cc_installments', $installments);
+    }
 }
