@@ -80,7 +80,7 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $bill = $I->getLastVindiBill();
-        if ($bill['amount'] == '15.0')
+        if ($bill['amount'] != '14.8')
             throw new \RuntimeException;
     }
 }
