@@ -620,7 +620,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function buildSingleDiscount($items, $order)
     {
-        if ($order->getDiscountAmount() > 0) {
+        if ($order->getDiscountAmount() < 0) {
             array_push($items, array(
                 'product_id'     => $this->findOrCreateProduct(
                     array(
@@ -628,7 +628,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                         'name'   => 'Cupom de Desconto'
                     )
                 ),
-                'quantity'       => 1,
                 'amount' =>  $order->getDiscountAmount(),
             ));
         }
@@ -754,10 +753,10 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             ));
         }
 
-        $list = $this->buildTax($list, $order);
-        $list = $this->buildSingleDiscount($list, $order);
-        $list = $this->buildShipping($list, $order);
-        return $list;
+        $billItems = $this->buildTax($billItems, $order);
+        $billItems = $this->buildSingleDiscount($billItems, $order);
+        $billItems = $this->buildShipping($billItems, $order);
+        return $billItems;
     }
 
     /**
