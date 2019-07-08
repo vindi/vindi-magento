@@ -582,17 +582,19 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'discounts'           => $discount,
             ));
         }
-        return $this->buildTaxAndshipping($list, $order);
+        $list = $this->buildTax($list, $order);
+        $list = $this->buildShipping($list, $order);
+        return $list;
     }
 
     /**
-     * Carrega Frete e Taxa para a Fatura Vindi
+     * Carrega Frete para a Fatura Vindi
      *
      * @param array $items, Mage_Sales_Model_Order $order
      *
      * @return array
      */
-    public function buildTaxAndshipping($items, $order)
+    public function buildShipping($items, $order)
     {
         if ($order->getShippingAmount() > 0) {
             array_push($items, array(
@@ -606,7 +608,41 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'pricing_schema' => array('price' => $order->getShippingAmount()),
             ));
         }
+        return $items;
+    }
 
+    /**
+     * Carrega cupom de desconto para a Faturas Avulsas
+     *
+     * @param array $items, Mage_Sales_Model_Order $order
+     *
+     * @return array
+     */
+    public function buildSingleDiscount($items, $order)
+    {
+        if ($order->getDiscountAmount() < 0) {
+            array_push($items, array(
+                'product_id'     => $this->findOrCreateProduct(
+                    array(
+                        'sku'    => 'cupom',
+                        'name'   => 'Cupom de Desconto'
+                    )
+                ),
+                'amount' =>  $order->getDiscountAmount(),
+            ));
+        }
+        return $items;
+    }
+
+    /**
+     * Carrega Taxas para a Fatura Vindi
+     *
+     * @param array $items, Mage_Sales_Model_Order $order
+     *
+     * @return array
+     */
+    public function buildTax($items, $order)
+    {
         if (array_key_exists('tax', $order->getQuote()->getTotals())) {
             array_push($items, array(
                 'product_id'     => $this->findOrCreateProduct(
@@ -716,7 +752,11 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 )
             ));
         }
-        return $this->buildTaxAndshipping($billItems, $order);
+
+        $billItems = $this->buildTax($billItems, $order);
+        $billItems = $this->buildSingleDiscount($billItems, $order);
+        $billItems = $this->buildShipping($billItems, $order);
+        return $billItems;
     }
 
     /**

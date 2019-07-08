@@ -1,8 +1,14 @@
 # Notas das versões
 
+## [1.8.3 - 08/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.3)
+
+### Corrigido
+- Corrige tratamento de cupom de desconto para vendas avulsas
+
+
 ## [1.8.2 - 02/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.2)
 
-### Ajustado
+### Corrigido
 - Corrige validação de quantidade de parcelas no checkout
 
 
