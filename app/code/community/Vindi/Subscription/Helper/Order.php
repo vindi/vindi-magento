@@ -304,7 +304,7 @@ class Vindi_Subscription_Helper_Order
 	{
 		foreach ($vindiData['products'] as $item) {
 			$magentoProduct = Mage::getModel('catalog/product')
-				->loadByAttribute('vindi_product_id', $item['product']['id']);
+                ->loadByAttribute('sku', $item['product']['code']);
 
 			if (! $magentoProduct) {
 				$this->logWebhook(sprintf('O produto com ID Vindi #%s não existe no Magento.',
