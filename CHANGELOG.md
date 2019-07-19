@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.8.4 - 19/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.4)
+
+### Corrigido
+- Corrige parâmetro para webhook bill_created
+
+
 ## [1.8.3 - 08/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.3)
 
 ### Corrigido
