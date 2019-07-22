@@ -198,7 +198,7 @@ class Vindi_Subscription_Helper_Order
 	 *
 	 * @return bool
 	 */
-	public function renewalOrder($order, $vindiData, $charges)
+	public function renewalOrder($order, $vindiData)
 	{
 		$order->setVindiSubscriptionId($vindiData['bill']['subscription']);
 		$order->setVindiBillId($vindiData['bill']['id']);	
@@ -208,6 +208,7 @@ class Vindi_Subscription_Helper_Order
 		$order->save();
 
 		if (Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment')) {
+			$charges = $vindiData['bill']['charges'];
 			foreach ($charges as $charge) {
 				if ($charge['payment_method']['type'] == 'PaymentMethod::BankSlip') {
 					$order->addStatusHistoryComment(sprintf(
