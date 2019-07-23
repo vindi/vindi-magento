@@ -194,7 +194,7 @@ class Vindi_Subscription_Helper_Order
 	/*
 	 * Atualiza o pedido inserindo as informações refentes a renovação de assinatura Vindi
 	 * 
-	 * @param Mage_Sales_Model_Order $order, array $vindiData, array $charges
+	 * @param Mage_Sales_Model_Order $order, array $vindiData
 	 *
 	 * @return bool
 	 */
