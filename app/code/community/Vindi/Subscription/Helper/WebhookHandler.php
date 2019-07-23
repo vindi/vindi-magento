@@ -5,14 +5,10 @@ class Vindi_Subscription_Helper_WebhookHandler extends Mage_Core_Helper_Abstract
 	use Vindi_Subscription_Trait_LogMessenger;
 	use Vindi_Subscription_Trait_ExceptionMessenger;
 
-	protected $billHandler;
-	protected $orderHandler;
 	protected $validator;
 
 	public function __construct() {
-		$this->billHandler  = Mage::helper('vindi_subscription/bill');
-		$this->orderHandler = Mage::helper('vindi_subscription/order');
-		$this->validator    = Mage::helper('vindi_subscription/validator');
+		$this->validator = Mage::helper('vindi_subscription/validator');
 	}
 
 	/**
