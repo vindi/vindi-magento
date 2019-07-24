@@ -95,6 +95,6 @@ class WebhookHandlerTest extends \Codeception\Test\Unit
         );
 
         \Codeception\Stub\Expected::once($dummy_validator_class);
-        $dummy_webhook_class->handle($this->webhooks::BILL_PAID_WEBHOOK);
+        $dummy_webhook_class->handle($this->webhooks::SINGLE_BILL_PAID_WEBHOOK);
     }
 }
