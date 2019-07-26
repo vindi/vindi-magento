@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.8.5 - 26/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.5)
+
+### Ajustado
+- Ajusta fluxo de renovação dos pedidos
+
+
 ## [1.8.4 - 19/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.4)
 
 ### Corrigido
