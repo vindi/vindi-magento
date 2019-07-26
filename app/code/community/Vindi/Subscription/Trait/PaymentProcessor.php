@@ -369,7 +369,9 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 		$type = 'bills';
 		if($payment && $payment['id']) {
 			$vindiId = $payment['id'];
+			$billing_type = 'beginning_of_period';
 			if (! $this->isSingleOrder($order)) {
+				$billing_type = $payment['billing_trigger_type'];
 				$payment = $payment['bill'];
 				$type = 'subscriptions';
 			}
@@ -377,6 +379,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$paymentMethod = reset($payment['charges'])['payment_method']['type'];
 			if ($paymentMethod === 'PaymentMethod::BankSlip'
 				|| $paymentMethod === 'PaymentMethod::DebitCard'
+				|| $billing_type !== 'beginning_of_period'
 				|| $payment['status'] === 'paid'
 				|| $payment['status'] === 'review'
 				|| reset($payment['charges'])['status'] === 'fraud_review')
