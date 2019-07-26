@@ -83,7 +83,7 @@ class Vindi_Subscription_Helper_Validator
 	 */
 	public function validateBillCreatedWebhook($data)
 	{
-		if (! $data['bill']) {
+		if (! isset($data['bill'])) {
 			$this->logWebhook('Erro ao interpretar webhook "bill_created".', 5);
 			return false;
 		}

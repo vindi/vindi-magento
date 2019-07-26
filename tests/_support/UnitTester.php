@@ -1,5 +1,7 @@
 <?php
 
+require 'Mage/Mage_Core_Helper_Abstract.php';
+require 'Mage/Mage.php';
 
 /**
  * Inherited Methods
@@ -19,8 +21,4 @@
 class UnitTester extends \Codeception\Actor
 {
     use _generated\UnitTesterActions;
-
-   /**
-    * Define custom actions here
-    */
 }
