@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.8.6 - 01/08/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.6)
+
+### Ajustado
+- Ajusta tratativa para número de parcelas 
+
+
 ## [1.8.5 - 26/07/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.5)
 
 ### Ajustado
