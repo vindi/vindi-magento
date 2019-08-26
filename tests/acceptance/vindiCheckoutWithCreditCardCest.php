@@ -9,7 +9,7 @@ class VindiCheckoutWithCreditCardCest
             $I->setConnectionConfig($I);
     }
 
-    public function buyAnProductInInstallment(AcceptanceTester $I)
+    public function buyProductInInstallment(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, true);
         $I->loginAsUser($I);
@@ -33,7 +33,7 @@ class VindiCheckoutWithCreditCardCest
         $I->see('Your order has been received.');
     }
 
-    public function buyAnProductWithoutInstallment(AcceptanceTester $I)
+    public function buyProductWithoutInstallment(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, false);
         $I->loginAsUser($I);
@@ -57,7 +57,7 @@ class VindiCheckoutWithCreditCardCest
         $I->see('Your order has been received.');
     }
 
-    public function buyAnProductWithDiscount(AcceptanceTester $I)
+    public function buyProductWithDiscount(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, false);
         $I->loginAsUser($I);
@@ -84,7 +84,7 @@ class VindiCheckoutWithCreditCardCest
             throw new \RuntimeException;
     }
 
-    public function buyAnMonthlySubscriptionWithInstallments(AcceptanceTester $I)
+    public function buyMonthlySubscriptionWithInstallments(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, true);
         $I->loginAsUser($I);
@@ -101,7 +101,7 @@ class VindiCheckoutWithCreditCardCest
         $I->see('Your order has been received.');
     }
 
-    public function buyAnSubscriptionWithoutInstallment(AcceptanceTester $I)
+    public function buySubscriptionWithoutInstallment(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, false);
         $I->loginAsUser($I);

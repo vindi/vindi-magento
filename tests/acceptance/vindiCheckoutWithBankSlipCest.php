@@ -9,7 +9,7 @@ class VindiCheckoutWithBankSlipCest
             $I->setConnectionConfig($I);
     }
 
-    public function buyAnProduct(AcceptanceTester $I)
+    public function buyProduct(AcceptanceTester $I)
     {
         $I->setDefaultBankSlip($I);
         $I->loginAsUser($I);
@@ -26,7 +26,7 @@ class VindiCheckoutWithBankSlipCest
         $I->see('Your order has been received.');
     }
 
-    public function buyAnProductWithDiscount(AcceptanceTester $I)
+    public function buyProductWithDiscount(AcceptanceTester $I)
     {
         $I->setDefaultBankSlip($I);
         $I->loginAsUser($I);
@@ -47,7 +47,7 @@ class VindiCheckoutWithBankSlipCest
             throw new \RuntimeException;
     }
 
-    public function buyAnSubscription(AcceptanceTester $I)
+    public function buySubscription(AcceptanceTester $I)
     {
         $I->setDefaultBankSlip($I);
         $I->loginAsUser($I);
