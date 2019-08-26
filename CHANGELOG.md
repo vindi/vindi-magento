@@ -1,5 +1,11 @@
 # Notas das versões
 
+## [1.8.7 - 26/08/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.7)
+
+### Ajustado
+- Insere compatibilidade com assinaturas com cobrança no término do período 
+
+
 ## [1.8.6 - 01/08/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.6)
 
 ### Ajustado
