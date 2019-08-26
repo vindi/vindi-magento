@@ -8,6 +8,12 @@ trait Shop
         $I->click('Add to Cart');
     }
 
+    public function addSubscriptionToCart($I)
+    {
+        $I->amOnPage('/vindi-subscription.html');
+        $I->click('Add to Cart');
+    }
+
     public function addDiscountCode($I)
     {
         $I->fillField('#coupon_code', 'desconto');

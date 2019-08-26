@@ -9,7 +9,7 @@ class VindiCheckoutWithCreditCardCest
             $I->setConnectionConfig($I);
     }
 
-    public function buyAProductInInstallment(AcceptanceTester $I)
+    public function buyProductInInstallment(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, true);
         $I->loginAsUser($I);
@@ -33,7 +33,7 @@ class VindiCheckoutWithCreditCardCest
         $I->see('Your order has been received.');
     }
 
-    public function buyAProductWithoutInstallment(AcceptanceTester $I)
+    public function buyProductWithoutInstallment(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, false);
         $I->loginAsUser($I);
@@ -56,6 +56,7 @@ class VindiCheckoutWithCreditCardCest
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->see('Your order has been received.');
     }
+
     public function buyAProductWithInstallmentsOne(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, false, 1);
@@ -66,12 +67,6 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('#dt_method_vindi_creditcard', 30);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->dontSeeElement('select.required-entry');
-
-        try
-        {
-            $I->fillCreditCardInfo($I);
-        } catch(Exception $e) { }
-
         $I->click('Continue', '#payment-buttons-container');
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
@@ -80,8 +75,7 @@ class VindiCheckoutWithCreditCardCest
         $I->see('Your order has been received.');
     }
 
-
-    public function buyAProductWithDiscount(AcceptanceTester $I)
+    public function buyProductWithDiscount(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, false);
         $I->loginAsUser($I);
@@ -106,5 +100,39 @@ class VindiCheckoutWithCreditCardCest
         $bill = $I->getLastVindiBill();
         if ($bill['amount'] != '14.8')
             throw new \RuntimeException;
+    }
+
+    public function buyMonthlySubscriptionWithInstallments(AcceptanceTester $I)
+    {
+        $I->setDefaultCreditCard($I, true);
+        $I->loginAsUser($I);
+        $I->addSubscriptionToCart($I);
+        $I->click('Proceed to Checkout');
+        $I->skipCheckoutForm($I);
+        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
+        $I->click('Continue', '#payment-buttons-container');
+        $I->waitForElement('#review-buttons-container', 30);
+        $I->click('Place Order');
+        $I->waitForElement('.main-container.col1-layout', 30);
+        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->see('Your order has been received.');
+    }
+
+    public function buySubscriptionWithoutInstallment(AcceptanceTester $I)
+    {
+        $I->setDefaultCreditCard($I, false);
+        $I->loginAsUser($I);
+        $I->addSubscriptionToCart($I);
+        $I->click('Proceed to Checkout');
+        $I->skipCheckoutForm($I);
+        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
+        $I->click('Continue', '#payment-buttons-container');
+        $I->waitForElement('#review-buttons-container', 30);
+        $I->click('Place Order');
+        $I->waitForElement('.main-container.col1-layout', 30);
+        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->see('Your order has been received.');
     }
 }
