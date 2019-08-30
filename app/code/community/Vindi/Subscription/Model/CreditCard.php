@@ -37,7 +37,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 		if ('saved' === $data->getCcChoice()) {
 			$info->setAdditionalInformation('PaymentMethod', $this->_code)
 				->setAdditionalInformation('use_saved_cc', true)
-				->setAdditionalInformation('installments', $data->getCcInstallments());
+				->setAdditionalInformation('installments', $data->getCcInstallments() || 1);
 
 			return $this;
 		}
@@ -68,7 +68,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 		$verifyStatus = $this->api()->verifyCustomerPaymentProfile($paymentProfileId);
 		return ($verifyStatus['transaction']['status'] === 'success');
 	}
-	
+
 	/**
 	 * @param int $customerVindiId
 	 */
@@ -118,7 +118,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 				return 'Você deve informar o número de parcelas.';
 			}
 
-			if ($installments != 1) { 
+			if ($installments != 1) {
 				$maxInstallmentNumber = Mage::getStoreConfig('payment/vindi_creditcard/max_installments_number');
 
 				if ($installments > $maxInstallmentNumber) {
