@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class VindiCheckoutWithCreditCardCest
 {
@@ -122,6 +122,23 @@ class VindiCheckoutWithCreditCardCest
     public function buySubscriptionWithoutInstallment(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, false);
+        $I->loginAsUser($I);
+        $I->addSubscriptionToCart($I);
+        $I->click('Proceed to Checkout');
+        $I->skipCheckoutForm($I);
+        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
+        $I->click('Continue', '#payment-buttons-container');
+        $I->waitForElement('#review-buttons-container', 30);
+        $I->click('Place Order');
+        $I->waitForElement('.main-container.col1-layout', 30);
+        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->see('Your order has been received.');
+    }
+
+    public function buyProductInInstallmentsOneWithSavedCreditCard(AcceptanceTester $I)
+    {
+        $I->setDefaultCreditCard($I, true, 1);
         $I->loginAsUser($I);
         $I->addSubscriptionToCart($I);
         $I->click('Proceed to Checkout');
