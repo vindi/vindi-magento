@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class VindiCheckoutWithCreditCardCest
 {
@@ -11,6 +11,7 @@ class VindiCheckoutWithCreditCardCest
 
     public function buyProductInInstallment(AcceptanceTester $I)
     {
+        $installments = 2;
         $I->setDefaultCreditCard($I, true);
         $I->loginAsUser($I);
         $I->addProductToCart($I);
@@ -22,7 +23,7 @@ class VindiCheckoutWithCreditCardCest
 
         try
         {
-            $I->fillCreditCardInfo($I, 2);
+            $I->fillCreditCardInfo($I, $installments);
         } catch(Exception $e) { }
 
         $I->click('Continue', '#payment-buttons-container');
@@ -31,6 +32,10 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->see('Your order has been received.');
+
+        $bill = $I->getLastVindiBill();
+        if ($bill['installments'] != $installments)
+            throw new \RuntimeException;
     }
 
     public function buyProductWithoutInstallment(AcceptanceTester $I)
@@ -55,11 +60,16 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->see('Your order has been received.');
+
+        $bill = $I->getLastVindiBill();
+        if ($bill['installments'] != 1)
+            throw new \RuntimeException;
     }
 
-    public function buyAProductWithInstallmentsOne(AcceptanceTester $I)
+    public function buyAProductWithInstallmentsOneEnabled(AcceptanceTester $I)
     {
-        $I->setDefaultCreditCard($I, false, 1);
+        $installments = 1;
+        $I->setDefaultCreditCard($I, false, $installments);
         $I->loginAsUser($I);
         $I->addProductToCart($I);
         $I->click('Proceed to Checkout');
@@ -73,6 +83,10 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->see('Your order has been received.');
+
+        $bill = $I->getLastVindiBill();
+        if ($bill['installments'] != $installments)
+            throw new \RuntimeException;
     }
 
     public function buyProductWithDiscount(AcceptanceTester $I)
@@ -97,12 +111,13 @@ class VindiCheckoutWithCreditCardCest
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
+
         $bill = $I->getLastVindiBill();
         if ($bill['amount'] != '14.8')
             throw new \RuntimeException;
     }
 
-    public function buyMonthlySubscriptionWithInstallments(AcceptanceTester $I)
+    public function buyMonthlySubscriptionWithEnabledInstallments(AcceptanceTester $I)
     {
         $I->setDefaultCreditCard($I, true);
         $I->loginAsUser($I);
@@ -117,6 +132,10 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->see('Your order has been received.');
+
+        $bill = $I->getLastVindiBill();
+        if ($bill['installments'] != 1)
+            throw new \RuntimeException;
     }
 
     public function buySubscriptionWithoutInstallment(AcceptanceTester $I)
@@ -134,5 +153,31 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->see('Your order has been received.');
+
+        $bill = $I->getLastVindiBill();
+        if ($bill['installments'] != 1)
+            throw new \RuntimeException;
+    }
+
+    public function buyProductInInstallmentsOneWithSavedCreditCard(AcceptanceTester $I)
+    {
+        $installments = 1;
+        $I->setDefaultCreditCard($I, true, $installments);
+        $I->loginAsUser($I);
+        $I->addSubscriptionToCart($I);
+        $I->click('Proceed to Checkout');
+        $I->skipCheckoutForm($I);
+        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
+        $I->click('Continue', '#payment-buttons-container');
+        $I->waitForElement('#review-buttons-container', 30);
+        $I->click('Place Order');
+        $I->waitForElement('.main-container.col1-layout', 30);
+        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->see('Your order has been received.');
+
+        $bill = $I->getLastVindiBill();
+        if ($bill['installments'] != $installments)
+            throw new \RuntimeException;
     }
 }
