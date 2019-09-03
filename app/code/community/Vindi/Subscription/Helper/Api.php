@@ -116,7 +116,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    private function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
+    public function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
     {
         if (! $this->key) {
             return false;
@@ -271,7 +271,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     /**
      * Make an API request to verify a Payment Profile to a Customer.
      *
-     * @param $id integer 
+     * @param $id integer
      *
      * @return array|bool|mixed
      */
@@ -358,7 +358,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             if (false === $response) {
                 return $this->acceptBankSlip = false;
             }
-
             foreach ($response['payment_methods'] as $method) {
                 if ('active' !== $method['status']) {
                     continue;
@@ -374,7 +373,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                         $paymentMethods['debit_card'],
                         $method['payment_companies']
                     );
-                } elseif ('PaymentMethod::BankSlip' === $method['type']) {
+                } elseif ('PaymentMethod::BankSlip' === $method['type'] ||
+                          'PaymentMethod::OnlineBankSlip' === $method['type']) {
                     $paymentMethods['bank_slip'] = true;
                 }
             }
@@ -733,7 +733,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      * @return array|bool|mixed
      */
     public function findOrCreateUniquePaymentProduct($order)
-    {      
+    {
         $billItems = array();
         foreach ($order->getItemsCollection() as $item) {
             $productId = $this->findOrCreateProduct(
