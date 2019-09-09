@@ -2,6 +2,7 @@
 
 require 'Mage/Mage_Core_Helper_Abstract.php';
 require 'Mage/Mage.php';
+require 'app/code/community/Vindi/Subscription/Trait/LogMessenger.php';
 
 /**
  * Inherited Methods

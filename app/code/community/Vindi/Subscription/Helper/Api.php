@@ -2,46 +2,21 @@
 
 class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 {
-
-    /**
-     * @const string API base path.
-     */
-    private $base_path ;
-
     /**
      * @var string
      */
     public $lastError = '';
 
     /**
-     * @var string
-     */
-    private $version;
-
-    /**
-     * @var string
-     */
-    private $key;
-
-    /**
      * @var bool
      */
     protected $acceptBankSlip;
 
+    protected $connector;
+
     public function __construct()
     {
-        $this->base_path = Mage::getStoreConfig('vindi_subscription/general/sandbox_mode');
-        $this->version = (string) Mage::getConfig()->getModuleConfig('Vindi_Subscription')->version;
-        $this->key = Mage::helper('vindi_subscription')->getKey();
-    }
-
-    /**
-     * @param string   $message
-     * @param int|null $level
-     */
-    protected function log($message, $level = null)
-    {
-        Mage::log($message, $level, 'vindi_api.log');
+        $this->connector = new Vindi_Subscription_Helper_Connector();
     }
 
     /**
@@ -52,23 +27,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         return Mage::app()->getCache();
     }
 
-    /**
-     * Build HTTP Query.
-     *
-     * @param array $data
-     *
-     * @return string
-     */
-    protected function buildBody($data)
-    {
-        $body = null;
-
-        if(!empty($data)) {
-            $body = json_encode($data);
-        }
-
-        return $body;
-    }
 
     /**
      * @param array $error
@@ -116,7 +74,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      *
      * @return array|bool|mixed
      */
-    public function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
+    private function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
     {
         if (! $this->key) {
             return false;
@@ -195,7 +153,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function createCustomer($body)
     {
-        if ($response = $this->request('customers', 'POST', $body)) {
+
+        if ($response = $this->connector->post('customers', $body)) {
             return $response['customer']['id'];
         }
 
@@ -214,7 +173,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $customerId = $this->cache()->load("vindi_customer_by_code_{$code}");
 
         if ($customerId === false) {
-            $response = $this->request("customers/search?code={$code}", 'GET');
+            $response = $this->connector->get("customers/search?code={$code}", 'GET');
 
             if ($response && (1 === count($response['customers'])) && isset($response['customers'][0]['id'])) {
                 $customerId = $response['customers'][0]['id'];
@@ -265,7 +224,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         $customerId = $body['customer_id'];
         $this->cache()->remove("vindi_payment_profile_{$customerId}");
 
-        return $this->request('payment_profiles', 'POST', $body, $dataToLog);
+        return $this->connector->post('payment_profiles', 'POST', $body, $dataToLog);
     }
 
     /**
@@ -277,7 +236,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function verifyCustomerPaymentProfile($id)
     {
-        return $this->request('payment_profiles/' . $id . '/verify', 'POST');
+        return $this->connector->post('payment_profiles/' . $id . '/verify', 'POST');
     }
 
     /**
@@ -299,7 +258,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
                 . '%20status%3Dactive%20type%3DPaymentProfile%3A%3A'. $type;
 
-            $response = $this->request($endpoint, 'GET');
+            $response = $this->connector->get($endpoint, 'GET');
 
             if ($response && $response['payment_profiles'] && count($response['payment_profiles'])) {
                 $paymentProfile = $response['payment_profiles'][0];
@@ -325,7 +284,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function createSubscription($body)
     {
-        if (($response = $this->request('subscriptions', 'POST', $body)) && isset($response['subscription']['id'])) {
+        if (($response = $this->connector->post('subscriptions', 'POST', $body)) && isset($response['subscription']['id'])) {
 
             $subscription = $response['subscription'];
             $subscription['bill'] = $response['bill'];
@@ -353,7 +312,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
                 'bank_slip'   => false,
             ];
 
-            $response = $this->request('payment_methods', 'GET');
+            $response = $this->connector->get('payment_methods', 'GET');
 
             if (false === $response) {
                 return $this->acceptBankSlip = false;
@@ -443,7 +402,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function createBill($body)
     {
-        if ($response = $this->request('bills', 'POST', $body)) {
+        if ($response = $this->connector->post('bills', 'POST', $body)) {
             return $response['bill'];
         }
 
@@ -457,7 +416,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function approveBill($billId)
     {
-        $response = $this->request("bills/{$billId}", 'GET');
+        $response = $this->connector->get("bills/{$billId}", 'GET');
 
         if (false === $response || ! isset($response['bill'])) {
             return false;
@@ -469,7 +428,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
             return true;
         }
 
-        return $this->request("bills/{$billId}/approve", 'POST');
+        return $this->connector->post("bills/{$billId}/approve", 'POST');
     }
 
     /**
@@ -479,7 +438,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function cancelPurchase($vindiId, $type)
     {
-        $this->request("{$type}/{$vindiId}", 'DELETE');
+        $this->connector->delete("{$type}/{$vindiId}", 'DELETE');
     }
 
     /**
@@ -489,7 +448,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getBankSlipDownload($billId)
     {
-        $response = $this->request("bills/{$billId}", 'GET');
+        $response = $this->connector->get("bills/{$billId}", 'GET');
 
         if (false === $response) {
             return false;
@@ -504,7 +463,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function getProducts()
     {
         $list = [];
-        $response = $this->request('products?query=status:active', 'GET');
+        $response = $this->connector->get('products?query=status:active', 'GET');
 
         if ($products = $response['products']) {
             foreach ($products as $product) {

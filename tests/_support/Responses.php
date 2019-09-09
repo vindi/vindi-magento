@@ -2,7 +2,7 @@
 
 class Responses
 {
-    const ACTIVE_BANKSLIP = array(
+    const ACTIVE_BANK_SLIP = array(
         'payment_methods' => array(
             array(
                 'name'        => 'Boleto bancário',
@@ -12,7 +12,7 @@ class Responses
             )
         )
     );
-    const ACTIVE_ONLINEBANKSLIP = array(
+    const ACTIVE_ONLINE_BANK_SLIP = array(
         'payment_methods' => array(
             array(
                 'name'        => 'Boleto bancário Online',
@@ -23,7 +23,7 @@ class Responses
             )
     );
 
-    const ACTIVE_CREDITCARD = array(
+    const ACTIVE_CREDIT_CARD = array(
         'payment_methods' => array(
             array(
                 'name'        => 'Cartão de Crédito',
@@ -48,7 +48,7 @@ class Responses
             )
         )
     );
-    const ACTIVE_DEBITCARD = array(
+    const ACTIVE_DEBIT_CARD = array(
         'payment_methods' => array(
             array(
                 'name'        => 'Cartão de Débito',
@@ -74,7 +74,7 @@ class Responses
         )
     );
 
-    const DEFAULT = array(
+    const GENERAL_PAYMENT_METHODS = array(
         'payment_methods' => array(
             array(
                 'name'        => 'Boleto bancário',
@@ -127,7 +127,7 @@ class Responses
         )
     );
 
-    const DEFAULTNULL = array(
+    const EMPTY_PAYMENT_METHODS = array(
         'payment_methods' => array()
     );
 }
