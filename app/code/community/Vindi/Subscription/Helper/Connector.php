@@ -129,7 +129,7 @@ class Vindi_Subscription_Helper_Connector
      *
      * @return array
      */
-    private function encrypt ($body , $endpoint)
+    private function encrypt ($body, $endpoint)
     {
         if ('payment_profile' === $endpoint) {
             $dataToLog = $body;
