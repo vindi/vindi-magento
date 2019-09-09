@@ -24,7 +24,7 @@ class Vindi_Subscription_Helper_Connector
        $this->request($endpoint, $body, 'DELETE');
     }
 
-    private function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
+    private function request($endpoint, $method = 'POST', $data = [])
     {
         $key = Mage::helper('vindi_subscription')->getKey();
         if (! $key) {
@@ -36,7 +36,7 @@ class Vindi_Subscription_Helper_Connector
 
         $requestId = rand();
 
-        $dataToLog = null !== $dataToLog ? $this->buildBody($dataToLog) : $body;
+        $dataToLog = $this->encrypt($body, $endpoint);
 
         $this->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $requestId, $method, $url,
             $dataToLog), 'vindi_api.log');
@@ -94,6 +94,23 @@ class Vindi_Subscription_Helper_Connector
         }
 
         return $responseBody;
+    }
+
+    /**
+     * Remove sensitive content.
+     *
+     * @param array $body | string $endpoint
+     *
+     * @return array
+     */
+    private function encrypt ($body , $endpoint)
+    {
+        if ('payment_profile' === $endpoint) {
+            $dataToLog = $body;
+            $dataToLog['card_number'] = '**** *' . substr($dataToLog['card_number'], -3);
+            $dataToLog['card_cvv'] = '***';
+            return $dataToLog;
+        }
     }
 
     /**
