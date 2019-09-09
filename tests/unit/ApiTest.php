@@ -32,51 +32,49 @@ class ApiTest extends \Codeception\Test\Unit
 
     public function testGetPaymentMethodBankSlip()
     {
-      $dummy_connector_class = $this->make(
-          'Vindi_Subscription_Helper_Connector',
-          [
-              'get' => $this->response::ACTIVE_BANK_SLIP
-          ]
-      );
-      $dummy_class = $this->make(
-          'Vindi_Subscription_Helper_API',
-          [
-              'connector' => $dummy_connector_class
-          ],
-
-      );
-      $success = array(
+        $dummy_connector_class = $this->make(
+            'Vindi_Subscription_Helper_Connector',
+            [
+                'get' => $this->response::ACTIVE_BANK_SLIP
+            ]
+        );
+        $dummy_class = $this->make(
+            'Vindi_Subscription_Helper_API',
+            [
+                'connector' => $dummy_connector_class
+            ],
+        );
+        $success = array(
           'credit_card' => [],
           'debit_card' => [],
           'bank_slip'   => true
       );
 
-      $this->assertEquals($dummy_class->getPaymentMethods(), $success);
-  }
+        $this->assertEquals($dummy_class->getPaymentMethods(), $success);
+    }
 
     public function testGetPaymentMethodOnlineBankSlip()
     {
-    $dummy_connector_class = $this->make(
-        'Vindi_Subscription_Helper_Connector',
-        [
-            'get' => $this->response::ACTIVE_ONLINE_BANK_SLIP
-        ]
-    );
-    $dummy_class = $this->make(
-        'Vindi_Subscription_Helper_API',
-        [
-            'connector' => $dummy_connector_class
-        ],
+        $dummy_connector_class = $this->make(
+            'Vindi_Subscription_Helper_Connector',
+            [
+                'get' => $this->response::ACTIVE_ONLINE_BANK_SLIP
+            ]
+        );
+        $dummy_class = $this->make(
+            'Vindi_Subscription_Helper_API',
+            [
+                'connector' => $dummy_connector_class
+            ],
+        );
+        $success = array(
+            'credit_card' => [],
+            'debit_card' => [],
+            'bank_slip'   => true
+        );
 
-    );
-    $success = array(
-        'credit_card' => [],
-        'debit_card' => [],
-        'bank_slip'   => true
-    );
-
-    $this->assertEquals($dummy_class->getPaymentMethods(), $success);
-  }
+        $this->assertEquals($dummy_class->getPaymentMethods(), $success);
+    }
 
     public function testGetPaymentMethodCreditCard()
     {
@@ -91,7 +89,6 @@ class ApiTest extends \Codeception\Test\Unit
             [
                 'connector' => $dummy_connector_class
             ],
-
         );
         $success = array(
             'credit_card' => array(
@@ -128,7 +125,6 @@ class ApiTest extends \Codeception\Test\Unit
             [
                 'connector' => $dummy_connector_class
             ],
-
         );
         $success = array(
             'credit_card' => [],
@@ -225,5 +221,4 @@ class ApiTest extends \Codeception\Test\Unit
 
         $this->assertEquals($dummy_class->getPaymentMethods(), $success);
     }
-
 }
