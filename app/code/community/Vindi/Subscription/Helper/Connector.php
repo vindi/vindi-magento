@@ -2,6 +2,7 @@
 
 class Vindi_Subscription_Helper_Connector
 {
+
     use Vindi_Subscription_Trait_LogMessenger;
 
     public function post($endpoint, $body)
@@ -22,6 +23,31 @@ class Vindi_Subscription_Helper_Connector
     public function delete($endpoint, $body)
     {
        $this->request($endpoint, $body, 'DELETE');
+    }
+
+    /**
+     * @param array $response
+     * @param       $endpoint
+     *
+     * @return bool
+     */
+    protected function checkResponse($response, $endpoint)
+    {
+        if (isset($response['errors']) && ! empty($response['errors'])) {
+            foreach ($response['errors'] as $error) {
+                $message = $this->getErrorMessage($error, $endpoint);
+
+                Mage::getSingleton('core/session')->addError($message);
+
+                $this->lastError = $message;
+            }
+
+            return false;
+        }
+
+        $this->lastError = '';
+
+        return true;
     }
 
     private function request($endpoint, $method = 'POST', $data = [])
@@ -131,4 +157,15 @@ class Vindi_Subscription_Helper_Connector
         return $body;
     }
 
+
+        /**
+         * @param array $error
+         * @param       $endpoint
+         *
+         * @return string
+         */
+    protected function getErrorMessage($error, $endpoint)
+    {
+        return "Erro em $endpoint: {$error['id']}: {$error['parameter']} - {$error['message']}";
+    }
 }

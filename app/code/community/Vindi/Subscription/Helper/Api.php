@@ -27,43 +27,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         return Mage::app()->getCache();
     }
 
-
-    /**
-     * @param array $error
-     * @param       $endpoint
-     *
-     * @return string
-     */
-    protected function getErrorMessage($error, $endpoint)
-    {
-        return "Erro em $endpoint: {$error['id']}: {$error['parameter']} - {$error['message']}";
-    }
-
-    /**
-     * @param array $response
-     * @param       $endpoint
-     *
-     * @return bool
-     */
-    protected function checkResponse($response, $endpoint)
-    {
-        if (isset($response['errors']) && ! empty($response['errors'])) {
-            foreach ($response['errors'] as $error) {
-                $message = $this->getErrorMessage($error, $endpoint);
-
-                Mage::getSingleton('core/session')->addError($message);
-
-                $this->lastError = $message;
-            }
-
-            return false;
-        }
-
-        $this->lastError = '';
-
-        return true;
-    }
-
     /**
      * Perform request to API.
      *

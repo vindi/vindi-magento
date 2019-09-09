@@ -183,7 +183,7 @@ class VindiCheckoutWithCreditCardCest
 
     public function buyProductInInstallmentsOneWithSavedCreditCard(AcceptanceTester $I)
     {
-        $I->setDefaultCreditCard($I, true, 1);
+        $I->setDefaultCreditCard($I, true, $installments);
         $I->loginAsUser($I);
         $I->addSubscriptionToCart($I);
         $I->click('Proceed to Checkout');
