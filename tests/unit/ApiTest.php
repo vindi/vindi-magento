@@ -5,28 +5,12 @@ require_once 'app/code/community/Vindi/Subscription/Helper/Connector.php';
 class ApiTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
-    /**
-     * @var \Vindi_Subscription_Helper_API
-     */
-    protected $api;
-
-    /**
      * @var \Responses
      */
     protected $response;
 
-    /**
-     * @var \Connector
-     */
-    protected $connector;
-
     protected function _before()
     {
-        $this->api = new Vindi_Subscription_Helper_API();
         $this->response = new Responses();
     }
 

@@ -1,15 +1,10 @@
-<?php 
+<?php
 require_once 'app/code/community/Vindi/Subscription/Trait/LogMessenger.php';
 require_once 'app/code/community/Vindi/Subscription/Helper/Bill.php';
 require_once 'app/code/community/Vindi/Subscription/Helper/Order.php';
 
 class ValidatorTest extends \Codeception\Test\Unit
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
     /**
      * @var \Webhook
      */
@@ -19,7 +14,7 @@ class ValidatorTest extends \Codeception\Test\Unit
      * @var \Vindi_Subscription_Helper_Validator
      */
     protected $validator;
-    
+
     protected function _before()
     {
         $this->validator = new Vindi_Subscription_Helper_Validator();

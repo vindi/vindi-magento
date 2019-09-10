@@ -5,22 +5,22 @@ class Vindi_Subscription_Helper_Connector
 
     use Vindi_Subscription_Trait_LogMessenger;
 
-    public function post($endpoint, $body)
+    public function post($endpoint, $body = [])
     {
        $this->request($endpoint, $body, 'POST');
     }
 
-    public function get($endpoint, $body)
+    public function get($endpoint, $body = [])
     {
        $this->request($endpoint, $body, 'GET');
     }
 
-    public function put($endpoint, $body)
+    public function put($endpoint, $body = [])
     {
        $this->request($endpoint, $body, 'PUT');
     }
 
-    public function delete($endpoint, $body)
+    public function delete($endpoint, $body = [])
     {
        $this->request($endpoint, $body, 'DELETE');
     }
@@ -84,7 +84,7 @@ class Vindi_Subscription_Helper_Connector
             CURLOPT_CUSTOMREQUEST  => $method
         ];
 
-        if (!empty($body)) {
+        if (! empty($body)) {
             $ch_options[CURLOPT_POSTFIELDS] = $body;
         }
 

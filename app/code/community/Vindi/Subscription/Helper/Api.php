@@ -179,13 +179,8 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function createCustomerPaymentProfile($body)
     {
-        // Protect credit card number.
-        $dataToLog = $body;
-        $dataToLog['card_number'] = '**** *' . substr($dataToLog['card_number'], -3);
-        $dataToLog['card_cvv'] = '***';
-
-         $this->log(json_encode($dataToLog), 'vindi_creditcard.log');
-         $customerId = $body['customer_id'];
+        $this->log(json_encode($dataToLog), 'vindi_creditcard.log');
+        $customerId = $body['customer_id'];
         $this->cache()->remove("vindi_payment_profile_{$customerId}");
 
         return $this->connector->post('payment_profiles', $body);
