@@ -110,7 +110,7 @@ class Vindi_Subscription_Helper_Connector
 
         if (! $responseBody) {
             $this->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $requestId,
-                print_r($body, true)));
+                print_r($body, true)), 'vindi_api.log');
 
             return false;
         }
