@@ -7,22 +7,22 @@ class Vindi_Subscription_Helper_Connector
 
     public function post($endpoint, $body = [])
     {
-       $this->request($endpoint, $body, 'POST');
+       return $this->request($endpoint, $body, 'POST');
     }
 
     public function get($endpoint, $body = [])
     {
-       $this->request($endpoint, $body, 'GET');
+       return $this->request($endpoint, $body, 'GET');
     }
 
     public function put($endpoint, $body = [])
     {
-       $this->request($endpoint, $body, 'PUT');
+       return $this->request($endpoint, $body, 'PUT');
     }
 
     public function delete($endpoint, $body = [])
     {
-       $this->request($endpoint, $body, 'DELETE');
+       return $this->request($endpoint, $body, 'DELETE');
     }
 
     /**
@@ -50,7 +50,7 @@ class Vindi_Subscription_Helper_Connector
         return true;
     }
 
-    private function request($endpoint, $method = 'POST', $data = [])
+    private function request($endpoint, $data = [], $method = 'POST')
     {
         $key = Mage::helper('vindi_subscription')->getKey();
         if (! $key) {

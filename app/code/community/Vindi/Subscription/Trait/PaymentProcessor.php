@@ -378,7 +378,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 			$paymentMethod = reset($payment['charges'])['payment_method']['type'];
 			if ($paymentMethod === 'PaymentMethod::BankSlip'
-                || $paymentMethod === 'PaymentMethod::OnlineBankSlip'
+				|| $paymentMethod === 'PaymentMethod::OnlineBankSlip'
 				|| $paymentMethod === 'PaymentMethod::DebitCard'
 				|| $billing_type !== 'beginning_of_period'
 				|| $payment['status'] === 'paid'

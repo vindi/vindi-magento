@@ -28,86 +28,6 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Perform request to API.
-     *
-     * @param string $endpoint
-     * @param string $method
-     * @param array  $data
-     * @param null   $dataToLog
-     *
-     * @return array|bool|mixed
-     */
-    private function request($endpoint, $method = 'POST', $data = [], $dataToLog = null)
-    {
-        if (! $this->key) {
-            return false;
-        }
-
-        $url = $this->base_path . $endpoint;
-        $body = $this->buildBody($data);
-
-        $requestId = rand();
-
-        $dataToLog = null !== $dataToLog ? $this->buildBody($dataToLog) : $body;
-
-        $this->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $requestId, $method, $url,
-            $dataToLog));
-
-        $ch = curl_init();
-        $ch_options = [
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-            ],
-            CURLOPT_TIMEOUT        => 60,
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_HEADER         => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT      => 'Vindi-Magento/' . $this->version,
-            CURLOPT_SSLVERSION     => 'CURL_SSLVERSION_TLSv1_2',
-            CURLOPT_USERPWD        => $this->key . ':',
-            CURLOPT_URL            => $url,
-            CURLOPT_CUSTOMREQUEST  => $method
-        ];
-
-        if (!empty($body)) {
-            $ch_options[CURLOPT_POSTFIELDS] = $body;
-        }
-
-        curl_setopt_array($ch, $ch_options);
-
-        $response = curl_exec($ch);
-
-        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $body = substr($response, curl_getinfo($ch, CURLINFO_HEADER_SIZE));
-
-        if (curl_errno($ch) || $response === false) {
-            $this->log(sprintf("[Request #%s]: Erro ao fazer request!\n%s", $requestId, print_r($response, true)));
-
-            return false;
-        }
-
-        curl_close($ch);
-
-        $status = "HTTP Status: $statusCode";
-        $this->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $requestId, $status, $body));
-
-        $responseBody = json_decode($body, true);
-
-        if (! $responseBody) {
-            $this->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $requestId,
-                print_r($body, true)));
-
-            return false;
-        }
-
-        if (! $this->checkResponse($responseBody, $endpoint)) {
-            return false;
-        }
-
-        return $responseBody;
-    }
-
-    /**
      * Make an API request to create a Customer.
      *
      * @param array $body (name, email, code)
@@ -441,7 +361,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function getPlanItems($id)
     {
         $list = [];
-        $response = $this->request("plans/{$id}", 'GET');
+        $response = $this->connector->get("plans/{$id}");
 
         if ($plan = $response['plan']) {
             foreach ($plan['plan_items'] as $item) {
@@ -588,7 +508,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
         if (($list === false) || ! count($list = unserialize($list))) {
 
             $list = [];
-            $response = $this->request('plans?query=status:active', 'GET');
+            $response = $this->connector->get('plans?query=status:active');
 
             if ($plans = $response['plans']) {
                 foreach ($plans as $plan) {
@@ -603,7 +523,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
     public function getPlanInstallments($id)
     {
-        $response = $this->request("plans/{$id}", 'GET');
+        $response = $this->connector->get("plans/{$id}");
         $plan = $response['plan'];
         $installments = $plan['installments'];
 
@@ -620,7 +540,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function createProduct($body)
     {
-        if ($response = $this->request('products', 'POST', $body)) {
+        if ($response = $this->connector->post('products', $body)) {
             return $response['product']['id'];
         }
 
@@ -636,7 +556,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function findProductByCode($code)
     {
-        $response = $this->request("products?query=code%3D{$code}", 'GET');
+        $response = $this->connector->get("products?query=code%3D{$code}");
 
         if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
             return $response['products'][0]['id'];
@@ -713,7 +633,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
 
         if ($merchant === false) {
 
-            $response = $this->request('merchant', 'GET');
+            $response = $this->connector->get('merchant');
 
             if (! $response || ! isset($response['merchant'])) {
                 return false;
@@ -750,7 +670,7 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
      */
     public function getBill($billId)
     {
-        $response = $this->request("bills/{$billId}", 'GET');
+        $response = $this->connector->get("bills/{$billId}");
 
         if (! $response || ! isset($response['bill'])) {
             return false;
@@ -762,10 +682,10 @@ class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
     public function getDebitCardRedirectUrl($billId)
     {
 
-        $bill = $this->request('bills/'.$billId, 'GET');
+        $bill = $this->connector->get('bills/'.$billId);
 
         $chargeId = $bill['bill']['charges'][0]['id'];
-        $charged = $this->request('charges/'.$chargeId.'/charge', 'POST', [
+        $charged = $this->connector->post('charges/'.$chargeId.'/charge', [
             'id' => $bill['bill']['payment_profile']['id']
         ]);
 
