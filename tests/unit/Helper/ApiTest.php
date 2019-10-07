@@ -31,23 +31,6 @@ class ApiTest extends \Codeception\Test\Unit
         $this->assertEquals($dummy_class->getPaymentMethods(), $success);
     }
 
-    public function testGetPaymentMethodOnlineBankSlip()
-    {
-        $dummy_class = $this->make(
-            'Vindi_Subscription_Helper_API',
-            [
-                'get' => $this->response::ACTIVE_ONLINE_BANK_SLIP
-            ]
-        );
-        $success = array(
-            'credit_card' => [],
-            'debit_card' => [],
-            'bank_slip'   => true
-        );
-
-        $this->assertEquals($dummy_class->getPaymentMethods(), $success);
-    }
-
     public function testGetPaymentMethodCreditCard()
     {
         $dummy_class = $this->make(

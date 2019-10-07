@@ -210,8 +210,7 @@ class Vindi_Subscription_Helper_Order
 		if (Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment')) {
 			$charges = $vindiData['bill']['charges'];
 			foreach ($charges as $charge) {
-				if ($charge['payment_method']['type'] === 'PaymentMethod::BankSlip' ||
-                    $charge['payment_method']['type'] === 'PaymentMethod::OnlineBankSlip') {
+				if ($charge['payment_method']['type'] === 'PaymentMethod::BankSlip') {
 					$order->addStatusHistoryComment(sprintf(
 						'<a target="_blank" href="%s">Clique aqui</a> para visualizar o boleto.',
 						$charge['print_url']

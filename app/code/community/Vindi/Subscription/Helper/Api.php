@@ -199,8 +199,7 @@ class Vindi_Subscription_Helper_API extends Vindi_Subscription_Helper_Connector
                         $paymentMethods['debit_card'],
                         $method['payment_companies']
                     );
-                } elseif ('PaymentMethod::BankSlip' === $method['type'] ||
-                          'PaymentMethod::OnlineBankSlip' === $method['type']) {
+                } elseif ('PaymentMethod::BankSlip' === $method['type'] {
                     $paymentMethods['bank_slip'] = true;
                 }
             }

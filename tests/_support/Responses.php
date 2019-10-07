@@ -12,16 +12,6 @@ class Responses
             )
         )
     );
-    const ACTIVE_ONLINE_BANK_SLIP = array(
-        'payment_methods' => array(
-            array(
-                'name'        => 'Boleto bancário Online',
-                'type'        => 'PaymentMethod::OnlineBankSlip',
-                'status'      => 'active',
-                'code'        => 'bank_slip'
-                )
-            )
-    );
 
     const ACTIVE_CREDIT_CARD = array(
         'payment_methods' => array(
@@ -48,6 +38,7 @@ class Responses
             )
         )
     );
+
     const ACTIVE_DEBIT_CARD = array(
         'payment_methods' => array(
             array(
