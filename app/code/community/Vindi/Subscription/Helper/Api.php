@@ -1,6 +1,6 @@
 <?php
 
-class Vindi_Subscription_Helper_API extends Mage_Core_Helper_Abstract
+class Vindi_Subscription_Helper_API
 {
     /**
      * @var string
