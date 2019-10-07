@@ -23,11 +23,11 @@ class Vindi_Subscription_Model_Observer
         if (! $this->_helper->isModuleEnabled()) {
             return;
         }
-        
+
         $this->validateOrder();
     }
 
-    public function validateOrder () 
+    public function validateOrder ()
     {
         $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
 
@@ -40,7 +40,7 @@ class Vindi_Subscription_Model_Observer
                 continue;
             }
 
-            if ($lastProduct === 'subscription') {
+            if (isset($lastProduct) && $lastProduct === 'subscription') {
                 Mage::throwException('Você pode fazer apenas uma assinatura por vez. Conclua a compra da assinatura ou remova-a do carrinho.');
             }
         }
@@ -130,4 +130,3 @@ class Vindi_Subscription_Model_Observer
         return $product->getTypeId() === 'subscription';
     }
 }
-

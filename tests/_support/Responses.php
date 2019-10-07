@@ -48,6 +48,7 @@ class Responses
             )
         )
     );
+
     const ACTIVE_DEBIT_CARD = array(
         'payment_methods' => array(
             array(
