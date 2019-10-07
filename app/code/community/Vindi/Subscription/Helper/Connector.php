@@ -1,6 +1,6 @@
 <?php
 
-class Vindi_Subscription_Helper_Connector
+class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
 {
 
     use Vindi_Subscription_Trait_LogMessenger;
