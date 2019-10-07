@@ -1,23 +1,11 @@
 <?php
 
-class Vindi_Subscription_Helper_API
+class Vindi_Subscription_Helper_API extends Vindi_Subscription_Helper_Connector
 {
-    /**
-     * @var string
-     */
-    public $lastError = '';
-
     /**
      * @var bool
      */
     protected $acceptBankSlip;
-
-    protected $connector;
-
-    public function __construct()
-    {
-        $this->connector = new Vindi_Subscription_Helper_Connector();
-    }
 
     /**
      * @return \Zend_Cache_Core
@@ -37,7 +25,7 @@ class Vindi_Subscription_Helper_API
     public function createCustomer($body)
     {
 
-        if ($response = $this->connector->post('customers', $body)) {
+        if ($response = $this->post('customers', $body)) {
             return $response['customer']['id'];
         }
 
@@ -56,7 +44,7 @@ class Vindi_Subscription_Helper_API
         $customerId = $this->cache()->load("vindi_customer_by_code_{$code}");
 
         if ($customerId === false) {
-            $response = $this->connector->get("customers/search?code={$code}");
+            $response = $this->get("customers/search?code={$code}");
 
             if ($response && (1 === count($response['customers'])) && isset($response['customers'][0]['id'])) {
                 $customerId = $response['customers'][0]['id'];
@@ -103,7 +91,7 @@ class Vindi_Subscription_Helper_API
         $customerId = $body['customer_id'];
         $this->cache()->remove("vindi_payment_profile_{$customerId}");
 
-        return $this->connector->post('payment_profiles', $body);
+        return $this->post('payment_profiles', $body);
     }
 
     /**
@@ -115,7 +103,7 @@ class Vindi_Subscription_Helper_API
      */
     public function verifyCustomerPaymentProfile($id)
     {
-        return $this->connector->post('payment_profiles/' . $id . '/verify');
+        return $this->post('payment_profiles/' . $id . '/verify');
     }
 
     /**
@@ -137,7 +125,7 @@ class Vindi_Subscription_Helper_API
             $endpoint = 'payment_profiles?query=customer_id%3D' . $customerId
                 . '%20status%3Dactive%20type%3DPaymentProfile%3A%3A'. $type;
 
-            $response = $this->connector->get($endpoint);
+            $response = $this->get($endpoint);
 
             if ($response && $response['payment_profiles'] && count($response['payment_profiles'])) {
                 $paymentProfile = $response['payment_profiles'][0];
@@ -163,7 +151,7 @@ class Vindi_Subscription_Helper_API
      */
     public function createSubscription($body)
     {
-        if (($response = $this->connector->post('subscriptions', $body)) && isset($response['subscription']['id'])) {
+        if (($response = $this->post('subscriptions', $body)) && isset($response['subscription']['id'])) {
 
             $subscription = $response['subscription'];
             $subscription['bill'] = $response['bill'];
@@ -191,7 +179,7 @@ class Vindi_Subscription_Helper_API
                 'bank_slip'   => false,
             ];
 
-            $response = $this->connector->get('payment_methods');
+            $response = $this->get('payment_methods');
 
             if (false === $response) {
                 return $this->acceptBankSlip = false;
@@ -281,7 +269,7 @@ class Vindi_Subscription_Helper_API
      */
     public function createBill($body)
     {
-        if ($response = $this->connector->post('bills', $body)) {
+        if ($response = $this->post('bills', $body)) {
             return $response['bill'];
         }
 
@@ -295,7 +283,7 @@ class Vindi_Subscription_Helper_API
      */
     public function approveBill($billId)
     {
-        $response = $this->connector->get("bills/{$billId}");
+        $response = $this->get("bills/{$billId}");
 
         if (false === $response || ! isset($response['bill'])) {
             return false;
@@ -307,7 +295,7 @@ class Vindi_Subscription_Helper_API
             return true;
         }
 
-        return $this->connector->post("bills/{$billId}/approve");
+        return $this->post("bills/{$billId}/approve");
     }
 
     /**
@@ -317,7 +305,7 @@ class Vindi_Subscription_Helper_API
      */
     public function cancelPurchase($vindiId, $type)
     {
-        $this->connector->delete("{$type}/{$vindiId}");
+        $this->delete("{$type}/{$vindiId}");
     }
 
     /**
@@ -327,7 +315,7 @@ class Vindi_Subscription_Helper_API
      */
     public function getBankSlipDownload($billId)
     {
-        $response = $this->connector->get("bills/{$billId}");
+        $response = $this->get("bills/{$billId}");
 
         if (false === $response) {
             return false;
@@ -342,7 +330,7 @@ class Vindi_Subscription_Helper_API
     public function getProducts()
     {
         $list = [];
-        $response = $this->connector->get('products?query=status:active');
+        $response = $this->get('products?query=status:active');
 
         if ($products = $response['products']) {
             foreach ($products as $product) {
@@ -361,7 +349,7 @@ class Vindi_Subscription_Helper_API
     public function getPlanItems($id)
     {
         $list = [];
-        $response = $this->connector->get("plans/{$id}");
+        $response = $this->get("plans/{$id}");
 
         if ($plan = $response['plan']) {
             foreach ($plan['plan_items'] as $item) {
@@ -508,7 +496,7 @@ class Vindi_Subscription_Helper_API
         if (($list === false) || ! count($list = unserialize($list))) {
 
             $list = [];
-            $response = $this->connector->get('plans?query=status:active');
+            $response = $this->get('plans?query=status:active');
 
             if ($plans = $response['plans']) {
                 foreach ($plans as $plan) {
@@ -523,7 +511,7 @@ class Vindi_Subscription_Helper_API
 
     public function getPlanInstallments($id)
     {
-        $response = $this->connector->get("plans/{$id}");
+        $response = $this->get("plans/{$id}");
         $plan = $response['plan'];
         $installments = $plan['installments'];
 
@@ -540,7 +528,7 @@ class Vindi_Subscription_Helper_API
      */
     public function createProduct($body)
     {
-        if ($response = $this->connector->post('products', $body)) {
+        if ($response = $this->post('products', $body)) {
             return $response['product']['id'];
         }
 
@@ -556,7 +544,7 @@ class Vindi_Subscription_Helper_API
      */
     public function findProductByCode($code)
     {
-        $response = $this->connector->get("products?query=code%3D{$code}");
+        $response = $this->get("products?query=code%3D{$code}");
 
         if ($response && (1 === count($response['products'])) && isset($response['products'][0]['id'])) {
             return $response['products'][0]['id'];
@@ -633,7 +621,7 @@ class Vindi_Subscription_Helper_API
 
         if ($merchant === false) {
 
-            $response = $this->connector->get('merchant');
+            $response = $this->get('merchant');
 
             if (! $response || ! isset($response['merchant'])) {
                 return false;
@@ -670,7 +658,7 @@ class Vindi_Subscription_Helper_API
      */
     public function getBill($billId)
     {
-        $response = $this->connector->get("bills/{$billId}");
+        $response = $this->get("bills/{$billId}");
 
         if (! $response || ! isset($response['bill'])) {
             return false;
@@ -682,10 +670,10 @@ class Vindi_Subscription_Helper_API
     public function getDebitCardRedirectUrl($billId)
     {
 
-        $bill = $this->connector->get('bills/'.$billId);
+        $bill = $this->get('bills/'.$billId);
 
         $chargeId = $bill['bill']['charges'][0]['id'];
-        $charged = $this->connector->post('charges/'.$chargeId.'/charge', [
+        $charged = $this->post('charges/'.$chargeId.'/charge', [
             'id' => $bill['bill']['payment_profile']['id']
         ]);
 
