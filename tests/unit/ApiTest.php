@@ -26,8 +26,8 @@ class ApiTest extends \Codeception\Test\Unit
             'Vindi_Subscription_Helper_API',
             [
                 'connector' => $dummy_connector_class
-            ],
-        );
+            ]
+            );
         $success = array(
           'credit_card' => [],
           'debit_card' => [],
@@ -49,7 +49,7 @@ class ApiTest extends \Codeception\Test\Unit
             'Vindi_Subscription_Helper_API',
             [
                 'connector' => $dummy_connector_class
-            ],
+            ]
         );
         $success = array(
             'credit_card' => [],
@@ -72,7 +72,7 @@ class ApiTest extends \Codeception\Test\Unit
             'Vindi_Subscription_Helper_API',
             [
                 'connector' => $dummy_connector_class
-            ],
+            ]
         );
         $success = array(
             'credit_card' => array(
@@ -108,7 +108,7 @@ class ApiTest extends \Codeception\Test\Unit
             'Vindi_Subscription_Helper_API',
             [
                 'connector' => $dummy_connector_class
-            ],
+            ]
         );
         $success = array(
             'credit_card' => [],
@@ -144,7 +144,7 @@ class ApiTest extends \Codeception\Test\Unit
             'Vindi_Subscription_Helper_API',
             [
                 'connector' => $dummy_connector_class
-            ],
+            ]
 
         );
         $success = array(
@@ -194,7 +194,7 @@ class ApiTest extends \Codeception\Test\Unit
             'Vindi_Subscription_Helper_API',
             [
                 'connector' => $dummy_connector_class
-            ],
+            ]
 
         );
         $success = array(
