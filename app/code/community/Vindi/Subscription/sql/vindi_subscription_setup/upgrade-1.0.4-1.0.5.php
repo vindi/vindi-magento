@@ -4,16 +4,14 @@ $setup = $this;
 $connection = $setup->getConnection();
 $setup->startSetup();
 
-if (! $this->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'vindi_product_id', 'attribute_id')) {
+if (! $this->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'attribute_id')) {
     $setup->addAttribute(
         Mage_Catalog_Model_Product::ENTITY,
-        'vindi_product_id',
         [
             'type'                    => 'int',
             'input'                   => 'text',
             'backend'                 => '',
             'frontend'                => '',
-            'label'                   => 'ID Vindi do produto',
             'class'                   => '',
             'global'                  => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
             'visible'                 => true,
@@ -35,8 +33,7 @@ if (! $this->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'vindi_product_id'
     );
 
     $attributeId = $setup->getAttributeId(
-        Mage_Catalog_Model_Product::ENTITY,
-        'vindi_product_id'
+        Mage_Catalog_Model_Product::ENTITY
     );
 
     $defaultSetId = $setup->getAttributeSetId(Mage_Catalog_Model_Product::ENTITY, 'default');
