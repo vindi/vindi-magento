@@ -38,7 +38,7 @@ class Vindi_Subscription_Model_CreditCard extends Vindi_Subscription_Model_Payme
 			$info->setAdditionalInformation('PaymentMethod', $this->_code)
 				->setAdditionalInformation('use_saved_cc', true)
 				->setAdditionalInformation('installments', $data->getCcInstallments() ?: 1);
-
+      
 			return $this;
 		}
 

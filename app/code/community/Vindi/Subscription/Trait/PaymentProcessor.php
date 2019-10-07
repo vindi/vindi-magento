@@ -94,7 +94,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$customer->loadByEmail($billing->getEmail());
 		}
 
-		//TODO fix user being created again if validation fails 
+		//TODO fix user being created again if validation fails
 		if (! ($userCode = $customer->getVindiUserCode())) {
 			$userCode = 'mag-' . $customer->getId() . '-' . time();
 
@@ -185,7 +185,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 			$orderHandler = Mage::helper('vindi_subscription/order');
 			$orderHandler->updateToSuccess($order);
 			$stateObject->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING)
-				->setState(Mage_Sales_Model_Order::STATE_PROCESSING); 
+				->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
 
 			return $this;
 		}
@@ -204,7 +204,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 
 		return $this->processSubscription($payment, $order, $customerId);
 	}
-	
+
 	/**
 	 * @param object $stateObject
 	 *
@@ -307,9 +307,9 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	protected function createSubscription($payment, $order, $customerId)
 	{
 		$orderItems = $order->getItemsCollection();
-		
+
 		foreach ($orderItems as $item) {
-			$plan = !empty($plan = $this->getCurrentVindiPlan($item)) ? $plan : null; 
+			$plan = !empty($plan = $this->getCurrentVindiPlan($item)) ? $plan : null;
 
 			if (null !== $plan) {
 				break;

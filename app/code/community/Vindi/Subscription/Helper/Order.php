@@ -2,8 +2,8 @@
 
 class Vindi_Subscription_Helper_Order
 {
-	use Vindi_Subscription_Trait_LogMessenger; 
-	
+	use Vindi_Subscription_Trait_LogMessenger;
+
 	/**
 	 * Altera o status de um pedido para Cancelado
 	 *
@@ -193,7 +193,7 @@ class Vindi_Subscription_Helper_Order
 
 	/*
 	 * Atualiza o pedido inserindo as informações refentes a renovação de assinatura Vindi
-	 * 
+	 *
 	 * @param Mage_Sales_Model_Order $order, array $vindiData
 	 *
 	 * @return bool
@@ -201,7 +201,7 @@ class Vindi_Subscription_Helper_Order
 	public function renewalOrder($order, $vindiData)
 	{
 		$order->setVindiSubscriptionId($vindiData['bill']['subscription']);
-		$order->setVindiBillId($vindiData['bill']['id']);	
+		$order->setVindiBillId($vindiData['bill']['id']);
 		$order->setVindiSubscriptionPeriod($vindiData['bill']['cycle']);
 		$order->setBaseGrandTotal($vindiData['bill']['amount']);
 		$order->setGrandTotal($vindiData['bill']['amount']);
@@ -210,7 +210,7 @@ class Vindi_Subscription_Helper_Order
 		if (Mage::getStoreConfig('vindi_subscription/general/bankslip_link_in_order_comment')) {
 			$charges = $vindiData['bill']['charges'];
 			foreach ($charges as $charge) {
-				if ($charge['payment_method']['type'] == 'PaymentMethod::BankSlip') {
+				if ($charge['payment_method']['type'] === 'PaymentMethod::BankSlip') {
 					$order->addStatusHistoryComment(sprintf(
 						'<a target="_blank" href="%s">Clique aqui</a> para visualizar o boleto.',
 						$charge['print_url']
@@ -226,7 +226,7 @@ class Vindi_Subscription_Helper_Order
 	/*
 	 * Carrega os dados e valores referentes ao Frete do pedido
 	 *
-	 * @param Mage_Sales_Model_Quote $quote, array $vindiData, Mage_Sales_Model_Quote $shippingMethod 
+	 * @param Mage_Sales_Model_Quote $quote, array $vindiData, Mage_Sales_Model_Quote $shippingMethod
 	 */
 	protected function loadShipping($quote, $vindiData, $shippingMethod)
 	{
@@ -316,8 +316,8 @@ class Vindi_Subscription_Helper_Order
 			if (number_format($magentoProduct->getPrice(), 2)
 				!== number_format($item['pricing_schema']['price'], 2)) {
 
-				$this->logWebhook(sprintf("Divergencia de valores na fatura #%s:  " . 
-					"produto %s: ID Magento #%s , ID Vindi #%s: " . 
+				$this->logWebhook(sprintf("Divergencia de valores na fatura #%s:  " .
+					"produto %s: ID Magento #%s , ID Vindi #%s: " .
 					"Valor Magento R$ %s , Valor Vindi R$ %s",
 					$vindiData['bill']['id'],
 					$magentoProduct->getName(),
