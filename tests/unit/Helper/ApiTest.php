@@ -41,7 +41,7 @@ class ApiTest extends \Codeception\Test\Unit
         );
         $success = array(
             'credit_card' => [],
-            'debit_card' => [],
+            'debit_card'  => [],
             'bank_slip'   => true
         );
 
