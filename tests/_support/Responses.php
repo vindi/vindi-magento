@@ -5,31 +5,31 @@ class Responses
     const ACTIVE_BANK_SLIP = array(
         'payment_methods' => array(
             array(
-                'name'        => 'Boleto bancário',
-                'type'        => 'PaymentMethod::BankSlip',
-                'status'      => 'active',
-                'code'        => 'bank_slip'
+                'name'   => 'Boleto bancário',
+                'type'   => 'PaymentMethod::BankSlip',
+                'status' => 'active',
+                'code'   => 'bank_slip'
             )
         )
     );
     const ACTIVE_ONLINE_BANK_SLIP = array(
         'payment_methods' => array(
             array(
-                'name'        => 'Boleto bancário Online',
-                'type'        => 'PaymentMethod::OnlineBankSlip',
-                'status'      => 'active',
-                'code'        => 'bank_slip'
-                )
+                'name'   => 'Boleto bancário Online',
+                'type'   => 'PaymentMethod::OnlineBankSlip',
+                'status' => 'active',
+                'code'   => 'bank_slip'
             )
+        )
     );
 
     const ACTIVE_CREDIT_CARD = array(
         'payment_methods' => array(
             array(
-                'name'        => 'Cartão de Crédito',
-                'type'        => 'PaymentMethod::CreditCard',
-                'status'      => 'active',
-                'code'        => 'credit_card',
+                'name'              => 'Cartão de Crédito',
+                'type'              => 'PaymentMethod::CreditCard',
+                'status'            => 'active',
+                'code'              => 'credit_card',
                 'payment_companies' => array(
                     array(
                         'name' => 'Mastercard',
@@ -51,10 +51,10 @@ class Responses
     const ACTIVE_DEBIT_CARD = array(
         'payment_methods' => array(
             array(
-                'name'        => 'Cartão de Débito',
-                'type'        => 'PaymentMethod::DebitCard',
-                'status'      => 'active',
-                'code'        => 'debit_card',
+                'name'              => 'Cartão de Débito',
+                'type'              => 'PaymentMethod::DebitCard',
+                'status'            => 'active',
+                'code'              => 'debit_card',
                 'payment_companies' => array(
                     array(
                         'name' => 'Maestro',
@@ -77,16 +77,16 @@ class Responses
     const GENERAL_PAYMENT_METHODS = array(
         'payment_methods' => array(
             array(
-                'name'        => 'Boleto bancário',
-                'type'        => 'PaymentMethod::BankSlip',
-                'status'      => 'active',
-                'code'        => 'bank_slip'
+                'name'   => 'Boleto bancário',
+                'type'   => 'PaymentMethod::BankSlip',
+                'status' => 'active',
+                'code'   => 'bank_slip'
             ),
             array(
-                'name'        => 'Cartão de Crédito',
-                'type'        => 'PaymentMethod::CreditCard',
-                'status'      => 'active',
-                'code'        => 'credit_card',
+                'name'              => 'Cartão de Crédito',
+                'type'              => 'PaymentMethod::CreditCard',
+                'status'            => 'active',
+                'code'              => 'credit_card',
                 'payment_companies' => array(
                     array(
                         'name' => 'Mastercard',
@@ -104,10 +104,10 @@ class Responses
                 )
             ),
             array(
-                'name'        => 'Cartão de Débito',
-                'type'        => 'PaymentMethod::DebitCard',
-                'status'      => 'active',
-                'code'        => 'debit_card',
+                'name'              => 'Cartão de Débito',
+                'type'              => 'PaymentMethod::DebitCard',
+                'status'            => 'active',
+                'code'              => 'debit_card',
                 'payment_companies' => array(
                     array(
                         'name' => 'Maestro',
