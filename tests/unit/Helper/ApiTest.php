@@ -1,6 +1,6 @@
 <?php
-require_once 'app/code/community/Vindi/Subscription/Helper/Api.php';
 require_once 'app/code/community/Vindi/Subscription/Helper/Connector.php';
+require_once 'app/code/community/Vindi/Subscription/Helper/Api.php';
 
 class ApiTest extends \Codeception\Test\Unit
 {
@@ -16,16 +16,10 @@ class ApiTest extends \Codeception\Test\Unit
 
     public function testGetPaymentMethodBankSlip()
     {
-        $dummy_connector_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'get' => $this->response::ACTIVE_BANK_SLIP
-            ]
-        );
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_API',
             [
-                'connector' => $dummy_connector_class
+                'get' => $this->response::ACTIVE_BANK_SLIP
             ]
             );
         $success = array(
@@ -39,16 +33,10 @@ class ApiTest extends \Codeception\Test\Unit
 
     public function testGetPaymentMethodOnlineBankSlip()
     {
-        $dummy_connector_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'get' => $this->response::ACTIVE_ONLINE_BANK_SLIP
-            ]
-        );
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_API',
             [
-                'connector' => $dummy_connector_class
+                'get' => $this->response::ACTIVE_ONLINE_BANK_SLIP
             ]
         );
         $success = array(
@@ -62,16 +50,10 @@ class ApiTest extends \Codeception\Test\Unit
 
     public function testGetPaymentMethodCreditCard()
     {
-        $dummy_connector_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'get' => $this->response::ACTIVE_CREDIT_CARD
-            ]
-        );
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_API',
             [
-                'connector' => $dummy_connector_class
+                'get' => $this->response::ACTIVE_CREDIT_CARD
             ]
         );
         $success = array(
@@ -98,16 +80,10 @@ class ApiTest extends \Codeception\Test\Unit
 
     public function testGetPaymentMethodDebitCard()
     {
-        $dummy_connector_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'get' => $this->response::ACTIVE_DEBIT_CARD
-            ]
-        );
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_API',
             [
-                'connector' => $dummy_connector_class
+                'get' => $this->response::ACTIVE_DEBIT_CARD
             ]
         );
         $success = array(
@@ -134,16 +110,10 @@ class ApiTest extends \Codeception\Test\Unit
 
     public function testGetDefaultPaymentMethods()
     {
-        $dummy_connector_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'get' => $this->response::GENERAL_PAYMENT_METHODS
-            ]
-        );
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_API',
             [
-                'connector' => $dummy_connector_class
+                'get' => $this->response::GENERAL_PAYMENT_METHODS
             ]
 
         );
@@ -184,16 +154,10 @@ class ApiTest extends \Codeception\Test\Unit
 
     public function testGetDefaultPaymentMethodsNull()
     {
-        $dummy_connector_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'get' => $this->response::EMPTY_PAYMENT_METHODS
-            ]
-        );
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_API',
             [
-                'connector' => $dummy_connector_class
+                'get' => $this->response::EMPTY_PAYMENT_METHODS
             ]
 
         );

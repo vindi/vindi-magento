@@ -12,6 +12,7 @@ class Responses
             )
         )
     );
+
     const ACTIVE_ONLINE_BANK_SLIP = array(
         'payment_methods' => array(
             array(
@@ -48,6 +49,7 @@ class Responses
             )
         )
     );
+
     const ACTIVE_DEBIT_CARD = array(
         'payment_methods' => array(
             array(
