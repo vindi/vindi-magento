@@ -68,8 +68,16 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
 
         $dataToLog = $this->encrypt($body, $endpoint);
 
-        $this->log(sprintf("[Request #%s]: Novo Request para a API.\n%s %s\n%s", $requestId, $method, $url,
-            $dataToLog), 'vindi_api.log');
+        $this->log(
+            sprintf(
+                "[Request #%s]: Novo Request para a API.\n%s %s\n%s",
+                $requestId,
+                $method,
+                $url,
+                $dataToLog
+            ),
+            'vindi_api.log'
+        );
 
         $ch = curl_init();
         $ch_options = [
@@ -100,7 +108,14 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
         $body = substr($response, curl_getinfo($ch, CURLINFO_HEADER_SIZE));
 
         if (curl_errno($ch) || $response === false) {
-            $this->log(sprintf("[Request #%s]: Erro ao fazer request!\n%s", $requestId, print_r($response, true)));
+            $this->log(
+                sprintf(
+                    "[Request #%s]: Erro ao fazer request!\n%s",
+                    $requestId,
+                    print_r($response, true)
+                ),
+                'vindi_api.log'
+            );
 
             return false;
         }
@@ -108,13 +123,27 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
         curl_close($ch);
 
         $status = "HTTP Status: $statusCode";
-        $this->log(sprintf("[Request #%s]: Nova Resposta da API.\n%s\n%s", $requestId, $status, $body));
+        $this->log(
+            sprintf(
+                "[Request #%s]: Nova Resposta da API.\n%s\n%s",
+                $requestId,
+                $status,
+                $body
+            ),
+            'vindi_api.log'
+        );
 
         $responseBody = json_decode($body, true);
 
         if (! $responseBody) {
-            $this->log(sprintf('[Request #%s]: Erro ao recuperar corpo do request! %s', $requestId,
-                print_r($body, true)), 'vindi_api.log');
+            $this->log(
+                sprintf(
+                    '[Request #%s]: Erro ao recuperar corpo do request! %s',
+                    $requestId,
+                    print_r($body, true)
+                ),
+                'vindi_api.log'
+            );
 
             return false;
         }
