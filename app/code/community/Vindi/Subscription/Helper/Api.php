@@ -87,7 +87,6 @@ class Vindi_Subscription_Helper_API extends Vindi_Subscription_Helper_Connector
      */
     public function createCustomerPaymentProfile($body)
     {
-        $this->log(json_encode($dataToLog), 'vindi_creditcard.log');
         $customerId = $body['customer_id'];
         $this->cache()->remove("vindi_payment_profile_{$customerId}");
 
