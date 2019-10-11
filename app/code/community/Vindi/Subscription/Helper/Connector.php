@@ -135,7 +135,7 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
      *
      * @return array
      */
-    protected function encrypt($body, $endpoint)
+    public function encrypt($body, $endpoint)
     {
         $dataToLog = $body;
 
