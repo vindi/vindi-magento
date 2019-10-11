@@ -3,7 +3,7 @@ require_once 'app/code/community/Vindi/Subscription/Helper/Connector.php';
 
 class ConnectorTest extends \Codeception\Test\Unit
 {
-    public function testEncryption()
+    public function testEncryptyOnCreditCards()
     {
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_Connector',
