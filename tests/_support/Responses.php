@@ -128,7 +128,9 @@ class Responses
             "customer_id": 456,
             "payment_method_code": "bank_slip",
             "product_items": [
-              { "product_id": 789 }
+              { 
+                  "product_id": 789 
+              }
             ]
-          }';
+        }';
 }
