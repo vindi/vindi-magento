@@ -43,7 +43,7 @@ class ConnectorTest extends \Codeception\Test\Unit
                 'getErrorMessage' => RequestBody::INVALID_SUBSCRIPTION_REQUEST
             ]
         );
-        $this->assertEquals(
+        $this->assertTrue(
             $dummy_class->checkResponse(
                 RequestBody::INVALID_SUBSCRIPTION_REQUEST, 'subscriptions'
             )
