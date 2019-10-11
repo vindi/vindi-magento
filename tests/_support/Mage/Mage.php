@@ -77,6 +77,6 @@ class Mage
 
     public static function getSingleton()
     {
-        return true;
+        return new Mage();
     }
 }
