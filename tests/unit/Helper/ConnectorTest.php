@@ -47,7 +47,6 @@ class ConnectorTest extends \Codeception\Test\Unit
             $dummy_class->checkResponse(
                 RequestBody::INVALID_SUBSCRIPTION_REQUEST, 'subscriptions'
             ),
-            true
         );
     }
 }
