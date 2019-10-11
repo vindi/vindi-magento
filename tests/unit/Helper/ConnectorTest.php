@@ -1,6 +1,5 @@
 <?php
 require_once 'app/code/community/Vindi/Subscription/Helper/Connector.php';
-require_once 'app/code/community/Vindi/Subscription/Helper/Api.php';
 
 class ConnectorTest extends \Codeception\Test\Unit
 {
