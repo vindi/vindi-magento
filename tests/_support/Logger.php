@@ -13,4 +13,13 @@ class Logger
             "payment_method_code":"credit_card"
         }
     }';
+
+    const INVALID_SUBSCRIPTION_RESPONSE = '{
+        {
+            "errors": [{
+                "id": "invalid_parameter",
+                "parameter": "plan_id",
+                "message": "não encontrado"
+            }
+        }';
 }

@@ -121,4 +121,14 @@ class Responses
     const EMPTY_PAYMENT_METHODS = array(
         'payment_methods' => array()
     );
+
+    const SUBSCRIPTION_RESPONSE = '{
+        {
+            "plan_id": 123,
+            "customer_id": 456,
+            "payment_method_code": "bank_slip",
+            "product_items": [
+              { "product_id": 789 }
+            ]
+          }';
 }

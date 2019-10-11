@@ -13,4 +13,24 @@ class RequestBody
             "payment_method_code":"credit_card"
         }
     }';
+
+    const SUBSCRIPTION_REQUEST = '{
+        {
+            "plan_id": 123,
+            "customer_id": 456,
+            "payment_method_code": "bank_slip",
+            "product_items": [
+              { "product_id": 789 }
+            ]
+          }';
+
+    const INVALID_SUBSCRIPTION_REQUEST = '{
+        {
+            "plan_id": 1651032,
+            "customer_id": 456,
+            "payment_method_code": "bank_slip",
+            "product_items": [
+              { "product_id": 789 }
+            ]
+        }';
 }

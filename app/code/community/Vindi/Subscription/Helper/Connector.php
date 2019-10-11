@@ -155,7 +155,7 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    protected function checkResponse($response, $endpoint)
+    public function checkResponse($response, $endpoint)
     {
         if (isset($response['errors']) && ! empty($response['errors'])) {
             foreach ($response['errors'] as $error) {

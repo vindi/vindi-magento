@@ -20,18 +20,35 @@ class ConnectorTest extends \Codeception\Test\Unit
         );
     }
 
-    // public function testResponseChecker()
-    // {
-    //     $dummy_class = $this->make(
-    //         'Vindi_Subscription_Helper_Connector',
-    //         [
-    //             'checkResponse' => Responses::GENERAL_PAYMENT_METHODS
-    //         ]
-    //     );
-    //     $this->assertEquals(
-    //         $dummy_class->checkResponse(
+    public function testResponseChecker()
+    {
+        $dummy_class = $this->make(
+            'Vindi_Subscription_Helper_Connector',
+            [
+                'checkResponse' => RequestBody::SUBSCRIPTION_REQUEST
+            ]
+        );
+        $this->assertEquals(
+            $dummy_class->checkResponse(
+                RequestBody::SUBSCRIPTION_REQUEST, 'subscriptions'
+            ),
+            Responses::SUBSCRIPTION_RESPONSE
+        );
+    }
 
-    //         )
-    //     )
-    // }
+    public function testGetErrorMessage()
+    {
+        $dummy_class = $this->make(
+            'Vindi_Subscription_Helper_Connector',
+            [
+                'getErrorMessage' => RequestBody::INVALID_SUBSCRIPTION_REQUEST
+            ]
+        );
+        $this->assertEquals(
+            $dummy_class->checkResponse(
+                RequestBody::INVALID_SUBSCRIPTION_REQUEST, 'subscriptions'
+            ),
+            true
+        );
+    }
 }
