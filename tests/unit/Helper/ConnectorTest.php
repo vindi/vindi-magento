@@ -19,7 +19,7 @@ class ConnectorTest extends \Codeception\Test\Unit
         );
     }
 
-    public function testResponseChecker()
+    public function testResponseCheckerOnValidBody()
     {
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_Connector',
