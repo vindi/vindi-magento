@@ -24,7 +24,7 @@ class ConnectorTest extends \Codeception\Test\Unit
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_Connector',
             [
-                'checkResponse' => RequestBody::SUBSCRIPTION_REQUEST
+                'checkResponse' => Responses::SUBSCRIPTION_RESPONSE
             ]
         );
         $this->assertEquals(
