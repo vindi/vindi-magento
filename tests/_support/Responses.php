@@ -122,7 +122,7 @@ class Responses
         'payment_methods' => array()
     );
 
-    const SUBSCRIPTION_RESPONSE = '{
+    const SAMPLE_SUBSCRIPTION_RESPONSE = '{
         {
             "plan_id": 123,
             "customer_id": 456,
