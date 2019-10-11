@@ -24,14 +24,14 @@ class ConnectorTest extends \Codeception\Test\Unit
         $dummy_class = $this->make(
             'Vindi_Subscription_Helper_Connector',
             [
-                'checkResponse' => Responses::SUBSCRIPTION_RESPONSE
+                'checkResponse' => Responses::SAMPLE_SUBSCRIPTION_RESPONSE
             ]
         );
         $this->assertEquals(
             $dummy_class->checkResponse(
-                RequestBody::SUBSCRIPTION_REQUEST, 'subscriptions'
+                RequestBody::SAMPLE_SUBSCRIPTION_REQUEST, 'subscriptions'
             ),
-            Responses::SUBSCRIPTION_RESPONSE
+            Responses::SAMPLE_SUBSCRIPTION_RESPONSE
         );
     }
 
@@ -46,7 +46,7 @@ class ConnectorTest extends \Codeception\Test\Unit
         $this->assertEquals(
             $dummy_class->checkResponse(
                 RequestBody::INVALID_SUBSCRIPTION_REQUEST, 'subscriptions'
-            ),
+            )
         );
     }
 }
