@@ -14,7 +14,7 @@ class RequestBody
         }
     }';
 
-    const SUBSCRIPTION_REQUEST = '{
+    const SAMPLE_SUBSCRIPTION_REQUEST = '{
         {
             "plan_id": 123,
             "customer_id": 456,
