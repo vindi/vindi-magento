@@ -67,6 +67,10 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	{
 		$info = $this->getInfoInstance();
 
+		if ($info->getAdditionalInformation('use_saved_dc')) {
+			return $this;
+		}
+
 		$dcNumber = $info->getCcNumber();
 
 		// remove debit card non-numbers
