@@ -5,14 +5,10 @@ class ConnectorTest extends \Codeception\Test\Unit
 {
     public function testEncryptyOnCreditCards()
     {
-        $dummy_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'encrypt' => Logger::ENCRYPTED_PAYMENT_PROFILE_CARD
-            ]
-        );
+        $connector = new Vindi_Subscription_Helper_Connector();
+
         $this->assertEquals(
-            $dummy_class->encrypt(
+            $connector->encrypt(
                 RequestBody::UNENCRYPTED_PAYMENT_PROFILE_REQUEST, 'payment_profiles'
             ),
             Logger::ENCRYPTED_PAYMENT_PROFILE_CARD
@@ -53,7 +49,7 @@ class ConnectorTest extends \Codeception\Test\Unit
             );
     }
 
-    public function testGetErrorMessageWithBody()
+    public function testGetErrorMessage()
     {
         $connector = new Vindi_Subscription_Helper_Connector();
 

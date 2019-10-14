@@ -221,7 +221,7 @@ class Responses
                         "status":"pending",
                         "billing_at":null,
                         "due_at":"2019-10-14T23:59:59.000-03:00",
-                        "url":"https://sandbox-app.vindi.com.br/customer/bills/2337376\?token=2f1a29eb-98bf-4ef6-bea1-ead5e231f8c1",
+                        "url":"https://sandbox-app.vindi.com.br/customer/bills/12345",
                         "created_at":"2019-10-11T10:12:40.000-03:00",
                         "charges":[
                             {
