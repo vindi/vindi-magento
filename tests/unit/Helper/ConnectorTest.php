@@ -21,32 +21,52 @@ class ConnectorTest extends \Codeception\Test\Unit
 
     public function testResponseCheckerOnValidBody()
     {
-        $dummy_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'checkResponse' => Responses::SAMPLE_SUBSCRIPTION_RESPONSE
-            ]
-        );
-        $this->assertEquals(
-            $dummy_class->checkResponse(
-                RequestBody::SAMPLE_SUBSCRIPTION_REQUEST, 'subscriptions'
-            ),
-            Responses::SAMPLE_SUBSCRIPTION_RESPONSE
-        );
+        $connector = new Vindi_Subscription_Helper_Connector();
+
+        $this->assertTrue(
+            $connector->checkResponse(
+                [
+                    Responses::SAMPLE_SUBSCRIPTION_RESPONSE
+                ],
+                'subscriptions'
+                )
+            );
     }
 
-    public function testGetErrorMessage()
+    public function testResponseCheckerOnInvalidBody()
     {
-        $dummy_class = $this->make(
-            'Vindi_Subscription_Helper_Connector',
-            [
-                'getErrorMessage' => RequestBody::INVALID_SUBSCRIPTION_REQUEST
-            ]
-        );
-        $this->assertTrue(
-            $dummy_class->checkResponse(
-                RequestBody::INVALID_SUBSCRIPTION_REQUEST, 'subscriptions'
-            )
+        $connector = new Vindi_Subscription_Helper_Connector();
+
+        $this->assertFalse(
+            $connector->checkResponse(
+                [
+                    "errors" => [
+                        [
+                            'id' => 'invalid_parameter',
+                            'parameter' => 'plan',
+                            'message' => 'inválido'
+                        ]
+                    ]
+                ],
+                'subscriptions'
+                )
+            );
+    }
+
+    public function testGetErrorMessageWithBody()
+    {
+        $connector = new Vindi_Subscription_Helper_Connector();
+
+        $this->assertEquals(
+            $connector->getErrorMessage(
+                [
+                    'id' => 'invalid_parameter',
+                    'parameter' => 'plan',
+                    'message' => 'inválido'
+                ],
+                'subscriptions'
+            ),
+            Responses::INVALID_SUBSCRIPTION_RESPONSE
         );
     }
 }

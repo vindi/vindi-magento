@@ -180,7 +180,7 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
      *
      * @return string
      */
-    protected function getErrorMessage($error, $endpoint)
+    public function getErrorMessage($error, $endpoint)
     {
         return "Erro em $endpoint: {$error['id']}: {$error['parameter']} - {$error['message']}";
     }
