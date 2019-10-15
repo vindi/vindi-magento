@@ -50,4 +50,14 @@ trait Shop
         if ($installments)
             $I->selectOption('#vindi_cc_installments', $installments);
     }
+
+    public function fillDebitCardInfo($I)
+    {
+        $I->fillField('#vindi_debitcard_dc_owner', 'Vindi Magento');
+        $I->selectOption('#vindi_debitcard_dc_type', 'visa_electron');
+        $I->fillField('#vindi_debitcard_dc_number', '4111111111111111');
+        $I->selectOption('select#vindi_debitcard_expiration.month', '12');
+        $I->selectOption('select#vindi_debitcard_expiration_yr.year', strval(date('Y') + 5));
+        $I->fillField('#vindi_debitcard_dc_cid', '123');
+    }
 }

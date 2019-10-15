@@ -78,7 +78,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 	/**
 	 * @return string
 	 */
-	protected function getPaymentMethodCode()
+	public function getPaymentMethodCode()
 	{
 		return $this->vindiMethodCode;
 	}
@@ -88,7 +88,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 	 *
 	 * @return array|bool
 	 */
-	protected function createPaymentProfile($customerId)
+	public function createPaymentProfile($customerId)
 	{
 		$payment = $this->getInfoInstance();
 
@@ -116,7 +116,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return $paymentProfile;
 	}
 
-	protected function processCardInformation($payment, $customerId, $customerVindiId)
+	public function processCardInformation($payment, $customerId, $customerVindiId)
 	{
 		if ('bank_slip' == $this->vindiMethodCode || 'debit_card' == $this->vindiMethodCode) {
 			return true;
@@ -190,7 +190,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return $nsu;
 	}
 
-	protected function verifyPaymentProfile($paymentProfile)
+	public function verifyPaymentProfile($paymentProfile)
 	{
 		$isVerifyEnabled = Mage::getStoreConfig('vindi_subscription/general/verify_method');
 
