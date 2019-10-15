@@ -69,4 +69,14 @@ class Mage
     {
         return true;
     }
+
+    public static function addError()
+    {
+        return true;
+    }
+
+    public static function getSingleton()
+    {
+        return new Mage();
+    }
 }
