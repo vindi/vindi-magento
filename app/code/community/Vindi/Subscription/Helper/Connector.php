@@ -29,31 +29,6 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
        return $this->request($endpoint, $body, 'DELETE');
     }
 
-    /**
-     * @param array $response
-     * @param       $endpoint
-     *
-     * @return bool
-     */
-    protected function checkResponse($response, $endpoint)
-    {
-        if (isset($response['errors']) && ! empty($response['errors'])) {
-            foreach ($response['errors'] as $error) {
-                $message = $this->getErrorMessage($error, $endpoint);
-
-                Mage::getSingleton('core/session')->addError($message);
-
-                $this->lastError = $message;
-            }
-
-            return false;
-        }
-
-        $this->lastError = '';
-
-        return true;
-    }
-
     private function request($endpoint, $data = [], $method = 'POST')
     {
         $key = Mage::helper('vindi_subscription')->getKey();
@@ -62,11 +37,9 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
         }
 
         $url = Mage::getStoreConfig('vindi_subscription/general/sandbox_mode') . $endpoint;
-        $body = $this->buildBody($data);
-
-        $requestId = rand();
-
+        $body = empty($data) ? null : json_encode($data);
         $dataToLog = $this->encrypt($body, $endpoint);
+        $requestId = rand();
 
         $this->log(
             sprintf(
@@ -162,42 +135,52 @@ class Vindi_Subscription_Helper_Connector extends Mage_Core_Helper_Abstract
      *
      * @return array
      */
-    private function encrypt ($body, $endpoint)
+    public function encrypt($body, $endpoint)
     {
-        if ('payment_profile' === $endpoint) {
-            $dataToLog = $body;
+        $dataToLog = $body;
+
+        if ('payment_profiles' === $endpoint) {
+            $dataToLog = json_decode($body, true);
             $dataToLog['card_number'] = '**** *' . substr($dataToLog['card_number'], -3);
             $dataToLog['card_cvv'] = '***';
-            return $dataToLog;
+            $dataToLog = json_encode($dataToLog);
         }
+
+        return $dataToLog;
     }
 
     /**
-     * Build HTTP Query.
+     * @param array $response
+     * @param       $endpoint
      *
-     * @param array $data
+     * @return bool
+     */
+    public function checkResponse($response, $endpoint)
+    {
+        if (isset($response['errors']) && ! empty($response['errors'])) {
+            foreach ($response['errors'] as $error) {
+                $message = $this->getErrorMessage($error, $endpoint);
+
+                Mage::getSingleton('core/session')->addError($message);
+
+                $this->lastError = $message;
+            }
+
+            return false;
+        }
+
+        $this->lastError = '';
+
+        return true;
+    }
+
+    /**
+     * @param array $error
+     * @param       $endpoint
      *
      * @return string
      */
-    private function buildBody($data)
-    {
-        $body = null;
-
-        if(!empty($data)) {
-            $body = json_encode($data);
-        }
-
-        return $body;
-    }
-
-
-        /**
-         * @param array $error
-         * @param       $endpoint
-         *
-         * @return string
-         */
-    protected function getErrorMessage($error, $endpoint)
+    public function getErrorMessage($error, $endpoint)
     {
         return "Erro em $endpoint: {$error['id']}: {$error['parameter']} - {$error['message']}";
     }
