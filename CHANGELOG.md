@@ -1,5 +1,17 @@
 # Notas das versões
 
+## [1.8.8 - 08/10/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.8)
+
+### Adicionado
+- Adiciona suporte para boletos Webservice
+
+### Corrigido
+- Correção erro de php "Undefined variable: lastProduct" (por @brunotda: #126)
+
+### Ajustado
+- Ajusta tratativa para número de parcelas em cartões de crédito salvos
+
+
 ## [1.8.7 - 26/08/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.7)
 
 ### Ajustado
