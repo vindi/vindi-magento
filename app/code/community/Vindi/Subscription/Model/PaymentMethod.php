@@ -113,12 +113,14 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 			return false;
 		}
 
+		$payment->setPaymentProfile($paymentProfile);
+
 		return $paymentProfile;
 	}
 
 	public function processCardInformation($payment, $customerId, $customerVindiId)
 	{
-		if ('bank_slip' == $this->vindiMethodCode || 'debit_card' == $this->vindiMethodCode) {
+		if ('bank_slip' == $this->vindiMethodCode) {
 			return true;
 		}
 
