@@ -23,6 +23,14 @@ trait PaymentMethod
         }
     }
 
+    public function setDefaultDebitCard($I)
+    {
+        $I->goToAdminPanel($I);
+        $I->goToBankSlipSettings($I);
+        $I->selectOption('#payment_vindi_debitcard_active', 'Yes');
+        $I->click('Save Config');
+    }
+
     public function goToDebitCardSettings($I)
     {
         $I->click('System');

@@ -11,6 +11,7 @@ class VindiCheckoutWithDebitCardCest
 
     public function buyProduct(AcceptanceTester $I)
     {
+        $I->setDefaultDebitCard($I);
         $I->loginAsUser($I);
         $I->addProductToCart($I);
         $I->click('Proceed to Checkout');
@@ -33,6 +34,7 @@ class VindiCheckoutWithDebitCardCest
 
     public function buyProductWithDiscount(AcceptanceTester $I)
     {
+        $I->setDefaultDebitCard($I);
         $I->loginAsUser($I);
         $I->addProductToCart($I);
         $I->addDiscountCode($I);
@@ -60,6 +62,7 @@ class VindiCheckoutWithDebitCardCest
 
     public function buySubscription(AcceptanceTester $I)
     {
+        $I->setDefaultDebitCard($I);
         $I->loginAsUser($I);
         $I->addSubscriptionToCart($I);
         $I->click('Proceed to Checkout');
