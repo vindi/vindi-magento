@@ -149,7 +149,7 @@ trait Vindi_Subscription_Trait_PaymentProcessor
 	/**
 	 * @return Vindi_Subscription_Helper_API
 	 */
-	protected function api()
+	public function api()
 	{
 		if (isset($this->vindiApi)) {
 			return $this->vindiApi;
