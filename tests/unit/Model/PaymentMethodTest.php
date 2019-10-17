@@ -19,10 +19,11 @@ class PaymentMethodTest extends \Codeception\Test\Unit
 
     public function testCreatePaymentProfileDebitCard()
     {
-        $dummy = $this->make(
+        $dummy_debit_card_class = $this->makeEmpty(
             'Vindi_Subscription_Model_DebitCard'
         );
-        $dummy_class = $this->make(
+        
+        $dummy_class = $this->makeEmpty(
             'Vindi_Subscription_Model_PaymentMethod',
             [
                 'api' => true
@@ -31,7 +32,7 @@ class PaymentMethodTest extends \Codeception\Test\Unit
                 'getInfoInstance' => $this->payment
             ],
             [
-                'getPaymentMethodCode' => $dummy->vindiMethodCode
+                'getPaymentMethodCode' => $dummy_debit_card_class->vindiMethodCode
             ]
         );
 
