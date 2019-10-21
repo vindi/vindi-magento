@@ -26,7 +26,7 @@ trait PaymentMethod
     public function setDefaultDebitCard($I)
     {
         $I->goToAdminPanel($I);
-        $I->goToBankSlipSettings($I);
+        $I->goToDebitCardSettings($I);
         $I->selectOption('#payment_vindi_debitcard_active', 'Yes');
         $I->click('Save Config');
     }
