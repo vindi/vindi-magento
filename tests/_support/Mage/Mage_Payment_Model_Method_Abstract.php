@@ -9,7 +9,7 @@ class Mage_Payment_Model_Method_Abstract
 
     public function getCcOwner()
     {
-        return 'teste';
+        return 'holder name';
     }
 
     public function getCcExpMonth()
@@ -24,7 +24,7 @@ class Mage_Payment_Model_Method_Abstract
 
     public function getCcNumber()
     {
-        return '4111 1111 1111 1111';
+        return '4111111111111111';
     }
 
     public function getCcCid()
@@ -39,6 +39,6 @@ class Mage_Payment_Model_Method_Abstract
 
     public function setPaymentProfile()
     {
-        return 123;
+        return true;
     }
 }

@@ -100,7 +100,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 			'card_cvv'             => $payment->getCcCid() ?: '000',
 			'customer_id'          => $customerId,
 			'payment_company_code' => $payment->getCcType(),
-			'payment_method_code'  =>  $this->getPaymentMethodCode()
+			'payment_method_code'  => $this->getPaymentMethodCode()
 		);
 
 		$paymentProfile = $this->api()->createCustomerPaymentProfile($cardData);

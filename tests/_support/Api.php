@@ -11,9 +11,8 @@ trait Api
      *
      * @return array|bool|mixed
      */
-    private function request($method, $endpoint, $body = [])
+    private function request($method = 'GET', $endpoint, $body = [])
     {
-        $method    = 'GET';
         $url = "https://sandbox-app.vindi.com.br/api/v1/$endpoint";
         $body = json_encode($body);
         $ch = curl_init();
@@ -58,6 +57,13 @@ trait Api
         $response = $this->request(
             'GET', "bills?page=1&per_page=1&sort_by=created_at&sort_order=desc"
         )['bills'][0];
+
+        return $response;
+    }
+
+    public function createCustomerPaymentProfile($body)
+    {
+        $response = $this->request('POST', 'payment_profiles', $body);
 
         return $response;
     }

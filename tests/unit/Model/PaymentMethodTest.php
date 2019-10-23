@@ -6,7 +6,8 @@ require_once 'app/code/community/Vindi/Subscription/Model/DebitCard.php';
 
 class PaymentMethodTest extends \Codeception\Test\Unit
 {
-    // use Vindi_Subscription_Trait_PaymentProcessor;
+    use Api;
+
     /**
      * @var \Payment
      */
@@ -17,28 +18,42 @@ class PaymentMethodTest extends \Codeception\Test\Unit
         $this->payment = new Mage_Payment_Model_Method_Abstract();
     }
 
-    public function testCreatePaymentProfileDebitCard()
+    public function testCreateValidPaymentProfileDebitCard()
     {
-        $dummy_debit_card_class = $this->make(
-            'Vindi_Subscription_Model_DebitCard'
-        );
-        
-        $dummy_class = $this->makeEmpty(
+        $dummy_class = $this->make(
             'Vindi_Subscription_Model_PaymentMethod',
             [
-                'api' => true
+                'api' => $this
             ],
             [
                 'getInfoInstance' => $this->payment
-            ],
-            [
-                'getPaymentMethodCode' => $dummy_debit_card_class->vindiMethodCode
             ]
         );
 
-        $this->assertTrue(
+        $dummy_class->vindiMethodCode = 'debit_card';
+        $valid_customer_id = 62;
+        $json_response = $dummy_class->createPaymentProfile($valid_customer_id);
+        
+        $this->assertArrayNotHasKey('errors', $json_response);
+        $this->assertArrayHasKey('payment_profile', $json_response);
+    }
 
-            $dummy_class->createPaymentProfile(11)
+    public function testCreateInvalidPaymentProfileDebitCard()
+    {
+        $dummy_class = $this->make(
+            'Vindi_Subscription_Model_PaymentMethod',
+            [
+                'api' => $this
+            ],
+            [
+                'getInfoInstance' => $this->payment
+            ]
         );
+
+        $dummy_class->vindiMethodCode = 'debit_card';
+        $invalid_customer_id = 63;
+        $json_response = $dummy_class->createPaymentProfile($invalid_customer_id);
+
+        $this->assertArrayHasKey('errors', $json_response);
     }
 }
