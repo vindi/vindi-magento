@@ -19,7 +19,7 @@ class Mage_Payment_Model_Method_Abstract
 
     public function getCcExpYear()
     {
-        return 2025;
+        return date('Y', strtotime('+4 years'));
     }
 
     public function getCcNumber()
