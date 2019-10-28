@@ -18,6 +18,7 @@ class VindiCheckoutWithDebitCardCest
         $I->skipCheckoutForm($I);
         $I->waitForElement('#dt_method_vindi_debitcard', 30);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Débito');
+        $I->fillDebitCardInfo($I);
         $I->click('Continue', '#payment-buttons-container');
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
@@ -37,6 +38,7 @@ class VindiCheckoutWithDebitCardCest
         $I->skipCheckoutForm($I);
         $I->waitForElement('#dt_method_vindi_debitcard', 30);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Débito');
+        $I->fillDebitCardInfo($I);
         $I->click('Continue', '#payment-buttons-container');
         $I->waitForElement('#review-buttons-container', 30);
         $I->see('Discount (desconto)');
@@ -60,6 +62,7 @@ class VindiCheckoutWithDebitCardCest
         $I->skipCheckoutForm($I);
         $I->waitForElement('#dt_method_vindi_debitcard', 30);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Débito');
+        $I->fillDebitCardInfo($I);
         $I->click('Continue', '#payment-buttons-container');
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
