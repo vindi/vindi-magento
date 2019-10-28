@@ -5,7 +5,7 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	/**
 	 * @var string
 	 */
-	public static $METHOD = "DebitCard";
+	public static $METHOD = "DebitCard"; 
 	/**
 	 * @var string
 	 */
