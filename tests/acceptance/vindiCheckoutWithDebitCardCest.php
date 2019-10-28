@@ -25,6 +25,7 @@ class VindiCheckoutWithDebitCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->click('Click here to approve');
+        $I->switchToNextTab();
         $I->dontSeeInCurrentUrl('/checkout/onepage/success');
     }
 
@@ -46,6 +47,7 @@ class VindiCheckoutWithDebitCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->click('Click here to approve');
+        $I->switchToNextTab();
         $I->dontSeeInCurrentUrl('/checkout/onepage/success');
 
         $bill = $I->getLastVindiBill();
@@ -69,6 +71,7 @@ class VindiCheckoutWithDebitCardCest
         $I->waitForElement('.main-container.col1-layout', 30);
         $I->seeInCurrentUrl('/checkout/onepage/success');
         $I->click('Click here to approve');
+        $I->switchToNextTab();
         $I->dontSeeInCurrentUrl('/checkout/onepage/success');
     }
 }
