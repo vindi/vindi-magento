@@ -11,7 +11,7 @@ class PaymentMethodTest extends \Codeception\Test\Unit
     /**
      * @var \Payment
      */
-    protected $payment;
+    private $payment;
 
     public function _before()
     {

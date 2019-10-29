@@ -16,12 +16,12 @@ class VindiCheckoutWithBankSlipCest
         $I->addProductToCart($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_bankslip', 30);
+        $I->waitForElement('#dt_method_vindi_bankslip', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Boleto Bancário');
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
         $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
     }
@@ -34,13 +34,13 @@ class VindiCheckoutWithBankSlipCest
         $I->addDiscountCode($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_bankslip', 30);
+        $I->waitForElement('#dt_method_vindi_bankslip', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Boleto Bancário');
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->see('Discount (desconto)');
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
         $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $bill = $I->getLastVindiBill();
         if ($bill['amount'] != '14.8')
@@ -54,12 +54,12 @@ class VindiCheckoutWithBankSlipCest
         $I->addSubscriptionToCart($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_bankslip', 30);
+        $I->waitForElement('#dt_method_vindi_bankslip', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Boleto Bancário');
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
         $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
     }
