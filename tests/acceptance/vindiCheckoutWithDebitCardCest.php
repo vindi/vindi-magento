@@ -23,10 +23,10 @@ class VindiCheckoutWithDebitCardCest
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->click('Click here to approve');
         $I->switchToNextTab();
-        $I->dontSeeInCurrentUrl('/checkout/onepage/success');
+        $I->dontseeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
     }
 
     public function buyProductWithDiscount(AcceptanceTester $I)
@@ -45,10 +45,10 @@ class VindiCheckoutWithDebitCardCest
         $I->see('Discount (desconto)');
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->click('Click here to approve');
         $I->switchToNextTab();
-        $I->dontSeeInCurrentUrl('/checkout/onepage/success');
+        $I->dontseeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
 
         $bill = $I->getLastVindiBill();
         if ($bill['amount'] != '14.8')
@@ -69,9 +69,9 @@ class VindiCheckoutWithDebitCardCest
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->click('Click here to approve');
         $I->switchToNextTab();
-        $I->dontSeeInCurrentUrl('/checkout/onepage/success');
+        $I->dontseeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
     }
 }

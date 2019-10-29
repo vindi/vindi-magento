@@ -22,7 +22,7 @@ class VindiCheckoutWithBankSlipCest
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
     }
 
@@ -41,7 +41,7 @@ class VindiCheckoutWithBankSlipCest
         $I->see('Discount (desconto)');
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $bill = $I->getLastVindiBill();
         if ($bill['amount'] != '14.8')
             throw new \RuntimeException;
@@ -60,7 +60,7 @@ class VindiCheckoutWithBankSlipCest
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
     }
 }

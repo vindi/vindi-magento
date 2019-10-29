@@ -24,6 +24,8 @@ class AcceptanceTester extends \Codeception\Actor
     use PaymentMethod;
     use Shop;
 
+    const SUCCESS_CHECKOUT_URL = '/checkout/onepage/success/';
+
     public function isModuleConfigured()
     {
         return getenv('CONFIGURED') == true;
