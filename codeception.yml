@@ -5,6 +5,13 @@ paths:
     support: tests/_support
     envs: tests/_envs
 actor_suffix: Tester
+coverage:
+    enabled: true
+    include:
+        - app/code/community/Vindi/Subscription/*
+    exclude:
+        - app/code/community/Vindi/Subscription/etc/*
+        - app/code/community/Vindi/Subscription/sql/*
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
