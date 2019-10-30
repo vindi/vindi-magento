@@ -78,7 +78,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 	/**
 	 * @return string
 	 */
-	protected function getPaymentMethodCode()
+	public function getPaymentMethodCode()
 	{
 		return $this->vindiMethodCode;
 	}
@@ -88,8 +88,10 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 	 *
 	 * @return array|bool
 	 */
-	protected function createPaymentProfile($customerId)
+	public function createPaymentProfile($customerId)
 	{
+		$dummy_cvv = '000';
+
 		$payment = $this->getInfoInstance();
 
 		$cardData = array(
@@ -97,10 +99,10 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 			'card_expiration'      => str_pad($payment->getCcExpMonth(), 2, '0', STR_PAD_LEFT)
 				. '/' . $payment->getCcExpYear(),
 			'card_number'          => $payment->getCcNumber(),
-			'card_cvv'             => $payment->getCcCid() ?: '000',
+			'card_cvv'             => $payment->getCcCid() ?: $dummy_cvv,
 			'customer_id'          => $customerId,
 			'payment_company_code' => $payment->getCcType(),
-			'payment_method_code'  =>  $this->getPaymentMethodCode()
+			'payment_method_code'  => $this->getPaymentMethodCode()
 		);
 
 		$paymentProfile = $this->api()->createCustomerPaymentProfile($cardData);
@@ -113,12 +115,14 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 			return false;
 		}
 
+		$payment->setPaymentProfile($paymentProfile);
+
 		return $paymentProfile;
 	}
 
-	protected function processCardInformation($payment, $customerId, $customerVindiId)
+	public function processCardInformation($payment, $customerId, $customerVindiId)
 	{
-		if ('bank_slip' == $this->vindiMethodCode || 'debit_card' == $this->vindiMethodCode) {
+		if ('bank_slip' == $this->vindiMethodCode) {
 			return true;
 		}
 
@@ -190,7 +194,7 @@ class Vindi_Subscription_Model_PaymentMethod extends Mage_Payment_Model_Method_A
 		return $nsu;
 	}
 
-	protected function verifyPaymentProfile($paymentProfile)
+	public function verifyPaymentProfile($paymentProfile)
 	{
 		$isVerifyEnabled = Mage::getStoreConfig('vindi_subscription/general/verify_method');
 

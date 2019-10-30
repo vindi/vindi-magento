@@ -315,5 +315,5 @@ class Responses
     }';
 
     const INVALID_SUBSCRIPTION_RESPONSE =
-        "Erro em subscriptions: invalid_parameter: plan - inválido";
+        'Erro em subscriptions: invalid_parameter: plan - inválido';
 }

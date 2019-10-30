@@ -30,7 +30,7 @@ class VindiCheckoutWithCreditCardCest
         $I->waitForElement('#review-buttons-container', 30);
         $I->click('Place Order');
         $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
 
         $bill = $I->getLastVindiBill();
@@ -45,7 +45,7 @@ class VindiCheckoutWithCreditCardCest
         $I->addProductToCart($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->waitForElement('#dt_method_vindi_creditcard', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->dontSeeElement('select.required-entry');
 
@@ -55,10 +55,10 @@ class VindiCheckoutWithCreditCardCest
         } catch(Exception $e) { }
 
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
 
         $bill = $I->getLastVindiBill();
@@ -74,14 +74,14 @@ class VindiCheckoutWithCreditCardCest
         $I->addProductToCart($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->waitForElement('#dt_method_vindi_creditcard', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->dontSeeElement('select.required-entry');
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
 
         $bill = $I->getLastVindiBill();
@@ -97,7 +97,7 @@ class VindiCheckoutWithCreditCardCest
         $I->addDiscountCode($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->waitForElement('#dt_method_vindi_creditcard', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
 
         try
@@ -106,11 +106,11 @@ class VindiCheckoutWithCreditCardCest
         } catch(Exception $e) { }
 
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->see('Discount (desconto)');
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
 
         $bill = $I->getLastVindiBill();
         if ($bill['amount'] != '14.8')
@@ -124,13 +124,13 @@ class VindiCheckoutWithCreditCardCest
         $I->addSubscriptionToCart($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->waitForElement('#dt_method_vindi_creditcard', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
 
         $bill = $I->getLastVindiBill();
@@ -145,13 +145,13 @@ class VindiCheckoutWithCreditCardCest
         $I->addSubscriptionToCart($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->waitForElement('#dt_method_vindi_creditcard', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
 
         $bill = $I->getLastVindiBill();
@@ -167,13 +167,13 @@ class VindiCheckoutWithCreditCardCest
         $I->addSubscriptionToCart($I);
         $I->click('Proceed to Checkout');
         $I->skipCheckoutForm($I);
-        $I->waitForElement('#dt_method_vindi_creditcard', 30);
+        $I->waitForElement('#dt_method_vindi_creditcard', AcceptanceTester::TIME_TO_WAIT);
         $I->selectOption('dl#checkout-payment-method-load', 'Cartão de Crédito');
         $I->click('Continue', '#payment-buttons-container');
-        $I->waitForElement('#review-buttons-container', 30);
+        $I->waitForElement('#review-buttons-container', AcceptanceTester::TIME_TO_WAIT);
         $I->click('Place Order');
-        $I->waitForElement('.main-container.col1-layout', 30);
-        $I->seeInCurrentUrl('/checkout/onepage/success');
+        $I->waitForElement('.main-container.col1-layout', AcceptanceTester::TIME_TO_WAIT);
+        $I->seeInCurrentUrl(AcceptanceTester::SUCCESS_CHECKOUT_URL);
         $I->see('Your order has been received.');
 
         $bill = $I->getLastVindiBill();

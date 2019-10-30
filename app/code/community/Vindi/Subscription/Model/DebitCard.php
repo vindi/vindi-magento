@@ -14,7 +14,7 @@ class Vindi_Subscription_Model_DebitCard extends Vindi_Subscription_Model_Paymen
 	/**
 	 * @var string
 	 */
-	protected $vindiMethodCode = 'debit_card';
+	public $vindiMethodCode = 'debit_card';
 
 	/**
 	 * @var bool

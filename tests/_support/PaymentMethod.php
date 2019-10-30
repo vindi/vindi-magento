@@ -23,6 +23,27 @@ trait PaymentMethod
         }
     }
 
+    public function setDefaultDebitCard($I)
+    {
+        $I->goToAdminPanel($I);
+        $I->goToDebitCardSettings($I);
+        $I->selectOption('#payment_vindi_debitcard_active', 'Yes');
+        $I->click('Save Config');
+    }
+
+    public function goToDebitCardSettings($I)
+    {
+        $I->click('System');
+        $I->click('Configuration');
+        $I->click('Payment Methods');
+
+        try {
+            $I->seeElement('#payment_vindi_debitcard_active');
+        } catch (Exception $e) {
+            $I->click('#payment_vindi_debitcard-head');
+        }
+    }
+
     public function setDefaultCreditCard($I, $withInstallments = true, $maxInstallment = 12)
     {
         $I->goToAdminPanel($I);
