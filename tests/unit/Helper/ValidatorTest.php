@@ -2,6 +2,9 @@
 require_once 'app/code/community/Vindi/Subscription/Trait/LogMessenger.php';
 require_once 'app/code/community/Vindi/Subscription/Helper/Bill.php';
 require_once 'app/code/community/Vindi/Subscription/Helper/Order.php';
+require_once 'app/code/community/Vindi/Subscription/Helper/Validator.php';
+require_once 'app/code/community/Vindi/Subscription/Helper/Connector.php';
+require_once 'app/code/community/Vindi/Subscription/Helper/Api.php';
 
 class ValidatorTest extends \Codeception\Test\Unit
 {
@@ -49,6 +52,43 @@ class ValidatorTest extends \Codeception\Test\Unit
         $dummy_validator_class->validateChargeWebhook(
             json_decode($this->webhooks::CHARGE_REJECTED_WEBHOOK, true
         )['event']['data']);
+    }
+
+    public function testSuccessValidateChargeWebhookWithoutNextAttempt()
+    {
+        $dummy_order_class = $this->makeEmpty(
+            'Vindi_Subscription_Helper_Order',
+            [
+                'getOrderFromVindi' => json_decode(
+                    $this->webhooks::BILL_CREATED_WEBHOOK, true
+                )['event']['data']['bill']
+            ]
+        );
+
+        $dummy_api_class = $this->makeEmpty(
+            'Vindi_Subscription_Helper_API',
+            [
+                'cancelPurchase' => true
+            ]
+        );
+
+        $dummy_validator_class = $this->make(
+            'Vindi_Subscription_Helper_Validator',
+            [
+                'orderHandler' => $dummy_order_class
+            ],
+            [
+                'api' => $dummy_api_class
+            ]
+        );
+
+        $webhook = json_decode($this->webhooks::CHARGE_REJECTED_WEBHOOK_WITHOUT_NEXT_ATTEMPT, true
+        )['event']['data'];
+        $id = $webhook['charge']['bill']['id'];
+        $endpoint = 'bills';
+
+        \Codeception\Stub\Expected::once($dummy_api_class->cancelPurchase($id, $endpoint));
+        $dummy_validator_class->validateChargeWebhook($webhook);
     }
 
     public function testFailureValidateChargeWebhookWithoutBill()
