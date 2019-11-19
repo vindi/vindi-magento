@@ -1,5 +1,10 @@
 # Notas das versões
 
+## [1.8.9 - 31/10/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.9)
+
+### Corrigido
+- Corrige cancelamento para faturas sem retentativa
+
 ## [1.8.8 - 08/10/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.8)
 
 ### Adicionado

@@ -127,4 +127,18 @@ class Webhooks
             }
         }
     }';
+
+    const CHARGE_REJECTED_WEBHOOK_WITHOUT_NEXT_ATTEMPT = '{
+        "event":{
+            "type":"charge_rejected",
+            "data":{
+                "charge":{"id":870375,"amount":"123.0","status":"pending","due_at":"2019-07-23T23:59:59.000-03:00","paid_at":null,"installments":1,"attempt_count":1,"next_attempt":null,"print_url":null,
+                "last_transaction":{"id":1017664,"transaction_type":"authorization","status":"rejected","amount":"123.0","installments":1,"gateway_message":"Transacao rejeitada","gateway_response_code":"57","gateway_authorization":"","gateway_transaction_id":"abcdef","gateway_response_fields":{"nsu":"abcdef12345"},"gateway":{"id":1,"connector":"cielo_v3"},
+                "payment_profile":{"id":125445,"holder_name":"TESTES VINDI","registry_code":null,"card_expiration":"2020-01-31T23:59:59.000-02:00","card_number_first_six":"411111","card_number_last_four":"1111","payment_company":{"id":1,"name":"Visa Electron","code":"visa_electron"}}},
+                "bill":{"id":123456, "code":12345},
+                "payment_method":{"id":1,"name":"Cartão de débito","code":"debit_card","type":"PaymentMethod::DebitCard"}},
+                "customer":{"id":1,"name":"Vindi Tests","email":"test@vindi.com.br","code":"mag-1"},"period":null,"subscription":null,"payment_profile":null,"payment_condition":null
+            }
+        }
+    }';
 }

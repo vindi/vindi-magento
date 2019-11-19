@@ -6,11 +6,13 @@ class Vindi_Subscription_Helper_Validator
 
 	protected $billHandler;
 	protected $orderHandler;
+	protected $api;
 
 	public function __construct() 
 	{
 		$this->billHandler  = Mage::helper('vindi_subscription/bill');
 		$this->orderHandler = Mage::helper('vindi_subscription/order');
+		$this->api          = Mage::helper('vindi_subscription/api');
 	}
 
 	/**
@@ -64,6 +66,10 @@ class Vindi_Subscription_Helper_Validator
 			$this->logWebhook(sprintf(
 				'Todas as tentativas de pagamento do pedido %s foram rejeitadas. Motivo: "%s".',
 				$order->getId(), $gatewayMessage));
+				
+			$vindiId = $vindiOrder['id'];
+			$this->api->cancelPurchase($vindiId, $endpoint = 'bills');
+
 			return true;
 		}
 
