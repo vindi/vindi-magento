@@ -24,6 +24,12 @@ blocks:
 
   - name: Test
     task:
+      prologue:
+        commands:
+          - checkout
+          - cache restore
+          # Prepend vendor/bin to the path so you can use dependency executables
+          - export "PATH=./vendor/bin:${PATH}"            
       jobs:
         - name: Test
           commands:
