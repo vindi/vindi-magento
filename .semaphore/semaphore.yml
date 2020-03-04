@@ -22,13 +22,12 @@ blocks:
             - chromedriver --url-base=/wd/hub & sleep 5
             - cache store
 
-  - name: Setup and Test
+  - name: Test
     task:
       prologue:
         commands:
           - checkout
           - cache restore
-#          - export "PATH=./vendor/bin:${PATH}"            
       jobs:
         - name: Test
           commands:
