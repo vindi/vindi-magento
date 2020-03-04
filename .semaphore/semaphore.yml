@@ -21,6 +21,7 @@ blocks:
             - sleep 10 && docker exec -it magento1_web php -r 'require "app/Mage.php"; Mage::app()->getCacheInstance()->flush();'
             - chromedriver --url-base=/wd/hub & sleep 5
             - cache store
+
   - name: Test
     task:
       jobs:
