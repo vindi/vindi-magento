@@ -34,7 +34,7 @@ blocks:
       jobs:
         - name: Test
           commands:
-            - cache restore
+#            - cache restore
             - if [ $SEMAPHORE_GIT_BRANCH = 'master' ]; then  composer test acceptance; else true; fi
             - composer test unit
 #            - codecept test
