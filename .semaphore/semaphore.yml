@@ -30,6 +30,6 @@ blocks:
           commands:
             - 'if [ $SEMAPHORE_GIT_BRANCH = ''master'' ]; then  composer test acceptance; else true; fi'
             - composer test unit
-      env_vars:
-        - name: VINDI_API_KEY
-          value: beJqWzrY6f1eqVuAaK3KbRvxvqzMsAM_AR0xdbWSM8E
+      env_vars: []
+      secrets:
+        - name: vindi_sandbox_api_key
