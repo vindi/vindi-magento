@@ -19,7 +19,7 @@ blocks:
             - echo $BRANCH_NAME
             - echo $SEMAPHORE_GIT_BRANCH
             - echo 'testando 2'
-            - docker exec -it magento1_web modgit add -b "$BRANCH_NAME" vindi https://github.com/vindi/vindi-magento.git
+            - docker exec -it magento1_web modgit add -b "$SEMAPHORE_GIT_BRANCH" vindi https://github.com/vindi/vindi-magento.git
             - sudo sh -c "echo '127.0.0.1 vindi.magento' >> /etc/hosts"
             - composer install
             - sleep 10 && docker exec -it magento1_web php -r 'require "app/Mage.php"; Mage::app()->getCacheInstance()->flush();'
