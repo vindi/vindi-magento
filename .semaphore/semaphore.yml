@@ -1,0 +1,31 @@
+# Documentação sobre Semaphore 2.0 com Ubuntu:
+# https://docs.semaphoreci.com/programming-languages/php/
+version: v1.0
+name: vindi-magento
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Setup
+    task:
+      jobs:
+        - name: Setup
+          commands:
+            - checkout
+            - cache restore
+            - docker network create webproxy && docker-compose up -d
+            - docker exec -it magento1_web modgit add -b "$BRANCH_NAME" vindi https://github.com/vindi/vindi-magento.git
+            - sudo sh -c "echo '127.0.0.1 vindi.magento' >> /etc/hosts"
+            - composer install
+            - sleep 10 && docker exec -it magento1_web php -r 'require "app/Mage.php"; Mage::app()->getCacheInstance()->flush();'
+            - chromedriver --url-base=/wd/hub & sleep 5
+            - cache store
+  - name: Test
+    task:
+      jobs:
+        - name: Test
+          commands:
+            - cache restore
+            - if [ $SEMAPHORE_GIT_BRANCH = 'master' ]; then  composer test acceptance; else true; fi
+            - composer test unit
