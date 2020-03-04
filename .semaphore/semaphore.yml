@@ -15,8 +15,10 @@ blocks:
             - checkout
             - cache restore
             - docker network create webproxy && docker-compose up -d
+            - echo 'testando 1'
             - echo $BRANCH_NAME
-            - echo 'testando'
+            - echo $SEMAPHORE_GIT_BRANCH
+            - echo 'testando 2'
             - docker exec -it magento1_web modgit add -b "$BRANCH_NAME" vindi https://github.com/vindi/vindi-magento.git
             - sudo sh -c "echo '127.0.0.1 vindi.magento' >> /etc/hosts"
             - composer install
