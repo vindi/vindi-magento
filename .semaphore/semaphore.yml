@@ -15,10 +15,6 @@ blocks:
             - checkout
             - cache restore
             - docker network create webproxy && docker-compose up -d
-            - echo 'testando 1'
-            - echo $BRANCH_NAME
-            - echo $SEMAPHORE_GIT_BRANCH
-            - echo 'testando 2'
             - docker exec -it magento1_web modgit add -b "$SEMAPHORE_GIT_BRANCH" vindi https://github.com/vindi/vindi-magento.git
             - sudo sh -c "echo '127.0.0.1 vindi.magento' >> /etc/hosts"
             - composer install
@@ -33,4 +29,5 @@ blocks:
           commands:
             - cache restore
             - if [ $SEMAPHORE_GIT_BRANCH = 'master' ]; then  composer test acceptance; else true; fi
-            - composer test unit
+#            - composer test unit
+            - codecept test
