@@ -18,23 +18,19 @@ blocks:
             - docker exec -it magento1_web modgit add -b "$SEMAPHORE_GIT_BRANCH" vindi https://github.com/vindi/vindi-magento.git
             - sudo sh -c "echo '127.0.0.1 vindi.magento' >> /etc/hosts"
             - composer install
-#            - composer test unit
             - sleep 10 && docker exec -it magento1_web php -r 'require "app/Mage.php"; Mage::app()->getCacheInstance()->flush();'
             - chromedriver --url-base=/wd/hub & sleep 5
             - cache store
 
-  - name: Test
+  - name: Setup and Test
     task:
       prologue:
         commands:
           - checkout
           - cache restore
-          # Prepend vendor/bin to the path so you can use dependency executables
-          - export "PATH=./vendor/bin:${PATH}"            
+#          - export "PATH=./vendor/bin:${PATH}"            
       jobs:
         - name: Test
           commands:
-#            - cache restore
             - if [ $SEMAPHORE_GIT_BRANCH = 'master' ]; then  composer test acceptance; else true; fi
             - composer test unit
-#            - codecept test
