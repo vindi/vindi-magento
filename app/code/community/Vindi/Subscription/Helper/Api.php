@@ -560,7 +560,7 @@ class Vindi_Subscription_Helper_API extends Vindi_Subscription_Helper_Connector
     public function findOrCreateUniquePaymentProduct($order)
     {
         $billItems = array();
-        foreach ($order->getItemsCollection() as $item) {
+        foreach ($order->getAllVisibleItems() as $item) {
             $productId = $this->findOrCreateProduct(
                 array(
                     'sku' => $item->getSku(),
