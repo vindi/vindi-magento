@@ -1,5 +1,10 @@
 # Notas das versões
 
+## [1.8.10 - 11/03/2021](https://github.com/vindi/vindi-magento/releases/tag/1.8.10)
+
+### Corrigido
+- Corrige duplicidade de produtos configuráveis
+
 ## [1.8.9 - 31/10/2019](https://github.com/vindi/vindi-magento/releases/tag/1.8.9)
 
 ### Corrigido
